@@ -19,6 +19,8 @@ class ShopifyAdminGroup {
   static RetrieveCollectionsProductCall retrieveCollectionsProductCall =
       RetrieveCollectionsProductCall();
   static CollectionsListCall collectionsListCall = CollectionsListCall();
+  static ProductImageCall productImageCall = ProductImageCall();
+  static ProductPriceCall productPriceCall = ProductPriceCall();
 }
 
 class RetrieveCollectionsProductCall {
@@ -43,6 +45,16 @@ class RetrieveCollectionsProductCall {
   dynamic product(dynamic response) => getJsonField(
         response,
         r'''$.products''',
+        true,
+      );
+  dynamic productid(dynamic response) => getJsonField(
+        response,
+        r'''$.products..id''',
+        true,
+      );
+  dynamic images(dynamic response) => getJsonField(
+        response,
+        r'''$.products..images..src''',
         true,
       );
 }
@@ -79,6 +91,57 @@ class CollectionsListCall {
   dynamic initialtitle(dynamic response) => getJsonField(
         response,
         r'''$.custom_collections[0].title''',
+      );
+}
+
+class ProductImageCall {
+  Future<ApiCallResponse> call({
+    int? id = 7867779186934,
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Product Image',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}products/${id}/images.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic image(dynamic response) => getJsonField(
+        response,
+        r'''$.images..src''',
+        true,
+      );
+}
+
+class ProductPriceCall {
+  Future<ApiCallResponse> call({
+    int? prId = 5403721891995,
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Product Price',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}/products/${prId}.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic price(dynamic response) => getJsonField(
+        response,
+        r'''$.product.variants..price''',
       );
 }
 

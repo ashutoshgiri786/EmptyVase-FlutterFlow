@@ -192,6 +192,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             productName: params.getParam('productName', ParamType.String),
             productDescription:
                 params.getParam('productDescription', ParamType.String),
+            id: params.getParam('id', ParamType.int),
+            images: params.getParam('images', ParamType.JSON),
           ),
         ),
         FFRoute(

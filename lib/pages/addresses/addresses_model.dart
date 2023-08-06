@@ -19,6 +19,8 @@ class AddressesModel extends FlutterFlowModel {
   void updateAddressesAtIndex(int index, Function(dynamic) updateFn) =>
       addresses[index] = updateFn(addresses[index]);
 
+  String? addressId;
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();

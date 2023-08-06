@@ -6,7 +6,6 @@ import '/flutter_flow/flutter_flow_toggle_icon.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
-import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -19,10 +18,14 @@ class ItemsPageCartWidget extends StatefulWidget {
     Key? key,
     required this.productName,
     required this.productDescription,
+    this.id,
+    this.images,
   }) : super(key: key);
 
   final String? productName;
   final String? productDescription;
+  final int? id;
+  final dynamic images;
 
   @override
   _ItemsPageCartWidgetState createState() => _ItemsPageCartWidgetState();
@@ -57,86 +60,67 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         body: Stack(
           children: [
-            Builder(
-              builder: (context) {
-                final productImage = List.generate(
-                    random_data.randomInteger(5, 6),
-                    (index) => random_data.randomName(true, true)).toList();
-                return SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children:
-                        List.generate(productImage.length, (productImageIndex) {
-                      final productImageItem = productImage[productImageIndex];
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(
-                          'assets/images/WhatsApp_Image_2023-07-14_at_00.56.31_(2).jpeg',
-                          width: MediaQuery.sizeOf(context).width * 1.0,
-                          height: MediaQuery.sizeOf(context).height * 0.5,
-                          fit: BoxFit.cover,
-                        ),
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Builder(
+                    builder: (context) {
+                      final image = widget.images?.toList() ?? [];
+                      return ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        itemCount: image.length,
+                        itemBuilder: (context, imageIndex) {
+                          final imageItem = image[imageIndex];
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              imageItem,
+                              width: 300.0,
+                              height: 291.0,
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        },
                       );
-                    }),
+                    },
                   ),
-                );
-              },
+                ],
+              ),
             ),
             Padding(
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  FlutterFlowIconButton(
-                    borderColor: Colors.transparent,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    icon: Icon(
-                      Icons.close_outlined,
-                      color: Colors.white,
-                      size: 24.0,
-                    ),
-                    onPressed: () async {
-                      context.safePop();
-                    },
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: AlignmentDirectional(1.0, -1.0),
-                      child: FlutterFlowIconButton(
+              child: Builder(
+                builder: (context) {
+                  final images = getJsonField(
+                    widget.images,
+                    r'''$.products..images..src''',
+                  ).toList();
+                  return Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(images.length, (imagesIndex) {
+                      final imagesItem = images[imagesIndex];
+                      return FlutterFlowIconButton(
                         borderColor: Colors.transparent,
                         borderRadius: 20.0,
                         borderWidth: 1.0,
                         buttonSize: 40.0,
                         icon: Icon(
-                          Icons.ios_share_sharp,
+                          Icons.close_outlined,
                           color: Colors.white,
                           size: 24.0,
                         ),
-                        onPressed: () {
-                          print('IconButton pressed ...');
+                        onPressed: () async {
+                          context.safePop();
                         },
-                      ),
-                    ),
-                  ),
-                  FlutterFlowIconButton(
-                    borderColor: Colors.transparent,
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    icon: Icon(
-                      Icons.shopping_cart_outlined,
-                      color: Colors.white,
-                      size: 24.0,
-                    ),
-                    onPressed: () async {
-                      context.pushNamed('Cart_2');
-                    },
-                  ),
-                ],
+                      );
+                    }),
+                  );
+                },
               ),
             ),
             Align(

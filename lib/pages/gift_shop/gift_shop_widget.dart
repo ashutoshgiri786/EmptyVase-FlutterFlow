@@ -342,22 +342,6 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
                                                 ),
                                           ),
                                         ),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-1.0, 0.0),
-                                          child: Text(
-                                            '\$ 1660.00',
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Montserrat',
-                                                  color: Color(0xFF2B4244),
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                          ),
-                                        ),
                                       ].divide(SizedBox(height: 8.0)),
                                     ),
                                   );

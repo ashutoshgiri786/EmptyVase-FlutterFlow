@@ -36,6 +36,12 @@ class _AddressesWidgetState extends State<AddressesWidget> {
       setState(() {
         _model.addresses = _model.list!.toList().cast<dynamic>();
       });
+      setState(() {
+        _model.addressId = getJsonField(
+          _model.list,
+          r'''$.defaultAddress.id''',
+        ).toString().toString();
+      });
     });
   }
 
@@ -258,20 +264,26 @@ class _AddressesWidgetState extends State<AddressesWidget> {
                                           ),
                                         ),
                                       ),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(-1.0, 0.0),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  14.0, 0.0, 0.0, 0.0),
-                                          child: Text(
-                                            'BILLING',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
+                                      if (getJsonField(
+                                            _model.list,
+                                            r'''$.defaultAddress.id''',
+                                          ) ==
+                                          _model.addressId)
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(-1.0, 0.0),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    14.0, 0.0, 0.0, 0.0),
+                                            child: Text(
+                                              'BILLING',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium,
+                                            ),
                                           ),
                                         ),
-                                      ),
                                     ].divide(SizedBox(height: 10.0)),
                                   ),
                                 ),

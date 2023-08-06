@@ -312,6 +312,20 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                             ).toString(),
                                             ParamType.String,
                                           ),
+                                          'id': serializeParam(
+                                            getJsonField(
+                                              productImageItem,
+                                              r'''$.product..images..src''',
+                                            ),
+                                            ParamType.int,
+                                          ),
+                                          'images': serializeParam(
+                                            getJsonField(
+                                              productImageItem,
+                                              r'''$.products..images..src''',
+                                            ),
+                                            ParamType.JSON,
+                                          ),
                                         }.withoutNulls,
                                       );
                                     },
@@ -370,17 +384,58 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                         Align(
                                           alignment:
                                               AlignmentDirectional(-1.0, 0.0),
-                                          child: Text(
-                                            '\$ 1660.00',
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Montserrat',
-                                                  color: Color(0xFF2B4244),
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
+                                          child: FutureBuilder<ApiCallResponse>(
+                                            future: ShopifyAdminGroup
+                                                .productPriceCall
+                                                .call(
+                                              prId: getJsonField(
+                                                productImageItem,
+                                                r'''$.id''',
+                                              ),
+                                            ),
+                                            builder: (context, snapshot) {
+                                              // Customize what your widget looks like when it's loading.
+                                              if (!snapshot.hasData) {
+                                                return Center(
+                                                  child: SizedBox(
+                                                    width: 50.0,
+                                                    height: 50.0,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<
+                                                              Color>(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .primary,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                              final textProductPriceResponse =
+                                                  snapshot.data!;
+                                              return Text(
+                                                ShopifyAdminGroup
+                                                    .productPriceCall
+                                                    .price(
+                                                      textProductPriceResponse
+                                                          .jsonBody,
+                                                    )
+                                                    .toString(),
+                                                textAlign: TextAlign.center,
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      fontFamily: 'Montserrat',
+                                                      color: Color(0xFF2B4244),
+                                                      fontSize: 12.0,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                              );
+                                            },
                                           ),
                                         ),
                                       ].divide(SizedBox(height: 8.0)),

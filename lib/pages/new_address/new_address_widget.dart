@@ -437,6 +437,12 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
                           widget.city!,
                           _model.textController4.text,
                         );
+                        if (_model.checkboxValue!) {
+                          await actions.defaultAddress(
+                            widget.id!,
+                            FFAppState().accessToken,
+                          );
+                        }
                       } else {
                         _model.createAddress = await actions.createAddress(
                           FFAppState().accessToken,

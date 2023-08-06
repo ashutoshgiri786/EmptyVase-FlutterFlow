@@ -9,14 +9,9 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Future<dynamic> updateAddress(
+Future<dynamic> defaultAddress(
   String addressId,
   String customerAccessToken,
-  String address1,
-  String country,
-  String province,
-  String city,
-  String zip,
 ) async {
   final httpLink = HttpLink(
     FFAppState().graphqlEndpoint,
@@ -28,38 +23,25 @@ Future<dynamic> updateAddress(
   final client = GraphQLClient(link: httpLink, cache: GraphQLCache());
 
   final String mutation = r'''
-  mutation UpdateAddress(
-    $addressId: ID!,
+  mutation SetDefaultAddress(
     $customerAccessToken: String!, 
-    $address1: String!,
-    $country: String!,
-    $province: String!,
-    $city: String!,
-    $zip: String!
-  ) {
-    customerAddressUpdate(
-      id: $addressId,
-      customerAccessToken: $customerAccessToken,
-      address: {
-        address1: $address1, 
-        country: $country, 
-        province: $province, 
-        city: $city, 
-        zip: $zip
-      }
-    ) { 
-      customerAddress {
-        id
-      }
-      customerUserErrors {
-        code
-        message
-      }
-      userErrors {
-        message
-      }
+    $addressId: ID!,
+) {
+    customerDefaultAddressUpdate(
+        customerAccessToken: $customerAccessToken,
+        addressId: $addressId, 
+    ) {
+        customer {
+            defaultAddress {
+                id
+            }
+        }
+        customerUserErrors {
+            code
+            message
+        }
     }
-  }
+}
 ''';
 
   final MutationOptions options = MutationOptions(
@@ -67,11 +49,6 @@ Future<dynamic> updateAddress(
     variables: {
       "addressId": addressId,
       "customerAccessToken": customerAccessToken,
-      'address1': address1,
-      'country': country,
-      "province": province,
-      "city": city,
-      "zip": zip,
     },
   );
 
