@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/components/item_added/item_added_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -7,6 +8,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -40,6 +42,25 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ItemsPageCartModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await showDialog(
+        context: context,
+        builder: (alertDialogContext) {
+          return AlertDialog(
+            title: Text('ook'),
+            content: Text(widget.id!.toString()),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(alertDialogContext),
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 
   @override
@@ -64,24 +85,54 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Builder(
-                    builder: (context) {
-                      final image = widget.images?.toList() ?? [];
-                      return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: image.length,
-                        itemBuilder: (context, imageIndex) {
-                          final imageItem = image[imageIndex];
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
-                              imageItem,
-                              width: 300.0,
-                              height: 291.0,
-                              fit: BoxFit.cover,
+                  FutureBuilder<ApiCallResponse>(
+                    future: ShopifyAdminGroup.productImageCall.call(
+                      id: widget.id,
+                    ),
+                    builder: (context, snapshot) {
+                      // Customize what your widget looks like when it's loading.
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: SizedBox(
+                            width: 50.0,
+                            height: 50.0,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                FlutterFlowTheme.of(context).primary,
+                              ),
                             ),
+                          ),
+                        );
+                      }
+                      final listViewProductImageResponse = snapshot.data!;
+                      return Builder(
+                        builder: (context) {
+                          final productsImage =
+                              (ShopifyAdminGroup.productImageCall.image(
+                                    listViewProductImageResponse.jsonBody,
+                                  ) as List)
+                                      .map<String>((s) => s.toString())
+                                      .toList()
+                                      ?.toList() ??
+                                  [];
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.vertical,
+                            itemCount: productsImage.length,
+                            itemBuilder: (context, productsImageIndex) {
+                              final productsImageItem =
+                                  productsImage[productsImageIndex];
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.network(
+                                  productsImageItem,
+                                  width: 300.0,
+                                  height: 291.0,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            },
                           );
                         },
                       );
@@ -94,10 +145,7 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
               child: Builder(
                 builder: (context) {
-                  final images = getJsonField(
-                    widget.images,
-                    r'''$.products..images..src''',
-                  ).toList();
+                  final images = widget.images?.toList() ?? [];
                   return Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

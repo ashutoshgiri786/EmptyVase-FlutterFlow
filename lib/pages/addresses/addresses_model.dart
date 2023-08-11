@@ -26,6 +26,8 @@ class AddressesModel extends FlutterFlowModel {
   final unfocusNode = FocusNode();
   // Stores action output result for [Custom Action - addressList] action in Addresses widget.
   dynamic? list;
+  // Stores action output result for [Custom Action - addressList] action in Text widget.
+  dynamic? defsultid;
 
   /// Initialization and disposal methods.
 

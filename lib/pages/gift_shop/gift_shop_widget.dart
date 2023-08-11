@@ -205,10 +205,11 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
                       chipSpacing: 12.0,
                       rowSpacing: 12.0,
                       multiselect: false,
+                      initialized: _model.choiceChipsValue != null,
                       alignment: WrapAlignment.start,
                       controller: _model.choiceChipsValueController ??=
                           FormFieldController<List<String>>(
-                        [],
+                        ['Flowers'],
                       ),
                     );
                   },

@@ -266,7 +266,7 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                               snapshot.data!;
                           return Builder(
                             builder: (context) {
-                              final productImage = ShopifyAdminGroup
+                              final product = ShopifyAdminGroup
                                       .retrieveCollectionsProductCall
                                       .product(
                                         gridViewRetrieveCollectionsProductResponse
@@ -285,10 +285,9 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                 ),
                                 shrinkWrap: true,
                                 scrollDirection: Axis.vertical,
-                                itemCount: productImage.length,
-                                itemBuilder: (context, productImageIndex) {
-                                  final productImageItem =
-                                      productImage[productImageIndex];
+                                itemCount: product.length,
+                                itemBuilder: (context, productIndex) {
+                                  final productItem = product[productIndex];
                                   return InkWell(
                                     splashColor: Colors.transparent,
                                     focusColor: Colors.transparent,
@@ -300,31 +299,27 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                         queryParameters: {
                                           'productName': serializeParam(
                                             getJsonField(
-                                              productImageItem,
+                                              productItem,
                                               r'''$..title''',
                                             ).toString(),
                                             ParamType.String,
                                           ),
                                           'productDescription': serializeParam(
                                             getJsonField(
-                                              productImageItem,
+                                              productItem,
                                               r'''$..body_html''',
                                             ).toString(),
                                             ParamType.String,
                                           ),
                                           'id': serializeParam(
-                                            getJsonField(
-                                              productImageItem,
-                                              r'''$.product..images..src''',
+                                            valueOrDefault<int>(
+                                              getJsonField(
+                                                productItem,
+                                                r'''$.id''',
+                                              ),
+                                              5403721891995,
                                             ),
                                             ParamType.int,
-                                          ),
-                                          'images': serializeParam(
-                                            getJsonField(
-                                              productImageItem,
-                                              r'''$.products..images..src''',
-                                            ),
-                                            ParamType.JSON,
                                           ),
                                         }.withoutNulls,
                                       );
@@ -352,7 +347,7 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                                 fit: BoxFit.cover,
                                                 image: Image.network(
                                                   getJsonField(
-                                                    productImageItem,
+                                                    productItem,
                                                     r'''$.image.src''',
                                                   ),
                                                 ).image,
@@ -367,7 +362,7 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                               AlignmentDirectional(-1.0, 0.0),
                                           child: Text(
                                             getJsonField(
-                                              productImageItem,
+                                              productItem,
                                               r'''$..title''',
                                             ).toString(),
                                             textAlign: TextAlign.center,
@@ -389,7 +384,7 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                                 .productPriceCall
                                                 .call(
                                               prId: getJsonField(
-                                                productImageItem,
+                                                productItem,
                                                 r'''$.id''',
                                               ),
                                             ),

@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Future<dynamic> addressList(
+Future<dynamic> orderHistory(
   String customerAccessToken,
 ) async {
   final httpLink = HttpLink(
@@ -25,22 +25,21 @@ Future<dynamic> addressList(
 
   query FetchCustomerInfo(\$customerAccessToken: String!) {
   customer(customerAccessToken: \$customerAccessToken) {
-        defaultAddress {
-          id 
-    }
-    
-    addresses(first: 100) {
-        edges {
-            node {
-                address1
-                city
-                country
-                id
-                province
-                zip
-            }
+   customer(customerAccessToken: \$customerAccessToken) {
+    orders(first: 10) {
+      edges {
+        node {
+          id
+          orderNumber
+          
+          processedAt
+          financialStatus
+          fulfillmentStatus
+        
         }
+      }
     }
+
   }
 }
 ''';
