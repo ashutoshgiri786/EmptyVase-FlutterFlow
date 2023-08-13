@@ -9,9 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Future<dynamic> orderHistory(
-  String customerAccessToken,
-) async {
+Future<int> resetLink(String email) async {
   final httpLink = HttpLink(
     FFAppState().graphqlEndpoint,
     defaultHeaders: {
@@ -19,44 +17,36 @@ Future<dynamic> orderHistory(
     },
   );
 
-  final client = GraphQLClient(
-    cache: GraphQLCache(),
-    link: httpLink,
-  );
+  final client = GraphQLClient(link: httpLink, cache: GraphQLCache());
 
-  final String query = '''
-    query FetchCustomerInfo(\$customerAccessToken: String!) {
-      customer(customerAccessToken: \$customerAccessToken) {
-        orders(first: 10) {
-          edges {
-            node {
-              id
-              orderNumber
-              processedAt
-              financialStatus
-              fulfillmentStatus
-            }
-          }
+  final String mutation = '''
+    mutation SendPasswordResetEmail(\$email: String!) {
+      customerRecover(email: \$email) {
+        customerUserErrors {
+          code
+          message
+        }
+        userErrors {
+          message
         }
       }
     }
   ''';
 
-  final QueryOptions options = QueryOptions(
-    document: gql(query),
+  final MutationOptions options = MutationOptions(
+    document: gql(mutation),
     variables: {
-      "customerAccessToken": customerAccessToken,
+      "email": email,
     },
   );
 
-  final QueryResult result = await client.query(options);
+  final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
     print('Error: ${result.exception.toString()}');
-    return null;
+    return -1;
   }
-
-  return result.data?["customer"]["orders"]["edges"];
+  return 0;
 }
 
 // Set your action name, define your arguments and return parameter,

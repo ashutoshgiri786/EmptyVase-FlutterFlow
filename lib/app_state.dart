@@ -33,6 +33,9 @@ class FFAppState extends ChangeNotifier {
       _adminAccesToken = await secureStorage.getString('ff_adminAccesToken') ??
           _adminAccesToken;
     });
+    await _safeInitAsync(() async {
+      _cartId = await secureStorage.getString('ff_cartId') ?? _cartId;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -91,6 +94,23 @@ class FFAppState extends ChangeNotifier {
 
   void deleteAdminAccesToken() {
     secureStorage.delete(key: 'ff_adminAccesToken');
+  }
+
+  String _customerId = '';
+  String get customerId => _customerId;
+  set customerId(String _value) {
+    _customerId = _value;
+  }
+
+  String _cartId = 'gid://shopify/Cart/c1-ce8abd8186e310e028a488184ca2f37a';
+  String get cartId => _cartId;
+  set cartId(String _value) {
+    _cartId = _value;
+    secureStorage.setString('ff_cartId', _value);
+  }
+
+  void deleteCartId() {
+    secureStorage.delete(key: 'ff_cartId');
   }
 }
 

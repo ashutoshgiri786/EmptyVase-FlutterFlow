@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Future<dynamic> orderHistory(
-  String customerAccessToken,
+Future<dynamic> getCart(
+  String cartId,
 ) async {
   final httpLink = HttpLink(
     FFAppState().graphqlEndpoint,
@@ -19,47 +19,56 @@ Future<dynamic> orderHistory(
     },
   );
 
-  final client = GraphQLClient(
-    cache: GraphQLCache(),
-    link: httpLink,
-  );
+  final client = GraphQLClient(link: httpLink, cache: GraphQLCache());
 
-  final String query = '''
-    query FetchCustomerInfo(\$customerAccessToken: String!) {
-      customer(customerAccessToken: \$customerAccessToken) {
-        orders(first: 10) {
-          edges {
-            node {
+  final String mutation = '''
+  query(\$cartId:ID!) {
+  cart(
+    id: \$cartId
+  ) {
+    id
+    createdAt
+    updatedAt
+    lines(first: 10) {
+      edges {
+        node {
+          id
+          quantity
+          merchandise {
+            ... on ProductVariant {
               id
-              orderNumber
-              processedAt
-              financialStatus
-              fulfillmentStatus
             }
+          }
+          attributes {
+            key
+            value
           }
         }
       }
     }
-  ''';
+    
 
-  final QueryOptions options = QueryOptions(
-    document: gql(query),
+   
+  }
+}
+''';
+
+  final MutationOptions options = MutationOptions(
+    document: gql(mutation),
     variables: {
-      "customerAccessToken": customerAccessToken,
+      "cartId": cartId,
     },
   );
 
-  final QueryResult result = await client.query(options);
+  final QueryResult result = await client.mutate(options);
 
   if (result.hasException) {
     print('Error: ${result.exception.toString()}');
     return null;
   }
 
-  return result.data?["customer"]["orders"]["edges"];
+  return result.data?["customer"];
 }
 
-// Set your action name, define your arguments and return parameter,
-// and then add the boilerplate code using the button on the right!
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the button on the right!

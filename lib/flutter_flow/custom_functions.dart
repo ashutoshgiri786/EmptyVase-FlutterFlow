@@ -21,3 +21,11 @@ int getFlowersId(
   }
   return 0;
 }
+
+bool? productvariants(List<String> input) {
+  // generate a code which take input as a list and returns false if the list more than 1 item
+  if (input.length > 1) {
+    return false;
+  }
+  return true;
+}

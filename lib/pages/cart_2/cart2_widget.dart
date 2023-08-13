@@ -2,8 +2,10 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'cart2_model.dart';
@@ -25,6 +27,31 @@ class _Cart2WidgetState extends State<Cart2Widget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => Cart2Model());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.carid = await actions.getCart(
+        valueOrDefault<String>(
+          FFAppState().cartId,
+          'gid://shopify/Cart/c1-ce8abd8186e310e028a488184ca2f37a',
+        ),
+      );
+      await showDialog(
+        context: context,
+        builder: (alertDialogContext) {
+          return AlertDialog(
+            title: Text('ok'),
+            content: Text(_model.carid!.toString()),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(alertDialogContext),
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 
   @override

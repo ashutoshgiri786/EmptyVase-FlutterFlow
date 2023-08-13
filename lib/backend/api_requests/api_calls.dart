@@ -20,7 +20,8 @@ class ShopifyAdminGroup {
       RetrieveCollectionsProductCall();
   static CollectionsListCall collectionsListCall = CollectionsListCall();
   static ProductImageCall productImageCall = ProductImageCall();
-  static ProductPriceCall productPriceCall = ProductPriceCall();
+  static ProductCall productCall = ProductCall();
+  static OrdersCall ordersCall = OrdersCall();
 }
 
 class RetrieveCollectionsProductCall {
@@ -61,11 +62,12 @@ class RetrieveCollectionsProductCall {
 
 class CollectionsListCall {
   Future<ApiCallResponse> call({
-    String? limit = '',
+    int? limit = 50,
   }) {
     return ApiManager.instance.makeApiCall(
       callName: ' Collections List ',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}custom_collections.json?limit=5',
+      apiUrl:
+          '${ShopifyAdminGroup.baseUrl}custom_collections.json?limit=${limit}',
       callType: ApiCallType.GET,
       headers: {
         ...ShopifyAdminGroup.headers,
@@ -120,12 +122,12 @@ class ProductImageCall {
       );
 }
 
-class ProductPriceCall {
+class ProductCall {
   Future<ApiCallResponse> call({
     int? prId = 5403721891995,
   }) {
     return ApiManager.instance.makeApiCall(
-      callName: 'Product Price',
+      callName: 'Product',
       apiUrl: '${ShopifyAdminGroup.baseUrl}/products/${prId}.json',
       callType: ApiCallType.GET,
       headers: {
@@ -141,8 +143,47 @@ class ProductPriceCall {
 
   dynamic price(dynamic response) => getJsonField(
         response,
-        r'''$.product.variants..price''',
+        r'''$.product.variants[0]..price''',
       );
+  dynamic variants(dynamic response) => getJsonField(
+        response,
+        r'''$.product.variants''',
+        true,
+      );
+  dynamic variantstitle(dynamic response) => getJsonField(
+        response,
+        r'''$.product.variants..title''',
+        true,
+      );
+  dynamic images(dynamic response) => getJsonField(
+        response,
+        r'''$.product.images..src''',
+        true,
+      );
+  dynamic productVariant(dynamic response) => getJsonField(
+        response,
+        r'''$.product.variants[0].id''',
+      );
+}
+
+class OrdersCall {
+  Future<ApiCallResponse> call({
+    int? id,
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Orders',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}customers/${id}/orders.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
 }
 
 /// End Shopify Admin Group Code

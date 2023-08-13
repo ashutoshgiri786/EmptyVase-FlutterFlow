@@ -148,7 +148,7 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                 padding: EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 16.0, 8.0),
                 child: FutureBuilder<ApiCallResponse>(
                   future: ShopifyAdminGroup.collectionsListCall.call(
-                    limit: _model.collections.toString(),
+                    limit: _model.collections,
                   ),
                   builder: (context, snapshot) {
                     // Customize what your widget looks like when it's loading.
@@ -381,7 +381,7 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                               AlignmentDirectional(-1.0, 0.0),
                                           child: FutureBuilder<ApiCallResponse>(
                                             future: ShopifyAdminGroup
-                                                .productPriceCall
+                                                .productCall
                                                 .call(
                                               prId: getJsonField(
                                                 productItem,
@@ -408,13 +408,12 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                                   ),
                                                 );
                                               }
-                                              final textProductPriceResponse =
+                                              final textProductResponse =
                                                   snapshot.data!;
                                               return Text(
-                                                ShopifyAdminGroup
-                                                    .productPriceCall
+                                                ShopifyAdminGroup.productCall
                                                     .price(
-                                                      textProductPriceResponse
+                                                      textProductResponse
                                                           .jsonBody,
                                                     )
                                                     .toString(),

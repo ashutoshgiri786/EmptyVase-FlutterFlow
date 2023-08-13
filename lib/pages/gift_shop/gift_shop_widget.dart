@@ -8,6 +8,7 @@ import '/flutter_flow/form_field_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'gift_shop_model.dart';
 export 'gift_shop_model.dart';
@@ -224,133 +225,126 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FutureBuilder<ApiCallResponse>(
-                        future: ShopifyAdminGroup.collectionsListCall.call(
-                          limit: valueOrDefault<String>(
-                            _model.limit,
-                            '50',
+                      PagedGridView<ApiPagingParams, dynamic>(
+                        pagingController: _model.setGridViewController(
+                          (nextPageMarker) =>
+                              ShopifyAdminGroup.collectionsListCall.call(
+                            limit: valueOrDefault<int>(
+                              _model.limit,
+                              50,
+                            ),
                           ),
                         ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50.0,
-                                height: 50.0,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    FlutterFlowTheme.of(context).primary,
-                                  ),
+                        padding: EdgeInsets.zero,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10.0,
+                          mainAxisSpacing: 10.0,
+                          childAspectRatio: 1.0,
+                        ),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.vertical,
+                        builderDelegate: PagedChildBuilderDelegate<dynamic>(
+                          // Customize what your widget looks like when it's loading the first page.
+                          firstPageProgressIndicatorBuilder: (_) => Center(
+                            child: SizedBox(
+                              width: 50.0,
+                              height: 50.0,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  FlutterFlowTheme.of(context).primary,
                                 ),
                               ),
-                            );
-                          }
-                          final gridViewCollectionsListResponse =
-                              snapshot.data!;
-                          return Builder(
-                            builder: (context) {
-                              final products =
-                                  ShopifyAdminGroup.collectionsListCall
-                                          .collections(
-                                            gridViewCollectionsListResponse
-                                                .jsonBody,
-                                          )
-                                          ?.toList() ??
-                                      [];
-                              return GridView.builder(
-                                padding: EdgeInsets.zero,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 10.0,
-                                  mainAxisSpacing: 10.0,
-                                  childAspectRatio: 1.0,
+                            ),
+                          ),
+                          // Customize what your widget looks like when it's loading another page.
+                          newPageProgressIndicatorBuilder: (_) => Center(
+                            child: SizedBox(
+                              width: 50.0,
+                              height: 50.0,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  FlutterFlowTheme.of(context).primary,
                                 ),
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                itemCount: products.length,
-                                itemBuilder: (context, productsIndex) {
-                                  final productsItem = products[productsIndex];
-                                  return InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      context.pushNamed(
-                                        'SpecificProductPage',
-                                        queryParameters: {
-                                          'id': serializeParam(
-                                            getJsonField(
-                                              productsItem,
-                                              r'''$..id''',
-                                            ),
-                                            ParamType.int,
-                                          ),
-                                        }.withoutNulls,
-                                      );
-                                    },
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width *
-                                                0.4,
-                                            height: MediaQuery.sizeOf(context)
-                                                    .height *
-                                                0.2,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                              image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: Image.network(
-                                                  getJsonField(
-                                                    productsItem,
-                                                    r'''$.image.src''',
-                                                  ),
-                                                ).image,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(30.0),
-                                            ),
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(-1.0, 0.0),
-                                          child: Text(
-                                            getJsonField(
-                                              productsItem,
-                                              r'''$..title''',
-                                            ).toString(),
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Montserrat',
-                                                  color: Color(0xFF2B4244),
-                                                  fontSize: 12.0,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                          ),
-                                        ),
-                                      ].divide(SizedBox(height: 8.0)),
+                              ),
+                            ),
+                          ),
+
+                          itemBuilder: (context, _, productsIndex) {
+                            final productsItem = _model
+                                .gridViewPagingController!
+                                .itemList![productsIndex];
+                            return InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                context.pushNamed(
+                                  'SpecificProductPage',
+                                  queryParameters: {
+                                    'id': serializeParam(
+                                      getJsonField(
+                                        productsItem,
+                                        r'''$..id''',
+                                      ),
+                                      ParamType.int,
                                     ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
+                                  }.withoutNulls,
+                                );
+                              },
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      width: MediaQuery.sizeOf(context).width *
+                                          0.4,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.2,
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: Image.network(
+                                            getJsonField(
+                                              productsItem,
+                                              r'''$.image.src''',
+                                            ),
+                                          ).image,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(30.0),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: AlignmentDirectional(-1.0, 0.0),
+                                    child: Text(
+                                      getJsonField(
+                                        productsItem,
+                                        r'''$..title''',
+                                      ).toString(),
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Montserrat',
+                                            color: Color(0xFF2B4244),
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                  ),
+                                ].divide(SizedBox(height: 8.0)),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ]
                         .divide(SizedBox(height: 10.0))
