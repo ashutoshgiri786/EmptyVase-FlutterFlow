@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
@@ -440,6 +441,99 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                             },
                           );
                         },
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 1.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            FFButtonWidget(
+                              onPressed: () {
+                                print('Button pressed ...');
+                              },
+                              text: 'Previous',
+                              options: FFButtonOptions(
+                                width: 150.0,
+                                height: 40.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: FlutterFlowTheme.of(context).primary,
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleSmall
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      color: Colors.white,
+                                    ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
+                                ),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                            Align(
+                              alignment: AlignmentDirectional(0.0, 1.0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  _model.result = await ShopifyAdminGroup
+                                      .retrieveCollectionsProductCall
+                                      .call(
+                                    id: _model.id,
+                                  );
+                                  setState(() {
+                                    _model.nextpageInfo =
+                                        (_model.result?.getHeader('link') ??
+                                            '');
+                                  });
+                                  await showDialog(
+                                    context: context,
+                                    builder: (alertDialogContext) {
+                                      return AlertDialog(
+                                        title: Text('ok'),
+                                        content: Text(_model.nextpageInfo!),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                alertDialogContext),
+                                            child: Text('Ok'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+
+                                  setState(() {});
+                                },
+                                text: 'Next',
+                                options: FFButtonOptions(
+                                  width: 150.0,
+                                  height: 40.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ]
                         .divide(SizedBox(height: 10.0))

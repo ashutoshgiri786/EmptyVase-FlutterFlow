@@ -27,6 +27,7 @@ class ShopifyAdminGroup {
 class RetrieveCollectionsProductCall {
   Future<ApiCallResponse> call({
     int? id,
+    String? pageInfo = '',
   }) {
     return ApiManager.instance.makeApiCall(
       callName: 'Retrieve Collections Product',
@@ -35,7 +36,10 @@ class RetrieveCollectionsProductCall {
       headers: {
         ...ShopifyAdminGroup.headers,
       },
-      params: {},
+      params: {
+        'limit': 10,
+        'page_info': pageInfo,
+      },
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,

@@ -3,7 +3,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
-import '/flutter_flow/random_data_util.dart' as random_data;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +29,7 @@ class _Cart2WidgetState extends State<Cart2Widget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.carid = await actions.getCart(
+      _model.cartid = await actions.getCart(
         valueOrDefault<String>(
           FFAppState().cartId,
           'gid://shopify/Cart/c1-ce8abd8186e310e028a488184ca2f37a',
@@ -41,7 +40,10 @@ class _Cart2WidgetState extends State<Cart2Widget> {
         builder: (alertDialogContext) {
           return AlertDialog(
             title: Text('ok'),
-            content: Text(_model.carid!.toString()),
+            content: Text(getJsonField(
+              _model.cartid,
+              r'''$..edges[:].node.id''',
+            ).toString().toString()),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(alertDialogContext),
@@ -107,12 +109,10 @@ class _Cart2WidgetState extends State<Cart2Widget> {
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
                 child: Builder(
                   builder: (context) {
-                    final cartProduct = List.generate(
-                        random_data.randomInteger(4, 5),
-                        (index) => random_data.randomImageUrl(
-                              0,
-                              0,
-                            )).toList();
+                    final cartProduct = getJsonField(
+                      _model.cartid,
+                      r'''$..edges[:]''',
+                    ).toList();
                     return SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
@@ -192,17 +192,31 @@ class _Cart2WidgetState extends State<Cart2Widget> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
-                                                  Text(
-                                                    'Product Name',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Montserrat',
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
+                                                  InkWell(
+                                                    splashColor:
+                                                        Colors.transparent,
+                                                    focusColor:
+                                                        Colors.transparent,
+                                                    hoverColor:
+                                                        Colors.transparent,
+                                                    highlightColor:
+                                                        Colors.transparent,
+                                                    onTap: () async {},
+                                                    child: Text(
+                                                      getJsonField(
+                                                        _model.cartid,
+                                                        r'''$..edges.node.id''',
+                                                      ).toString(),
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Montserrat',
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                    ),
                                                   ),
                                                   Text(
                                                     '\$50',

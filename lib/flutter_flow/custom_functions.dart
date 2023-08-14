@@ -29,3 +29,48 @@ bool? productvariants(List<String> input) {
   }
   return true;
 }
+
+String removeBetween(
+  String start,
+  String end,
+  String stringInput,
+) {
+  int startIndex = stringInput.indexOf(start);
+  if (startIndex == -1) {
+    return "";
+  }
+
+  int endIndex = stringInput.indexOf(end, startIndex + start.length);
+  if (endIndex == -1) {
+    return "";
+  }
+
+  String extractedText =
+      stringInput.substring(startIndex + start.length, endIndex);
+
+  return extractedText;
+}
+
+String removesletters(
+  String stringInput,
+  int? start,
+) {
+  start ??= 0;
+
+  if (start < 0) {
+    start = 0;
+  }
+
+  return stringInput.substring(start);
+}
+
+String? extractPageInfo(String fullUrl) {
+  Uri parsedUrl = Uri.parse(fullUrl);
+  Map<String, List<String>> queryParameters = parsedUrl.queryParametersAll;
+
+  if (queryParameters.containsKey('page_info')) {
+    return queryParameters['page_info']![0];
+  } else {
+    return ''; // Page info not found in URL
+  }
+}

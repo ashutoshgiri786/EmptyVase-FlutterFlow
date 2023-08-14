@@ -1,4 +1,4 @@
-package com.mycompany.emptyvase
+package com.flutterflow.emptyvase
 
 import io.flutter.embedding.android.FlutterActivity
 

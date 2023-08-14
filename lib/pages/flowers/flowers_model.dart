@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
@@ -18,12 +19,18 @@ class FlowersModel extends FlutterFlowModel {
 
   int collections = 5;
 
+  String? nextpageInfo = '123';
+
+  String? prevpageinfo = '123';
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
   // State field(s) for ChoiceChips widget.
   String? choiceChipsValue;
   FormFieldController<List<String>>? choiceChipsValueController;
+  // Stores action output result for [Backend Call - API (Retrieve Collections Product)] action in Button widget.
+  ApiCallResponse? result;
   // Model for navbar component.
   late NavbarModel navbarModel;
 

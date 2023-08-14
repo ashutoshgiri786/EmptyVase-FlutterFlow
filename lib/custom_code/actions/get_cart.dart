@@ -67,7 +67,7 @@ Future<dynamic> getCart(
     return null;
   }
 
-  return result.data?["customer"];
+  return result.data?["cart"]["lines"];
 }
 
 // Set your action name, define your arguments and return parameter,
