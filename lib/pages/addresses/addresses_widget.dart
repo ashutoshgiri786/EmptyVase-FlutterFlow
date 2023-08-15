@@ -34,7 +34,12 @@ class _AddressesWidgetState extends State<AddressesWidget> {
         FFAppState().accessToken,
       );
       setState(() {
-        _model.addresses = _model.list!.toList().cast<dynamic>();
+        _model.addresses = getJsonField(
+          _model.list,
+          r'''$.addresses.edges''',
+        )!
+            .toList()
+            .cast<dynamic>();
       });
     });
   }
@@ -139,234 +144,264 @@ class _AddressesWidgetState extends State<AddressesWidget> {
             elevation: 0.0,
           ),
         ),
-        body: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Align(
-                    alignment: AlignmentDirectional(-0.8, 0.0),
-                    child: FlutterFlowIconButton(
-                      borderColor: Colors.transparent,
-                      borderRadius: 20.0,
-                      borderWidth: 1.0,
-                      buttonSize: 40.0,
-                      icon: Icon(
-                        Icons.chevron_left_rounded,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 24.0,
+        body: Align(
+          alignment: AlignmentDirectional(0.0, -1.0),
+          child: Padding(
+            padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Align(
+                      alignment: AlignmentDirectional(-0.8, 0.0),
+                      child: FlutterFlowIconButton(
+                        borderColor: Colors.transparent,
+                        borderRadius: 20.0,
+                        borderWidth: 1.0,
+                        buttonSize: 40.0,
+                        icon: Icon(
+                          Icons.chevron_left_rounded,
+                          color: FlutterFlowTheme.of(context).primaryText,
+                          size: 24.0,
+                        ),
+                        onPressed: () async {
+                          context.safePop();
+                        },
                       ),
-                      onPressed: () async {
-                        context.safePop();
-                      },
                     ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: Text(
-                      'ADDRESSES',
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.w500,
-                          ),
+                    Align(
+                      alignment: AlignmentDirectional(0.0, 0.0),
+                      child: Text(
+                        'ADDRESSES',
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Montserrat',
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Builder(
-                  builder: (context) {
-                    final address = _model.addresses.toList();
-                    return SingleChildScrollView(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(address.length, (addressIndex) {
-                          final addressItem = address[addressIndex];
-                          return Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                20.0, 0.0, 20.0, 0.0),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(-1.0, -1.0),
-                                        child: RichText(
-                                          text: TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: getJsonField(
-                                                  addressItem,
-                                                  r'''$.node.address1''',
-                                                ).toString(),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Montserrat',
-                                                          color: Colors.black,
-                                                          fontWeight:
-                                                              FontWeight.normal,
-                                                        ),
-                                              ),
-                                              TextSpan(
-                                                text: '\n',
-                                                style: TextStyle(),
-                                              ),
-                                              TextSpan(
-                                                text: getJsonField(
-                                                  addressItem,
-                                                  r'''$.node.city''',
-                                                ).toString(),
-                                                style: TextStyle(),
-                                              ),
-                                              TextSpan(
-                                                text: '\n',
-                                                style: TextStyle(),
-                                              ),
-                                              TextSpan(
-                                                text: getJsonField(
-                                                  addressItem,
-                                                  r'''$.node.province''',
-                                                ).toString(),
-                                                style: TextStyle(),
-                                              ),
-                                              TextSpan(
-                                                text: '\n',
-                                                style: TextStyle(),
-                                              ),
-                                              TextSpan(
-                                                text: getJsonField(
-                                                  addressItem,
-                                                  r'''$.node.zip''',
-                                                ).toString(),
-                                                style: TextStyle(),
-                                              )
-                                            ],
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
+                  ],
+                ),
+                Expanded(
+                  child: Builder(
+                    builder: (context) {
+                      final address = _model.addresses.toList();
+                      return SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children:
+                              List.generate(address.length, (addressIndex) {
+                            final addressItem = address[addressIndex];
+                            return Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 0.0, 20.0, 0.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Align(
+                                          alignment:
+                                              AlignmentDirectional(-1.0, -1.0),
+                                          child: RichText(
+                                            text: TextSpan(
+                                              children: [
+                                                TextSpan(
+                                                  text: getJsonField(
+                                                    addressItem,
+                                                    r'''$.node.address1''',
+                                                  ).toString(),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                                ),
+                                                TextSpan(
+                                                  text: '\n',
+                                                  style: TextStyle(),
+                                                ),
+                                                TextSpan(
+                                                  text: getJsonField(
+                                                    addressItem,
+                                                    r'''$.node.city''',
+                                                  ).toString(),
+                                                  style: TextStyle(),
+                                                ),
+                                                TextSpan(
+                                                  text: '\n',
+                                                  style: TextStyle(),
+                                                ),
+                                                TextSpan(
+                                                  text: getJsonField(
+                                                    addressItem,
+                                                    r'''$.node.province''',
+                                                  ).toString(),
+                                                  style: TextStyle(),
+                                                ),
+                                                TextSpan(
+                                                  text: '\n',
+                                                  style: TextStyle(),
+                                                ),
+                                                TextSpan(
+                                                  text: getJsonField(
+                                                    addressItem,
+                                                    r'''$.node.zip''',
+                                                  ).toString(),
+                                                  style: TextStyle(),
+                                                )
+                                              ],
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ].divide(SizedBox(height: 10.0)),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional(-0.8, 0.0),
-                                  child: FlutterFlowIconButton(
-                                    borderColor: Colors.transparent,
-                                    borderRadius: 20.0,
-                                    borderWidth: 1.0,
-                                    buttonSize: 40.0,
-                                    icon: Icon(
-                                      Icons.chevron_right,
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      size: 24.0,
-                                    ),
-                                    onPressed: () async {
-                                      context.pushNamed(
-                                        'NewAddress',
-                                        queryParameters: {
-                                          'address': serializeParam(
-                                            getJsonField(
-                                              addressItem,
-                                              r'''$.node.address1''',
-                                            ).toString(),
-                                            ParamType.String,
-                                          ),
-                                          'province': serializeParam(
-                                            getJsonField(
-                                              addressItem,
-                                              r'''$.node.province''',
-                                            ).toString(),
-                                            ParamType.String,
-                                          ),
-                                          'city': serializeParam(
-                                            getJsonField(
-                                              addressItem,
-                                              r'''$.node.city''',
-                                            ).toString(),
-                                            ParamType.String,
-                                          ),
-                                          'zip': serializeParam(
-                                            getJsonField(
-                                              addressItem,
-                                              r'''$.node.zip''',
-                                            ).toString(),
-                                            ParamType.String,
-                                          ),
-                                          'country': serializeParam(
-                                            getJsonField(
-                                              addressItem,
-                                              r'''$.node.country''',
-                                            ).toString(),
-                                            ParamType.String,
-                                          ),
-                                          'update': serializeParam(
-                                            true,
-                                            ParamType.bool,
-                                          ),
-                                          'id': serializeParam(
+                                        if (getJsonField(
+                                              _model.list,
+                                              r'''$.defaultAddress.id''',
+                                            ) ==
                                             getJsonField(
                                               addressItem,
                                               r'''$.node.id''',
-                                            ).toString(),
-                                            ParamType.String,
+                                            ))
+                                          Align(
+                                            alignment: AlignmentDirectional(
+                                                -1.0, -1.0),
+                                            child: Text(
+                                              'BILLING',
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium,
+                                            ),
                                           ),
-                                        }.withoutNulls,
-                                      );
-                                    },
+                                      ].divide(SizedBox(height: 10.0)),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }).divide(SizedBox(height: 10.0)),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    context.pushNamed('NewAddress');
-                  },
-                  text: 'ADD NEW',
-                  options: FFButtonOptions(
-                    width: 312.0,
-                    height: 50.0,
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    iconPadding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: Colors.white,
-                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                          fontFamily: 'Montserrat',
-                          color: Color(0xFF2B4244),
-                          fontSize: 12.6,
-                          fontWeight: FontWeight.w600,
+                                  Align(
+                                    alignment: AlignmentDirectional(-0.8, 0.0),
+                                    child: FlutterFlowIconButton(
+                                      borderColor: Colors.transparent,
+                                      borderRadius: 20.0,
+                                      borderWidth: 1.0,
+                                      buttonSize: 40.0,
+                                      icon: Icon(
+                                        Icons.chevron_right,
+                                        color: FlutterFlowTheme.of(context)
+                                            .primaryText,
+                                        size: 24.0,
+                                      ),
+                                      onPressed: () async {
+                                        context.pushNamed(
+                                          'NewAddress',
+                                          queryParameters: {
+                                            'address': serializeParam(
+                                              getJsonField(
+                                                addressItem,
+                                                r'''$.node.address1''',
+                                              ).toString(),
+                                              ParamType.String,
+                                            ),
+                                            'province': serializeParam(
+                                              getJsonField(
+                                                addressItem,
+                                                r'''$.node.province''',
+                                              ).toString(),
+                                              ParamType.String,
+                                            ),
+                                            'city': serializeParam(
+                                              getJsonField(
+                                                addressItem,
+                                                r'''$.node.city''',
+                                              ).toString(),
+                                              ParamType.String,
+                                            ),
+                                            'zip': serializeParam(
+                                              getJsonField(
+                                                addressItem,
+                                                r'''$.node.zip''',
+                                              ).toString(),
+                                              ParamType.String,
+                                            ),
+                                            'country': serializeParam(
+                                              getJsonField(
+                                                addressItem,
+                                                r'''$.node.country''',
+                                              ).toString(),
+                                              ParamType.String,
+                                            ),
+                                            'update': serializeParam(
+                                              true,
+                                              ParamType.bool,
+                                            ),
+                                            'id': serializeParam(
+                                              getJsonField(
+                                                addressItem,
+                                                r'''$.node.id''',
+                                              ).toString(),
+                                              ParamType.String,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }).divide(SizedBox(height: 10.0)),
                         ),
-                    borderSide: BorderSide(
-                      color: Color(0xFF2B4244),
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(80.0),
+                      );
+                    },
                   ),
                 ),
-              ),
-            ].divide(SizedBox(height: 20.0)),
+                Align(
+                  alignment: AlignmentDirectional(0.0, -1.0),
+                  child: Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+                    child: FFButtonWidget(
+                      onPressed: () async {
+                        context.pushNamed('NewAddress');
+                      },
+                      text: 'ADD NEW',
+                      options: FFButtonOptions(
+                        width: 312.0,
+                        height: 50.0,
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: Colors.white,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
+                                  fontFamily: 'Montserrat',
+                                  color: Color(0xFF2B4244),
+                                  fontSize: 12.6,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                        borderSide: BorderSide(
+                          color: Color(0xFF2B4244),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(80.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ].divide(SizedBox(height: 20.0)),
+            ),
           ),
         ),
       ),

@@ -22,6 +22,7 @@ class ShopifyAdminGroup {
   static ProductImageCall productImageCall = ProductImageCall();
   static ProductCall productCall = ProductCall();
   static OrdersCall ordersCall = OrdersCall();
+  static ProductVariantCall productVariantCall = ProductVariantCall();
 }
 
 class RetrieveCollectionsProductCall {
@@ -128,7 +129,7 @@ class ProductImageCall {
 
 class ProductCall {
   Future<ApiCallResponse> call({
-    int? prId = 5403721891995,
+    String? prId = '',
   }) {
     return ApiManager.instance.makeApiCall(
       callName: 'Product',
@@ -168,6 +169,14 @@ class ProductCall {
         response,
         r'''$.product.variants[0].id''',
       );
+  dynamic productitle(dynamic response) => getJsonField(
+        response,
+        r'''$.product.title''',
+      );
+  dynamic coverimage(dynamic response) => getJsonField(
+        response,
+        r'''$.product.images[0].src''',
+      );
 }
 
 class OrdersCall {
@@ -188,6 +197,35 @@ class OrdersCall {
       cache: false,
     );
   }
+}
+
+class ProductVariantCall {
+  Future<ApiCallResponse> call({
+    String? vrId = '35107817717915',
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Product Variant',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}variants/${vrId}.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic productid(dynamic response) => getJsonField(
+        response,
+        r'''$.variant.product_id''',
+      );
+  dynamic variantprice(dynamic response) => getJsonField(
+        response,
+        r'''$.variant.price''',
+      );
 }
 
 /// End Shopify Admin Group Code

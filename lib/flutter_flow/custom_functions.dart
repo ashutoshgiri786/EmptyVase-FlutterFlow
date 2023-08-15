@@ -22,6 +22,13 @@ int getFlowersId(
   return 0;
 }
 
+int subractOne(int input) {
+  if (input == 1) {
+    return 1;
+  }
+  return input - 1;
+}
+
 bool? productvariants(List<String> input) {
   // generate a code which take input as a list and returns false if the list more than 1 item
   if (input.length > 1) {
@@ -51,17 +58,29 @@ String removeBetween(
   return extractedText;
 }
 
-String removesletters(
+String removeBetweenOccurence(
   String stringInput,
-  int? start,
+  int occurrence,
+  String start,
+  String end,
 ) {
-  start ??= 0;
-
-  if (start < 0) {
-    start = 0;
+  int startIndex = -1;
+  for (int i = 0; i < occurrence; i++) {
+    startIndex = stringInput.indexOf(start, startIndex + 1);
+    if (startIndex == -1) {
+      return "";
+    }
   }
 
-  return stringInput.substring(start);
+  int endIndex = stringInput.indexOf(end, startIndex + start.length);
+  if (endIndex == -1) {
+    return "";
+  }
+
+  String extractedText =
+      stringInput.substring(startIndex + start.length, endIndex);
+
+  return extractedText;
 }
 
 String? extractPageInfo(String fullUrl) {
@@ -73,4 +92,19 @@ String? extractPageInfo(String fullUrl) {
   } else {
     return ''; // Page info not found in URL
   }
+}
+
+String removeletters(
+  String from,
+  String input,
+) {
+  final fromIndex = input.indexOf(from);
+  if (fromIndex != -1) {
+    return input.substring(fromIndex + from.length);
+  }
+  return input;
+}
+
+int addOne(int input) {
+  return input + 1;
 }

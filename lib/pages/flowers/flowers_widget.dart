@@ -9,6 +9,7 @@ import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'flowers_model.dart';
@@ -30,6 +31,41 @@ class _FlowersWidgetState extends State<FlowersWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => FlowersModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.firstResponse =
+          await ShopifyAdminGroup.retrieveCollectionsProductCall.call(
+        id: _model.id,
+      );
+      setState(() {
+        _model.nextpageInfo = functions.removeBetween(
+            'pageinfo=', '>', (_model.firstResponse?.getHeader('link') ?? ''));
+      });
+      await showDialog(
+        context: context,
+        builder: (alertDialogContext) {
+          return AlertDialog(
+            title: Text('ok '),
+            content: Text((_model.firstResponse?.succeeded ?? true).toString()),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(alertDialogContext),
+                child: Text('Ok'),
+              ),
+            ],
+          );
+        },
+      );
+      setState(() {
+        _model.rsponse = ShopifyAdminGroup.retrieveCollectionsProductCall
+            .product(
+              (_model.firstResponse?.jsonBody ?? ''),
+            )!
+            .toList()
+            .cast<dynamic>();
+      });
+    });
   }
 
   @override
@@ -267,14 +303,7 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                               snapshot.data!;
                           return Builder(
                             builder: (context) {
-                              final product = ShopifyAdminGroup
-                                      .retrieveCollectionsProductCall
-                                      .product(
-                                        gridViewRetrieveCollectionsProductResponse
-                                            .jsonBody,
-                                      )
-                                      ?.toList() ??
-                                  [];
+                              final product = _model.rsponse.toList();
                               return GridView.builder(
                                 padding: EdgeInsets.zero,
                                 gridDelegate:
@@ -387,7 +416,7 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                               prId: getJsonField(
                                                 productItem,
                                                 r'''$.id''',
-                                              ),
+                                              ).toString(),
                                             ),
                                             builder: (context, snapshot) {
                                               // Customize what your widget looks like when it's loading.
@@ -448,56 +477,115 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                           mainAxisSize: MainAxisSize.max,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            FFButtonWidget(
-                              onPressed: () {
-                                print('Button pressed ...');
-                              },
-                              text: 'Previous',
-                              options: FFButtonOptions(
-                                width: 150.0,
-                                height: 40.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context).primary,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      fontFamily: 'Montserrat',
-                                      color: Colors.white,
-                                    ),
-                                elevation: 3.0,
-                                borderSide: BorderSide(
-                                  color: Colors.transparent,
-                                  width: 1.0,
+                            if (_model.prevpageinfo == null ||
+                                _model.prevpageinfo == '')
+                              FFButtonWidget(
+                                onPressed: () async {
+                                  _model.prevpageresponse =
+                                      await ShopifyAdminGroup
+                                          .retrieveCollectionsProductCall
+                                          .call(
+                                    id: _model.id,
+                                    pageInfo: _model.prevpageinfo,
+                                  );
+                                  await showDialog(
+                                    context: context,
+                                    builder: (alertDialogContext) {
+                                      return AlertDialog(
+                                        title: Text('45'),
+                                        content: Text(_model.prevpageinfo!),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.pop(
+                                                alertDialogContext),
+                                            child: Text('Ok'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                  setState(() {
+                                    _model.rsponse = ShopifyAdminGroup
+                                        .retrieveCollectionsProductCall
+                                        .product(
+                                          (_model.prevpageresponse?.jsonBody ??
+                                              ''),
+                                        )!
+                                        .toList()
+                                        .cast<dynamic>();
+                                  });
+
+                                  setState(() {});
+                                },
+                                text: 'Previous',
+                                options: FFButtonOptions(
+                                  width: 150.0,
+                                  height: 40.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        color: Colors.white,
+                                      ),
+                                  elevation: 3.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                borderRadius: BorderRadius.circular(8.0),
                               ),
-                            ),
                             Align(
                               alignment: AlignmentDirectional(0.0, 1.0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  _model.result = await ShopifyAdminGroup
-                                      .retrieveCollectionsProductCall
-                                      .call(
+                                  _model.nextpageresponse =
+                                      await ShopifyAdminGroup
+                                          .retrieveCollectionsProductCall
+                                          .call(
                                     id: _model.id,
+                                    pageInfo: _model.nextpageInfo,
                                   );
+                                  setState(() {
+                                    _model.rsponse = ShopifyAdminGroup
+                                        .retrieveCollectionsProductCall
+                                        .product(
+                                          (_model.nextpageresponse?.jsonBody ??
+                                              ''),
+                                        )!
+                                        .toList()
+                                        .cast<dynamic>();
+                                  });
                                   setState(() {
                                     _model.nextpageInfo =
                                         functions.removeBetween(
-                                            'page_info',
+                                            'page_info=',
                                             '>',
-                                            (_model.result?.getHeader('link') ??
+                                            (_model.nextpageresponse
+                                                    ?.getHeader('link') ??
                                                 ''));
+                                  });
+                                  setState(() {
+                                    _model.prevpageinfo =
+                                        functions.removeBetweenOccurence(
+                                            (_model.nextpageresponse
+                                                    ?.getHeader('link') ??
+                                                ''),
+                                            2,
+                                            'page_info=',
+                                            '>');
                                   });
                                   await showDialog(
                                     context: context,
                                     builder: (alertDialogContext) {
                                       return AlertDialog(
-                                        title: Text('ok'),
-                                        content: Text(_model.nextpageInfo!),
+                                        title: Text('15'),
+                                        content: Text(_model.prevpageinfo!),
                                         actions: [
                                           TextButton(
                                             onPressed: () => Navigator.pop(

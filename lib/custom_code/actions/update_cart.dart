@@ -9,8 +9,9 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Future<dynamic> getCart(
-  String cartId,
+Future<dynamic> updateCart(
+  String cartproductId,
+  int quantity,
 ) async {
   final httpLink = HttpLink(
     FFAppState().graphqlEndpoint,
@@ -20,44 +21,43 @@ Future<dynamic> getCart(
   );
 
   final client = GraphQLClient(link: httpLink, cache: GraphQLCache());
-
+  final cart_id = FFAppState().cartId;
   final String mutation = '''
-  query(\$cartId:ID!) {
-  cart(
-    id: \$cartId
-  ) {
-    id
-    createdAt
-    updatedAt
-    lines(first: 10) {
-      edges {
-        node {
-          id
-          quantity
-          merchandise {
-            ... on ProductVariant {
-              id
-            }
+    mutation {
+      cartLinesUpdate(
+          cartId: "gid://shopify/Cart/$cart_id"
+    lines: {
+      id: $cartproductId
+      quantity: $quantity
+          attributes: {
+            key: "cart_attribute"
+            value: "This is a cart attribute"
           }
-          attributes {
-            key
-            value
+        }
+      ) {
+        cart {
+          id
+          createdAt
+          updatedAt
+          lines(first: 10) {
+            edges {
+              node {
+                id
+                merchandise {
+                  ... on ProductVariant {
+                    id
+                  }
+                }
+              }
+            }
           }
         }
       }
     }
-    
-
-   
-  }
-}
-''';
+  ''';
 
   final MutationOptions options = MutationOptions(
     document: gql(mutation),
-    variables: {
-      "cartId": cartId,
-    },
   );
 
   final QueryResult result = await client.mutate(options);
@@ -67,7 +67,7 @@ Future<dynamic> getCart(
     return null;
   }
 
-  return result.data?["cart"];
+  return result.data?["cartLinesUpdate"]["cart"];
 }
 
 // Set your action name, define your arguments and return parameter,

@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/components/item_added/item_added_widget.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -49,7 +50,7 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
         _model.productid = widget.id;
       });
       _model.apiResultsqe = await ShopifyAdminGroup.productCall.call(
-        prId: widget.id,
+        prId: widget.id?.toString(),
       );
       setState(() {
         _model.productVariants = functions
@@ -76,7 +77,7 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
 
     return FutureBuilder<ApiCallResponse>(
       future: ShopifyAdminGroup.productCall.call(
-        prId: _model.productid,
+        prId: _model.productid?.toString(),
       ),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
@@ -347,22 +348,29 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                         .toString(),
                                     1,
                                   );
-                                  await showDialog(
+                                  setState(() {
+                                    FFAppState().cartId = getJsonField(
+                                      _model.out,
+                                      r'''$.cart.id''',
+                                    ).toString();
+                                  });
+                                  await showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    enableDrag: false,
                                     context: context,
-                                    builder: (alertDialogContext) {
-                                      return AlertDialog(
-                                        title: Text('ok'),
-                                        content: Text(_model.out!.toString()),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.pop(
-                                                alertDialogContext),
-                                            child: Text('Ok'),
-                                          ),
-                                        ],
+                                    builder: (context) {
+                                      return GestureDetector(
+                                        onTap: () => FocusScope.of(context)
+                                            .requestFocus(_model.unfocusNode),
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: ItemAddedWidget(),
+                                        ),
                                       );
                                     },
-                                  );
+                                  ).then((value) => setState(() {}));
 
                                   setState(() {});
                                 },

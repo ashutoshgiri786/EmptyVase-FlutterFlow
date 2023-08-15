@@ -1,6 +1,7 @@
 export 'sign_up.dart' show signUp;
 export 'customer_id.dart' show customerId;
 export 'order_history.dart' show orderHistory;
+export 'update_cart.dart' show updateCart;
 export 'reset_link.dart' show resetLink;
 export 'sign_in.dart' show signIn;
 export 'create_address.dart' show createAddress;
