@@ -102,7 +102,7 @@ class FFAppState extends ChangeNotifier {
     _customerId = _value;
   }
 
-  String _cartId = '';
+  String _cartId = 'gid://shopify/Cart/c1-ce8abd8186e310e028a488184ca2f37a';
   String get cartId => _cartId;
   set cartId(String _value) {
     _cartId = _value;
