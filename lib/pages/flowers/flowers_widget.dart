@@ -486,8 +486,11 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                   );
                                   setState(() {
                                     _model.nextpageInfo =
-                                        (_model.result?.getHeader('link') ??
-                                            '');
+                                        functions.removeBetween(
+                                            'page_info',
+                                            '>',
+                                            (_model.result?.getHeader('link') ??
+                                                ''));
                                   });
                                   await showDialog(
                                     context: context,

@@ -34,33 +34,7 @@ class _AddressesWidgetState extends State<AddressesWidget> {
         FFAppState().accessToken,
       );
       setState(() {
-        _model.addresses = getJsonField(
-          _model.list,
-          r'''$.addresses''',
-        )!
-            .toList()
-            .cast<dynamic>();
-      });
-      await showDialog(
-        context: context,
-        builder: (alertDialogContext) {
-          return AlertDialog(
-            title: Text('ok'),
-            content: Text(_model.list!.toString()),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(alertDialogContext),
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
-      setState(() {
-        _model.addressId = getJsonField(
-          _model.list,
-          r'''$.defaultAddress.id''',
-        ).toString().toString();
+        _model.addresses = _model.list!.toList().cast<dynamic>();
       });
     });
   }
@@ -281,38 +255,6 @@ class _AddressesWidgetState extends State<AddressesWidget> {
                                             ],
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium,
-                                          ),
-                                        ),
-                                      ),
-                                      Align(
-                                        alignment:
-                                            AlignmentDirectional(-1.0, 0.0),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  14.0, 0.0, 0.0, 0.0),
-                                          child: InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.defsultid =
-                                                  await actions.addressList(
-                                                FFAppState().accessToken,
-                                              );
-
-                                              setState(() {});
-                                            },
-                                            child: Text(
-                                              getJsonField(
-                                                _model.defsultid,
-                                                r'''$.defaultAddress.id''',
-                                              ).toString(),
-                                              style:
-                                                  FlutterFlowTheme.of(context)
-                                                      .bodyMedium,
-                                            ),
                                           ),
                                         ),
                                       ),

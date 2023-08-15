@@ -4,7 +4,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -12,8 +11,8 @@ class Cart2Model extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // Stores action output result for [Custom Action - getCart] action in Cart_2 widget.
-  dynamic? cartid;
+  // Stores action output result for [Custom Action - getCart] action in Column widget.
+  dynamic? getcart;
 
   /// Initialization and disposal methods.
 

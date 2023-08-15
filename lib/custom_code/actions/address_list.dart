@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 // Begin custom action code
 // DO NOT REMOVE OR MODIFY THE CODE ABOVE!
 
-import 'package:graphql_flutter/graphql_flutter.dart';
-
 Future<dynamic> addressList(
   String customerAccessToken,
 ) async {
@@ -22,13 +20,11 @@ Future<dynamic> addressList(
   final client = GraphQLClient(link: httpLink, cache: GraphQLCache());
 
   final String mutation = '''
-
   query FetchCustomerInfo(\$customerAccessToken: String!) {
   customer(customerAccessToken: \$customerAccessToken) {
-        defaultAddress {
-          id 
+    defaultAddress {
+        id
     }
-    
     addresses(first: 100) {
         edges {
             node {
