@@ -20,14 +20,14 @@ export 'items_page_cart_model.dart';
 class ItemsPageCartWidget extends StatefulWidget {
   const ItemsPageCartWidget({
     Key? key,
-    required this.productName,
     required this.productDescription,
     this.id,
+    required this.productName,
   }) : super(key: key);
 
-  final String? productName;
   final String? productDescription;
   final int? id;
+  final String? productName;
 
   @override
   _ItemsPageCartWidgetState createState() => _ItemsPageCartWidgetState();
@@ -45,7 +45,6 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      await Future.delayed(const Duration(milliseconds: 1000));
       setState(() {
         _model.productid = widget.id;
       });
@@ -133,7 +132,7 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                   productsImageItem,
                                   width: 300.0,
                                   height: 291.0,
-                                  fit: BoxFit.cover,
+                                  fit: BoxFit.fill,
                                 ),
                               );
                             },
@@ -313,14 +312,15 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                           16.0, 4.0, 16.0, 4.0),
                                       hidesUnderline: true,
                                       isSearchable: false,
+                                      isMultiSelect: false,
                                     ),
                                   ),
                                 ToggleIcon(
                                   onPressed: () async {
-                                    setState(
-                                        () => _model.expaded = !_model.expaded);
+                                    setState(() =>
+                                        _model.wishlist = !_model.wishlist);
                                   },
-                                  value: _model.expaded,
+                                  value: _model.wishlist,
                                   onIcon: Icon(
                                     Icons.favorite,
                                     color: Color(0xFFFA0038),
@@ -340,20 +340,36 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                   0.0, 0.0, 0.0, 20.0),
                               child: FFButtonWidget(
                                 onPressed: () async {
-                                  _model.out = await actions.createCart(
-                                    ShopifyAdminGroup.productCall
-                                        .productVariant(
-                                          itemsPageCartProductResponse.jsonBody,
-                                        )
-                                        .toString(),
-                                    1,
-                                  );
-                                  setState(() {
-                                    FFAppState().cartId = getJsonField(
-                                      _model.out,
-                                      r'''$.cart.id''',
-                                    ).toString();
-                                  });
+                                  if (FFAppState().cartId == null ||
+                                      FFAppState().cartId == '') {
+                                    _model.out = await actions.createCart(
+                                      ShopifyAdminGroup.productCall
+                                          .productVariant(
+                                            itemsPageCartProductResponse
+                                                .jsonBody,
+                                          )
+                                          .toString(),
+                                      1,
+                                    );
+                                    setState(() {
+                                      FFAppState().cartId = getJsonField(
+                                        _model.out,
+                                        r'''$.cart.id''',
+                                      ).toString();
+                                    });
+                                  } else {
+                                    _model.added =
+                                        await actions.addMoreItemsInCart(
+                                      ShopifyAdminGroup.productCall
+                                          .productVariant(
+                                            itemsPageCartProductResponse
+                                                .jsonBody,
+                                          )
+                                          .toString(),
+                                      1,
+                                    );
+                                  }
+
                                   await showModalBottomSheet(
                                     isScrollControlled: true,
                                     backgroundColor: Colors.transparent,
@@ -366,7 +382,14 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                         child: Padding(
                                           padding:
                                               MediaQuery.viewInsetsOf(context),
-                                          child: ItemAddedWidget(),
+                                          child: ItemAddedWidget(
+                                            productimage: ShopifyAdminGroup
+                                                .productCall
+                                                .coverimage(
+                                              itemsPageCartProductResponse
+                                                  .jsonBody,
+                                            ),
+                                          ),
                                         ),
                                       );
                                     },

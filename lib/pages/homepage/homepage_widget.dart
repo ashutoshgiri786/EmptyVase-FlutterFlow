@@ -1,12 +1,15 @@
+import '/backend/api_requests/api_calls.dart';
 import '/components/navbar/navbar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart'
     as smooth_page_indicator;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'homepage_model.dart';
@@ -28,6 +31,16 @@ class _HomepageWidgetState extends State<HomepageWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HomepageModel());
+
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      _model.customerrid = await actions.customerId(
+        valueOrDefault<String>(
+          FFAppState().accessToken,
+          '79bfb95601d6091b4788fb80e256c318',
+        ),
+      );
+    });
   }
 
   @override
@@ -173,38 +186,89 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                                     ),
                                     Align(
                                       alignment: AlignmentDirectional(0.0, 0.8),
-                                      child: FFButtonWidget(
-                                        onPressed: () async {
-                                          context.pushNamed('Flowers');
-                                        },
-                                        text: 'SHOP ARRANGEMENTS',
-                                        options: FFButtonOptions(
-                                          width: 296.0,
-                                          height: 48.0,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  24.0, 0.0, 24.0, 0.0),
-                                          iconPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          color: Color(0xFFF2EFEB),
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .override(
-                                                    fontFamily: 'Montserrat',
-                                                    color: Colors.black,
-                                                    fontWeight:
-                                                        FontWeight.normal,
+                                      child: FutureBuilder<ApiCallResponse>(
+                                        future: ShopifyAdminGroup
+                                            .collectionsListCall
+                                            .call(),
+                                        builder: (context, snapshot) {
+                                          // Customize what your widget looks like when it's loading.
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: SizedBox(
+                                                width: 50.0,
+                                                height: 50.0,
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
                                                   ),
-                                          elevation: 0.0,
-                                          borderSide: BorderSide(
-                                            color: Color(0xFF2B4244),
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(80.0),
-                                        ),
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          final buttonCollectionsListResponse =
+                                              snapshot.data!;
+                                          return FFButtonWidget(
+                                            onPressed: () async {
+                                              context.pushNamed(
+                                                'Flowers',
+                                                queryParameters: {
+                                                  'id': serializeParam(
+                                                    ShopifyAdminGroup
+                                                        .collectionsListCall
+                                                        .initialid(
+                                                      buttonCollectionsListResponse
+                                                          .jsonBody,
+                                                    ),
+                                                    ParamType.int,
+                                                  ),
+                                                  'choiceinitialvalue':
+                                                      serializeParam(
+                                                    ShopifyAdminGroup
+                                                        .collectionsListCall
+                                                        .initialtitle(
+                                                          buttonCollectionsListResponse
+                                                              .jsonBody,
+                                                        )
+                                                        .toString(),
+                                                    ParamType.String,
+                                                  ),
+                                                }.withoutNulls,
+                                              );
+                                            },
+                                            text: 'SHOP ARRANGEMENTS',
+                                            options: FFButtonOptions(
+                                              width: 296.0,
+                                              height: 48.0,
+                                              padding: EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      24.0, 0.0, 24.0, 0.0),
+                                              iconPadding: EdgeInsetsDirectional
+                                                  .fromSTEB(0.0, 0.0, 0.0, 0.0),
+                                              color: Color(0xFFF2EFEB),
+                                              textStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .override(
+                                                        fontFamily:
+                                                            'Montserrat',
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.normal,
+                                                      ),
+                                              elevation: 0.0,
+                                              borderSide: BorderSide(
+                                                color: Color(0xFF2B4244),
+                                                width: 1.0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(80.0),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     ),
                                   ],
@@ -366,37 +430,86 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                                     ),
                                   ),
                                 ),
-                                InkWell(
-                                  splashColor: Colors.transparent,
-                                  focusColor: Colors.transparent,
-                                  hoverColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onTap: () async {
-                                    context.pushNamed('Flowers');
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'GO TO PRODUCTS',
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .override(
-                                              fontFamily: 'Montserrat',
-                                              fontWeight: FontWeight.w500,
+                                FutureBuilder<ApiCallResponse>(
+                                  future: ShopifyAdminGroup.collectionsListCall
+                                      .call(),
+                                  builder: (context, snapshot) {
+                                    // Customize what your widget looks like when it's loading.
+                                    if (!snapshot.hasData) {
+                                      return Center(
+                                        child: SizedBox(
+                                          width: 50.0,
+                                          height: 50.0,
+                                          child: CircularProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                              FlutterFlowTheme.of(context)
+                                                  .primary,
                                             ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    final rowCollectionsListResponse =
+                                        snapshot.data!;
+                                    return InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        context.pushNamed(
+                                          'Flowers',
+                                          queryParameters: {
+                                            'id': serializeParam(
+                                              ShopifyAdminGroup
+                                                  .collectionsListCall
+                                                  .initialid(
+                                                rowCollectionsListResponse
+                                                    .jsonBody,
+                                              ),
+                                              ParamType.int,
+                                            ),
+                                            'choiceinitialvalue':
+                                                serializeParam(
+                                              ShopifyAdminGroup
+                                                  .collectionsListCall
+                                                  .initialtitle(
+                                                    rowCollectionsListResponse
+                                                        .jsonBody,
+                                                  )
+                                                  .toString(),
+                                              ParamType.String,
+                                            ),
+                                          }.withoutNulls,
+                                        );
+                                      },
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'GO TO PRODUCTS',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Montserrat',
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                          Icon(
+                                            Icons.chevron_right,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                            size: 24.0,
+                                          ),
+                                        ].divide(SizedBox(width: 20.0)),
                                       ),
-                                      Icon(
-                                        Icons.chevron_right,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        size: 24.0,
-                                      ),
-                                    ].divide(SizedBox(width: 20.0)),
-                                  ),
+                                    );
+                                  },
                                 ),
                               ].divide(SizedBox(height: 20.0)),
                             ),
@@ -408,41 +521,84 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.sizeOf(context).width * 0.4,
-                            maxHeight: MediaQuery.sizeOf(context).height * 0.35,
+                        FutureBuilder<ApiCallResponse>(
+                          future: ShopifyAdminGroup.collectionsListCall.call(
+                            limit: 5,
                           ),
-                          decoration: BoxDecoration(
-                            color: Color(0x52739C9F),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Align(
-                            alignment: AlignmentDirectional(-1.0, -1.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.sizeOf(context).width * 0.38,
-                                    maxHeight:
-                                        MediaQuery.sizeOf(context).height *
-                                            0.34,
+                          builder: (context, snapshot) {
+                            // Customize what your widget looks like when it's loading.
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: SizedBox(
+                                  width: 50.0,
+                                  height: 50.0,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      FlutterFlowTheme.of(context).primary,
+                                    ),
                                   ),
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  child: InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      context.pushNamed('Flowers');
-                                    },
+                                ),
+                              );
+                            }
+                            final containerCollectionsListResponse =
+                                snapshot.data!;
+                            return InkWell(
+                              splashColor: Colors.transparent,
+                              focusColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onTap: () async {
+                                context.pushNamed(
+                                  'Flowers',
+                                  queryParameters: {
+                                    'id': serializeParam(
+                                      ShopifyAdminGroup.collectionsListCall
+                                          .initialid(
+                                        containerCollectionsListResponse
+                                            .jsonBody,
+                                      ),
+                                      ParamType.int,
+                                    ),
+                                    'choiceinitialvalue': serializeParam(
+                                      ShopifyAdminGroup.collectionsListCall
+                                          .initialtitle(
+                                            containerCollectionsListResponse
+                                                .jsonBody,
+                                          )
+                                          .toString(),
+                                      ParamType.String,
+                                    ),
+                                  }.withoutNulls,
+                                );
+                              },
+                              child: Container(
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.sizeOf(context).width * 0.4,
+                                  maxHeight:
+                                      MediaQuery.sizeOf(context).height * 0.35,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(0x52739C9F),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 8.0, 8.0),
+                                  child: Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth:
+                                          MediaQuery.sizeOf(context).width *
+                                              0.38,
+                                      maxHeight:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.34,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
@@ -476,79 +632,73 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
+                              ),
+                            );
+                          },
                         ),
-                        Container(
-                          constraints: BoxConstraints(
-                            maxWidth: MediaQuery.sizeOf(context).width * 0.4,
-                            maxHeight: MediaQuery.sizeOf(context).height * 0.35,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Color(0x52739C9F),
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Align(
-                            alignment: AlignmentDirectional(-1.0, -1.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
-                                  constraints: BoxConstraints(
-                                    maxWidth:
-                                        MediaQuery.sizeOf(context).width * 0.38,
-                                    maxHeight:
-                                        MediaQuery.sizeOf(context).height *
-                                            0.34,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  child: InkWell(
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onTap: () async {
-                                      context.pushNamed('GiftShop');
-                                    },
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                          child: Image.asset(
-                                            'assets/images/Untitled_design_(1).png',
-                                            width: 300.0,
-                                            height: 200.0,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                        Align(
-                                          alignment:
-                                              AlignmentDirectional(0.0, -1.0),
-                                          child: Text(
-                                            'GIFT SHOP',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Montserrat',
-                                                  color: Color(0xFF2B4244),
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                          ),
-                                        ),
-                                      ].divide(SizedBox(height: 10.0)),
-                                    ),
-                                  ),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            context.pushNamed('GiftShop');
+                          },
+                          child: Container(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.sizeOf(context).width * 0.4,
+                              maxHeight:
+                                  MediaQuery.sizeOf(context).height * 0.35,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Color(0x52739C9F),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 8.0, 8.0),
+                              child: Container(
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.sizeOf(context).width * 0.38,
+                                  maxHeight:
+                                      MediaQuery.sizeOf(context).height * 0.34,
                                 ),
-                              ],
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.asset(
+                                        'assets/images/Untitled_design_(1).png',
+                                        width: 300.0,
+                                        height: 200.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(0.0, -1.0),
+                                      child: Text(
+                                        'GIFT SHOP',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Montserrat',
+                                              color: Color(0xFF2B4244),
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+                                    ),
+                                  ].divide(SizedBox(height: 10.0)),
+                                ),
+                              ),
                             ),
                           ),
                         ),

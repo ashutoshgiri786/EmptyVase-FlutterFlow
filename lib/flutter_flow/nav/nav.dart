@@ -90,7 +90,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'Flowers',
           path: '/flowers',
-          builder: (context, params) => FlowersWidget(),
+          builder: (context, params) => FlowersWidget(
+            id: params.getParam('id', ParamType.int),
+            choiceinitialvalue:
+                params.getParam('choiceinitialvalue', ParamType.String),
+          ),
         ),
         FFRoute(
           name: 'Notification',
@@ -189,10 +193,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'items_page_cart',
           path: '/itemsPageCart',
           builder: (context, params) => ItemsPageCartWidget(
-            productName: params.getParam('productName', ParamType.String),
             productDescription:
                 params.getParam('productDescription', ParamType.String),
             id: params.getParam('id', ParamType.int),
+            productName: params.getParam('productName', ParamType.String),
           ),
         ),
         FFRoute(

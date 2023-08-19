@@ -25,10 +25,6 @@ class Cart2Model extends FlutterFlowModel {
   final unfocusNode = FocusNode();
   // Stores action output result for [Custom Action - getCart] action in Cart_2 widget.
   dynamic? cart;
-  // Stores action output result for [Backend Call - API (Product Variant)] action in Container widget.
-  ApiCallResponse? variant;
-  // Stores action output result for [Backend Call - API (Product)] action in Container widget.
-  ApiCallResponse? productDetails;
 
   /// Initialization and disposal methods.
 

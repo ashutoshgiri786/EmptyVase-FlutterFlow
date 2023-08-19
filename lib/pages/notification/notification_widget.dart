@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/components/navbar/navbar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -185,7 +186,32 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () async {
-                    context.pushNamed('Flowers');
+                    _model.choice =
+                        await ShopifyAdminGroup.collectionsListCall.call(
+                      limit: 5,
+                    );
+
+                    context.pushNamed(
+                      'Flowers',
+                      queryParameters: {
+                        'id': serializeParam(
+                          ShopifyAdminGroup.collectionsListCall.initialid(
+                            (_model.choice?.jsonBody ?? ''),
+                          ),
+                          ParamType.int,
+                        ),
+                        'choiceinitialvalue': serializeParam(
+                          ShopifyAdminGroup.collectionsListCall
+                              .initialtitle(
+                                (_model.choice?.jsonBody ?? ''),
+                              )
+                              .toString(),
+                          ParamType.String,
+                        ),
+                      }.withoutNulls,
+                    );
+
+                    setState(() {});
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.max,

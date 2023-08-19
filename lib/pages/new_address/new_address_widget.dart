@@ -51,21 +51,6 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
       setState(() {
         _model.updateAddress = widget.update;
       });
-      await showDialog(
-        context: context,
-        builder: (alertDialogContext) {
-          return AlertDialog(
-            title: Text('ok'),
-            content: Text(_model.updateAddress.toString()),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(alertDialogContext),
-                child: Text('Ok'),
-              ),
-            ],
-          );
-        },
-      );
     });
 
     _model.textController1 ??= TextEditingController(text: widget.address);
@@ -381,46 +366,47 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
                       _model.textController5Validator.asValidator(context),
                 ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: AlignmentDirectional(-1.0, 0.0),
-                    child: Theme(
-                      data: ThemeData(
-                        checkboxTheme: CheckboxThemeData(
-                          visualDensity: VisualDensity.compact,
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4.0),
+              if (widget.update == true)
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Align(
+                      alignment: AlignmentDirectional(-1.0, 0.0),
+                      child: Theme(
+                        data: ThemeData(
+                          checkboxTheme: CheckboxThemeData(
+                            visualDensity: VisualDensity.compact,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
                           ),
+                          unselectedWidgetColor: Color(0xFF4F0C87),
                         ),
-                        unselectedWidgetColor: Color(0xFF4F0C87),
-                      ),
-                      child: Checkbox(
-                        value: _model.checkboxValue ??= false,
-                        onChanged: (newValue) async {
-                          setState(() => _model.checkboxValue = newValue!);
-                        },
-                        activeColor: Color(0xFFF6F6F6),
-                        checkColor: Colors.black,
+                        child: Checkbox(
+                          value: _model.checkboxValue ??= false,
+                          onChanged: (newValue) async {
+                            setState(() => _model.checkboxValue = newValue!);
+                          },
+                          activeColor: Color(0xFFF6F6F6),
+                          checkColor: Colors.black,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    'SET AS BILLING',
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily: 'Montserrat',
-                          color: Color(0xFF2B4244),
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.normal,
-                        ),
-                  ),
-                ],
-              ),
+                    Text(
+                      'SET AS BILLING',
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Montserrat',
+                            color: Color(0xFF2B4244),
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.normal,
+                          ),
+                    ),
+                  ],
+                ),
               Align(
                 alignment: AlignmentDirectional(-1.0, 0.0),
                 child: Padding(

@@ -17,7 +17,7 @@ class ResetModel extends FlutterFlowModel {
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
   // Stores action output result for [Custom Action - resetLink] action in Button widget.
-  int? result;
+  String? result;
   // Model for navbar component.
   late NavbarModel navbarModel;
 

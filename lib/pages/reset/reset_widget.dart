@@ -230,8 +230,22 @@ class _ResetWidgetState extends State<ResetWidget> {
                           _model.result = await actions.resetLink(
                             _model.textController.text,
                           );
-
-                          context.pushNamed('Homepage');
+                          await showDialog(
+                            context: context,
+                            builder: (alertDialogContext) {
+                              return AlertDialog(
+                                title: Text('Alert'),
+                                content: Text(_model.result!),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(alertDialogContext),
+                                    child: Text('Ok'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
 
                           setState(() {});
                         },

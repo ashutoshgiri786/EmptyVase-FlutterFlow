@@ -295,22 +295,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       FFAppState().deleteAccessToken();
                       FFAppState().accessToken = '';
                     });
-                    await showDialog(
-                      context: context,
-                      builder: (alertDialogContext) {
-                        return AlertDialog(
-                          title: Text('mfn'),
-                          content: Text(FFAppState().accessToken),
-                          actions: [
-                            TextButton(
-                              onPressed: () =>
-                                  Navigator.pop(alertDialogContext),
-                              child: Text('Ok'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
 
                     context.pushNamed('LoginPage');
                   },
@@ -318,16 +302,6 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     'Log Out',
                     style: FlutterFlowTheme.of(context).bodyMedium,
                   ),
-                ),
-              ),
-            ),
-            Align(
-              alignment: AlignmentDirectional(-1.0, -1.0),
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
-                child: Text(
-                  'Delete',
-                  style: FlutterFlowTheme.of(context).bodyMedium,
                 ),
               ),
             ),

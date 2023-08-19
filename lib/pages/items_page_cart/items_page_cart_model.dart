@@ -24,6 +24,8 @@ class ItemsPageCartModel extends FlutterFlowModel {
 
   bool productVariants = true;
 
+  bool wishlist = false;
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
@@ -34,6 +36,8 @@ class ItemsPageCartModel extends FlutterFlowModel {
   FormFieldController<String>? dropDownValueController;
   // Stores action output result for [Custom Action - createCart] action in Button widget.
   dynamic? out;
+  // Stores action output result for [Custom Action - addMoreItemsInCart] action in Button widget.
+  dynamic? added;
 
   /// Initialization and disposal methods.
 

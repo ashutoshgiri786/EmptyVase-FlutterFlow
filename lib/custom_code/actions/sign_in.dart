@@ -49,7 +49,7 @@ Future<dynamic> signIn(
 
   if (result.hasException) {
     print('Error: ${result.exception.toString()}');
-    return null;
+    return "Invalid Id Or Password";
   }
   FFAppState().update(() {
     FFAppState().accessToken = (result.data!["customerAccessTokenCreate"]
@@ -57,6 +57,7 @@ Future<dynamic> signIn(
             "")
         .toString();
   });
+  return "Logged In";
 }
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the button on the right!

@@ -16,20 +16,18 @@ import 'package:provider/provider.dart';
 class FlowersModel extends FlutterFlowModel {
   ///  Local state fields for this page.
 
-  int? id;
-
   int collections = 5;
 
-  String? nextpageInfo = '123';
+  String? nextpageInfo = '';
 
-  String? prevpageinfo = '123';
+  String? prevpageinfo = '';
 
-  List<dynamic> rsponse = [];
-  void addToRsponse(dynamic item) => rsponse.add(item);
-  void removeFromRsponse(dynamic item) => rsponse.remove(item);
-  void removeAtIndexFromRsponse(int index) => rsponse.removeAt(index);
-  void updateRsponseAtIndex(int index, Function(dynamic) updateFn) =>
-      rsponse[index] = updateFn(rsponse[index]);
+  List<dynamic> response = [];
+  void addToResponse(dynamic item) => response.add(item);
+  void removeFromResponse(dynamic item) => response.remove(item);
+  void removeAtIndexFromResponse(int index) => response.removeAt(index);
+  void updateResponseAtIndex(int index, Function(dynamic) updateFn) =>
+      response[index] = updateFn(response[index]);
 
   ///  State fields for stateful widgets in this page.
 

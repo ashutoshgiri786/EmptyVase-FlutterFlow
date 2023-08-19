@@ -9,7 +9,12 @@ import 'item_added_model.dart';
 export 'item_added_model.dart';
 
 class ItemAddedWidget extends StatefulWidget {
-  const ItemAddedWidget({Key? key}) : super(key: key);
+  const ItemAddedWidget({
+    Key? key,
+    required this.productimage,
+  }) : super(key: key);
+
+  final String? productimage;
 
   @override
   _ItemAddedWidgetState createState() => _ItemAddedWidgetState();
@@ -134,17 +139,8 @@ class _ItemAddedWidgetState extends State<ItemAddedWidget> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(
-                          'assets/images/WhatsApp_Image_2023-07-14_at_00.56.32_(2).jpeg',
-                          width: 149.0,
-                          height: 132.0,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.asset(
-                          'assets/images/WhatsApp_Image_2023-07-14_at_00.56.32_(2).jpeg',
+                        child: Image.network(
+                          widget.productimage!,
                           width: 149.0,
                           height: 132.0,
                           fit: BoxFit.cover,

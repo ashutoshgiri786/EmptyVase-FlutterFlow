@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Future<int> resetLink(String email) async {
+Future<String> resetLink(String email) async {
   final httpLink = HttpLink(
     FFAppState().graphqlEndpoint,
     defaultHeaders: {
@@ -44,9 +44,9 @@ Future<int> resetLink(String email) async {
 
   if (result.hasException) {
     print('Error: ${result.exception.toString()}');
-    return -1;
+    return "Invalid";
   }
-  return 0;
+  return "The Reset Link Has Been Sent To Email";
 }
 
 // Set your action name, define your arguments and return parameter,

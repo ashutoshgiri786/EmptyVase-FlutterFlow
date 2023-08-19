@@ -131,243 +131,375 @@ class _Cart2WidgetState extends State<Cart2Widget> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    InkWell(
-                                      splashColor: Colors.transparent,
-                                      focusColor: Colors.transparent,
-                                      hoverColor: Colors.transparent,
-                                      highlightColor: Colors.transparent,
-                                      onTap: () async {
-                                        _model.variant = await ShopifyAdminGroup
-                                            .productVariantCall
-                                            .call(
-                                          vrId: functions.removeletters(
-                                              'ProductVariant/',
-                                              getJsonField(
-                                                productsItem,
-                                                r'''$.node.merchandise.id''',
-                                              ).toString()),
-                                        );
-                                        _model.productDetails =
-                                            await ShopifyAdminGroup.productCall
-                                                .call(
-                                          prId: ShopifyAdminGroup
-                                              .productVariantCall
-                                              .productid(
-                                                (_model.variant?.jsonBody ??
-                                                    ''),
-                                              )
-                                              .toString(),
-                                        );
-
-                                        setState(() {});
-                                      },
-                                      child: Container(
-                                        width:
-                                            MediaQuery.sizeOf(context).width *
-                                                0.769,
-                                        height:
-                                            MediaQuery.sizeOf(context).height *
-                                                0.153,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryBackground,
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  10.0, 10.0, 10.0, 10.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                                child: Image.network(
-                                                  ShopifyAdminGroup.productCall
-                                                      .coverimage(
-                                                    (_model.productDetails
-                                                            ?.jsonBody ??
-                                                        ''),
-                                                  ),
-                                                  width: 90.0,
-                                                  height: 98.0,
-                                                  fit: BoxFit.cover,
+                                    FutureBuilder<ApiCallResponse>(
+                                      future: ShopifyAdminGroup
+                                          .productVariantCall
+                                          .call(
+                                        vrId: functions.removeletters(
+                                            'ProductVariant/',
+                                            getJsonField(
+                                              productsItem,
+                                              r'''$.node.merchandise.id''',
+                                            ).toString()),
+                                      ),
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
                                                 ),
                                               ),
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    ShopifyAdminGroup
-                                                        .productCall
-                                                        .productitle(
-                                                          (_model.productDetails
-                                                                  ?.jsonBody ??
-                                                              ''),
-                                                        )
-                                                        .toString(),
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Montserrat',
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                  ),
-                                                  Text(
-                                                    ShopifyAdminGroup
-                                                        .productVariantCall
-                                                        .variantprice(
-                                                          (_model.variant
-                                                                  ?.jsonBody ??
-                                                              ''),
-                                                        )
-                                                        .toString(),
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Montserrat',
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                        ),
-                                                  ),
-                                                ]
-                                                    .divide(
-                                                        SizedBox(height: 10.0))
-                                                    .around(
-                                                        SizedBox(height: 10.0)),
+                                            ),
+                                          );
+                                        }
+                                        final containerProductVariantResponse =
+                                            snapshot.data!;
+                                        return Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width *
+                                                  0.769,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.153,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryBackground,
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    10.0, 10.0, 10.0, 10.0),
+                                            child:
+                                                FutureBuilder<ApiCallResponse>(
+                                              future: ShopifyAdminGroup
+                                                  .productCall
+                                                  .call(
+                                                prId: ShopifyAdminGroup
+                                                    .productVariantCall
+                                                    .productid(
+                                                      containerProductVariantResponse
+                                                          .jsonBody,
+                                                    )
+                                                    .toString(),
                                               ),
-                                              Container(
-                                                width: 41.0,
-                                                height: 118.0,
-                                                decoration: BoxDecoration(
-                                                  color: Color(0xFFF2EFEB),
-                                                ),
-                                                child: Column(
+                                              builder: (context, snapshot) {
+                                                // Customize what your widget looks like when it's loading.
+                                                if (!snapshot.hasData) {
+                                                  return Center(
+                                                    child: SizedBox(
+                                                      width: 50.0,
+                                                      height: 50.0,
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation<
+                                                                Color>(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .primary,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+                                                final rowProductResponse =
+                                                    snapshot.data!;
+                                                return Row(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
                                                           .spaceEvenly,
                                                   children: [
-                                                    FFButtonWidget(
-                                                      onPressed: () {
-                                                        print(
-                                                            'Button pressed ...');
-                                                      },
-                                                      text: '+',
-                                                      options: FFButtonOptions(
-                                                        width: 40.0,
-                                                        height: 30.0,
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        iconPadding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        color:
-                                                            Color(0xFF2B4244),
-                                                        textStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .titleSmall
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Montserrat',
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                        borderSide: BorderSide(
-                                                          color: Colors
-                                                              .transparent,
-                                                          width: 1.0,
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0),
+                                                      child: Image.network(
+                                                        ShopifyAdminGroup
+                                                            .productCall
+                                                            .coverimage(
+                                                          rowProductResponse
+                                                              .jsonBody,
                                                         ),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.0),
+                                                        width: 90.0,
+                                                        height: 98.0,
+                                                        fit: BoxFit.cover,
                                                       ),
                                                     ),
-                                                    Text(
-                                                      '1',
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium,
-                                                    ),
-                                                    FFButtonWidget(
-                                                      onPressed: () {
-                                                        print(
-                                                            'Button pressed ...');
-                                                      },
-                                                      text: '-',
-                                                      options: FFButtonOptions(
-                                                        width: 40.0,
-                                                        height: 30.0,
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        iconPadding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        color:
-                                                            Color(0xFF7C9496),
-                                                        textStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .titleSmall
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Montserrat',
-                                                                  color: Colors
-                                                                      .white,
-                                                                ),
-                                                        elevation: 3.0,
-                                                        borderSide: BorderSide(
-                                                          color: Colors
-                                                              .transparent,
-                                                          width: 1.0,
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          ShopifyAdminGroup
+                                                              .productCall
+                                                              .productitle(
+                                                                rowProductResponse
+                                                                    .jsonBody,
+                                                              )
+                                                              .toString()
+                                                              .maybeHandleOverflow(
+                                                                  maxChars: 10),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Montserrat',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
                                                         ),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8.0),
+                                                        Text(
+                                                          ShopifyAdminGroup
+                                                              .productVariantCall
+                                                              .variantprice(
+                                                                containerProductVariantResponse
+                                                                    .jsonBody,
+                                                              )
+                                                              .toString(),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Montserrat',
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              ),
+                                                        ),
+                                                      ]
+                                                          .divide(SizedBox(
+                                                              height: 10.0))
+                                                          .around(SizedBox(
+                                                              height: 10.0)),
+                                                    ),
+                                                    Container(
+                                                      width: 41.0,
+                                                      height: 118.0,
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            Color(0xFFF2EFEB),
+                                                      ),
+                                                      child: Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        children: [
+                                                          FFButtonWidget(
+                                                            onPressed:
+                                                                () async {
+                                                              await actions
+                                                                  .updateCart(
+                                                                getJsonField(
+                                                                  productsItem,
+                                                                  r'''$.node.id''',
+                                                                ).toString(),
+                                                                functions.addOne(
+                                                                    getJsonField(
+                                                                  productsItem,
+                                                                  r'''$.node.quantity''',
+                                                                )),
+                                                              );
+                                                              await Future.delayed(
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          500));
+                                                              if (Navigator.of(
+                                                                      context)
+                                                                  .canPop()) {
+                                                                context.pop();
+                                                              }
+                                                              context.pushNamed(
+                                                                'Cart_2',
+                                                                extra: <String,
+                                                                    dynamic>{
+                                                                  kTransitionInfoKey:
+                                                                      TransitionInfo(
+                                                                    hasTransition:
+                                                                        true,
+                                                                    transitionType:
+                                                                        PageTransitionType
+                                                                            .fade,
+                                                                    duration: Duration(
+                                                                        milliseconds:
+                                                                            0),
+                                                                  ),
+                                                                },
+                                                              );
+                                                            },
+                                                            text: '+',
+                                                            options:
+                                                                FFButtonOptions(
+                                                              width: 40.0,
+                                                              height: 30.0,
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              iconPadding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              color: Color(
+                                                                  0xFF2B4244),
+                                                              textStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Montserrat',
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: 1.0,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0),
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            getJsonField(
+                                                              productsItem,
+                                                              r'''$.node.quantity''',
+                                                            ).toString(),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium,
+                                                          ),
+                                                          FFButtonWidget(
+                                                            onPressed:
+                                                                () async {
+                                                              await actions
+                                                                  .updateCart(
+                                                                getJsonField(
+                                                                  productsItem,
+                                                                  r'''$.node.id''',
+                                                                ).toString(),
+                                                                functions
+                                                                    .subractOne(
+                                                                        getJsonField(
+                                                                  productsItem,
+                                                                  r'''$.node.quantity''',
+                                                                )),
+                                                              );
+                                                              await Future.delayed(
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          500));
+                                                              if (Navigator.of(
+                                                                      context)
+                                                                  .canPop()) {
+                                                                context.pop();
+                                                              }
+                                                              context.pushNamed(
+                                                                'Cart_2',
+                                                                extra: <String,
+                                                                    dynamic>{
+                                                                  kTransitionInfoKey:
+                                                                      TransitionInfo(
+                                                                    hasTransition:
+                                                                        true,
+                                                                    transitionType:
+                                                                        PageTransitionType
+                                                                            .fade,
+                                                                    duration: Duration(
+                                                                        milliseconds:
+                                                                            0),
+                                                                  ),
+                                                                },
+                                                              );
+                                                            },
+                                                            text: '-',
+                                                            options:
+                                                                FFButtonOptions(
+                                                              width: 40.0,
+                                                              height: 30.0,
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              iconPadding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0,
+                                                                          0.0),
+                                                              color: Color(
+                                                                  0xFF7C9496),
+                                                              textStyle:
+                                                                  FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .titleSmall
+                                                                      .override(
+                                                                        fontFamily:
+                                                                            'Montserrat',
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                              elevation: 3.0,
+                                                              borderSide:
+                                                                  BorderSide(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                width: 1.0,
+                                                              ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8.0),
+                                                            ),
+                                                          ),
+                                                        ].divide(SizedBox(
+                                                            height: 8.0)),
                                                       ),
                                                     ),
                                                   ].divide(
-                                                      SizedBox(height: 8.0)),
-                                                ),
-                                              ),
-                                            ].divide(SizedBox(width: 10.0)),
+                                                      SizedBox(width: 10.0)),
+                                                );
+                                              },
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -418,7 +550,13 @@ class _Cart2WidgetState extends State<Cart2Widget> {
                                 ),
                           ),
                           Text(
-                            '\$50',
+                            valueOrDefault<String>(
+                              getJsonField(
+                                _model.cart,
+                                r'''$.cost.totalAmount.amount''',
+                              ).toString(),
+                              '0.00',
+                            ),
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(

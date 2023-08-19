@@ -13,6 +13,8 @@ class ForgotPasswordModel extends FlutterFlowModel {
   // State field(s) for TextField widget.
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
+  // Stores action output result for [Custom Action - resetLink] action in Button widget.
+  String? result;
 
   /// Initialization and disposal methods.
 

@@ -96,13 +96,7 @@ class FFAppState extends ChangeNotifier {
     secureStorage.delete(key: 'ff_adminAccesToken');
   }
 
-  String _customerId = '';
-  String get customerId => _customerId;
-  set customerId(String _value) {
-    _customerId = _value;
-  }
-
-  String _cartId = 'gid://shopify/Cart/c1-ce8abd8186e310e028a488184ca2f37a';
+  String _cartId = '';
   String get cartId => _cartId;
   set cartId(String _value) {
     _cartId = _value;
@@ -111,6 +105,12 @@ class FFAppState extends ChangeNotifier {
 
   void deleteCartId() {
     secureStorage.delete(key: 'ff_cartId');
+  }
+
+  String _customerId = '';
+  String get customerId => _customerId;
+  set customerId(String _value) {
+    _customerId = _value;
   }
 }
 

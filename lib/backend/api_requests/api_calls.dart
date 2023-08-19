@@ -23,6 +23,9 @@ class ShopifyAdminGroup {
   static ProductCall productCall = ProductCall();
   static OrdersCall ordersCall = OrdersCall();
   static ProductVariantCall productVariantCall = ProductVariantCall();
+  static RetrieveCollectionsProductFirstResponseCall
+      retrieveCollectionsProductFirstResponseCall =
+      RetrieveCollectionsProductFirstResponseCall();
 }
 
 class RetrieveCollectionsProductCall {
@@ -68,6 +71,7 @@ class RetrieveCollectionsProductCall {
 class CollectionsListCall {
   Future<ApiCallResponse> call({
     int? limit = 50,
+    String? pageInfo = '',
   }) {
     return ApiManager.instance.makeApiCall(
       callName: ' Collections List ',
@@ -77,7 +81,9 @@ class CollectionsListCall {
       headers: {
         ...ShopifyAdminGroup.headers,
       },
-      params: {},
+      params: {
+        'page_info': pageInfo,
+      },
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
@@ -97,7 +103,11 @@ class CollectionsListCall {
       );
   dynamic initialtitle(dynamic response) => getJsonField(
         response,
-        r'''$.custom_collections[0].title''',
+        r'''$.custom_collections[1].title''',
+      );
+  dynamic initialid(dynamic response) => getJsonField(
+        response,
+        r'''$.custom_collections[1].id''',
       );
 }
 
@@ -181,7 +191,7 @@ class ProductCall {
 
 class OrdersCall {
   Future<ApiCallResponse> call({
-    int? id,
+    String? id = '',
   }) {
     return ApiManager.instance.makeApiCall(
       callName: 'Orders',
@@ -190,13 +200,22 @@ class OrdersCall {
       headers: {
         ...ShopifyAdminGroup.headers,
       },
-      params: {},
+      params: {
+        'status': "any",
+        'limit': 1,
+      },
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
       cache: false,
     );
   }
+
+  dynamic id(dynamic response) => getJsonField(
+        response,
+        r'''$.orders''',
+        true,
+      );
 }
 
 class ProductVariantCall {
@@ -225,6 +244,44 @@ class ProductVariantCall {
   dynamic variantprice(dynamic response) => getJsonField(
         response,
         r'''$.variant.price''',
+      );
+}
+
+class RetrieveCollectionsProductFirstResponseCall {
+  Future<ApiCallResponse> call({
+    String? id = '',
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Retrieve Collections Product First Response',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}collections/${id}/products.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {
+        'limit': 10,
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic product(dynamic response) => getJsonField(
+        response,
+        r'''$.products''',
+        true,
+      );
+  dynamic productid(dynamic response) => getJsonField(
+        response,
+        r'''$.products..id''',
+        true,
+      );
+  dynamic images(dynamic response) => getJsonField(
+        response,
+        r'''$.products..images..src''',
+        true,
       );
 }
 

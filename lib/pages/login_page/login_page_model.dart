@@ -16,11 +16,16 @@ class LoginPageModel extends FlutterFlowModel {
   String? Function(BuildContext, String?)? textController1Validator;
   // State field(s) for TextField widget.
   TextEditingController? textController2;
+  late bool passwordVisibility;
   String? Function(BuildContext, String?)? textController2Validator;
+  // Stores action output result for [Custom Action - signIn] action in Row widget.
+  dynamic? signin;
 
   /// Initialization and disposal methods.
 
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    passwordVisibility = false;
+  }
 
   void dispose() {
     unfocusNode.dispose();

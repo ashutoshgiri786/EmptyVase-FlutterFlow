@@ -23,9 +23,6 @@ int getFlowersId(
 }
 
 int subractOne(int input) {
-  if (input == 1) {
-    return 1;
-  }
   return input - 1;
 }
 

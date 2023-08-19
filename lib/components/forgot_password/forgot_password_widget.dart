@@ -145,36 +145,50 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
-                  child: FFButtonWidget(
-                    onPressed: () async {
-                      await actions.resetLink(
-                        _model.textController.text,
-                      );
-                    },
-                    text: 'SEND RESET LINK',
-                    options: FFButtonOptions(
-                      width: 370.0,
-                      height: 50.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: Color(0xFF2B4244),
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleMedium.override(
-                                fontFamily: 'Montserrat',
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500,
-                              ),
-                      elevation: 3.0,
-                      borderSide: BorderSide(
-                        color: Colors.transparent,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(80.0),
+                FFButtonWidget(
+                  onPressed: () async {
+                    _model.result = await actions.resetLink(
+                      _model.textController.text,
+                    );
+                    await showDialog(
+                      context: context,
+                      builder: (alertDialogContext) {
+                        return AlertDialog(
+                          title: Text('Alert'),
+                          content: Text(_model.result!),
+                          actions: [
+                            TextButton(
+                              onPressed: () =>
+                                  Navigator.pop(alertDialogContext),
+                              child: Text('Ok'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+
+                    setState(() {});
+                  },
+                  text: 'SEND RESET LINK',
+                  options: FFButtonOptions(
+                    width: 370.0,
+                    height: 50.0,
+                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: Color(0xFF2B4244),
+                    textStyle:
+                        FlutterFlowTheme.of(context).titleMedium.override(
+                              fontFamily: 'Montserrat',
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                    elevation: 3.0,
+                    borderSide: BorderSide(
+                      color: Colors.transparent,
+                      width: 1.0,
                     ),
+                    borderRadius: BorderRadius.circular(80.0),
                   ),
                 ),
                 Row(

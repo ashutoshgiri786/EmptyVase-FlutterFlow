@@ -9,8 +9,9 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Future<dynamic> customerId(
-  String customerAccessToken,
+Future<dynamic> addMoreItemsInCart(
+  String productVariantId,
+  int quantity,
 ) async {
   final httpLink = HttpLink(
     FFAppState().graphqlEndpoint,
@@ -20,46 +21,56 @@ Future<dynamic> customerId(
   );
 
   final client = GraphQLClient(link: httpLink, cache: GraphQLCache());
+  final cart_id = FFAppState().cartId;
 
   final String mutation = '''
+  mutation {
+  cartLinesAdd(cartId: "$cart_id", lines: [
+    {
+      merchandiseId: "gid://shopify/ProductVariant/$productVariantId",
+      quantity: 5
+    }
+  ]) {
+    cart {
+      id
+      lines(first: 10) {
+        edges {
+          node {
+            id
+            quantity
+            merchandise {
+              ... on ProductVariant {
 
-  query FetchCustomerInfo(\$customerAccessToken: String!) {
-  customer(customerAccessToken: \$customerAccessToken) {
-    id
-     }
+                id,
+                
+              },
+            }
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
 }
-''';
+
+  ''';
 
   final MutationOptions options = MutationOptions(
     document: gql(mutation),
-    variables: {
-      "customerAccessToken": customerAccessToken,
-    },
   );
 
   final QueryResult result = await client.mutate(options);
 
-  final String stringInput = result.data?["customer"].toString() ?? "0";
-  final String start = "Customer/";
-  final String end = ")";
-  final int startIndex = stringInput.indexOf(start);
-  String extractedText = "";
-
-  if (startIndex != -1) {
-    final int endIndex = stringInput.indexOf(end, startIndex + start.length);
-    if (endIndex != -1) {
-      extractedText =
-          stringInput.substring(startIndex + start.length, endIndex);
-    }
+  if (result.hasException) {
+    print('Error: ${result.exception.toString()}');
+    return null;
   }
 
-  FFAppState().update(() {
-    FFAppState().customerId = extractedText;
-  });
-  return extractedText;
+  return result.data?["cartLinesAdd"];
 }
 
-// Set your action name, define your arguments and return parameter,
-// and then add the boilerplate code using the button on the right!
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the button on the right!

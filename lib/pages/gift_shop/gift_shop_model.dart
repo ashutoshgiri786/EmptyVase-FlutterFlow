@@ -4,11 +4,13 @@ import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 
 class GiftShopModel extends FlutterFlowModel {
@@ -18,17 +20,37 @@ class GiftShopModel extends FlutterFlowModel {
 
   int limit = 50;
 
+  List<dynamic> response = [];
+  void addToResponse(dynamic item) => response.add(item);
+  void removeFromResponse(dynamic item) => response.remove(item);
+  void removeAtIndexFromResponse(int index) => response.removeAt(index);
+  void updateResponseAtIndex(int index, Function(dynamic) updateFn) =>
+      response[index] = updateFn(response[index]);
+
+  String nextpageinfo = '';
+
+  String? prevpageinfo;
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  // Stores action output result for [Backend Call - API ( Collections List )] action in GiftShop widget.
+  ApiCallResponse? firstpageresponse;
   // State field(s) for ChoiceChips widget.
   String? choiceChipsValue;
   FormFieldController<List<String>>? choiceChipsValueController;
-  // State field(s) for GridView widget.
-
-  PagingController<ApiPagingParams, dynamic>? gridViewPagingController;
-  Function(ApiPagingParams nextPageMarker)? gridViewApiCall;
-
+  // Stores action output result for [Backend Call - API (Retrieve Collections Product)] action in ChoiceChips widget.
+  ApiCallResponse? giftShop;
+  // Stores action output result for [Backend Call - API ( Collections List )] action in ChoiceChips widget.
+  ApiCallResponse? firstchoicepageresponse;
+  // Stores action output result for [Backend Call - API (Retrieve Collections Product)] action in Button widget.
+  ApiCallResponse? giftPrevPage;
+  // Stores action output result for [Backend Call - API ( Collections List )] action in Button widget.
+  ApiCallResponse? prevpageresponse;
+  // Stores action output result for [Backend Call - API (Retrieve Collections Product)] action in Button widget.
+  ApiCallResponse? giftNextPage;
+  // Stores action output result for [Backend Call - API ( Collections List )] action in Button widget.
+  ApiCallResponse? nextpageresponse;
   // Model for navbar component.
   late NavbarModel navbarModel;
 
@@ -40,51 +62,10 @@ class GiftShopModel extends FlutterFlowModel {
 
   void dispose() {
     unfocusNode.dispose();
-    gridViewPagingController?.dispose();
     navbarModel.dispose();
   }
 
   /// Action blocks are added here.
 
   /// Additional helper methods are added here.
-
-  PagingController<ApiPagingParams, dynamic> setGridViewController(
-    Function(ApiPagingParams) apiCall,
-  ) {
-    gridViewApiCall = apiCall;
-    return gridViewPagingController ??= _createGridViewController(apiCall);
-  }
-
-  PagingController<ApiPagingParams, dynamic> _createGridViewController(
-    Function(ApiPagingParams) query,
-  ) {
-    final controller = PagingController<ApiPagingParams, dynamic>(
-      firstPageKey: ApiPagingParams(
-        nextPageNumber: 0,
-        numItems: 0,
-        lastResponse: null,
-      ),
-    );
-    return controller..addPageRequestListener(gridViewCollectionsListPage);
-  }
-
-  void gridViewCollectionsListPage(ApiPagingParams nextPageMarker) =>
-      gridViewApiCall!(nextPageMarker).then((gridViewCollectionsListResponse) {
-        final pageItems = (ShopifyAdminGroup.collectionsListCall.collections(
-                  gridViewCollectionsListResponse.jsonBody,
-                )! ??
-                [])
-            .toList() as List;
-        final newNumItems = nextPageMarker.numItems + pageItems.length;
-        gridViewPagingController?.appendPage(
-          pageItems,
-          (pageItems.length > 0)
-              ? ApiPagingParams(
-                  nextPageNumber: nextPageMarker.nextPageNumber + 1,
-                  numItems: newNumItems,
-                  lastResponse: gridViewCollectionsListResponse,
-                )
-              : null,
-        );
-      });
 }

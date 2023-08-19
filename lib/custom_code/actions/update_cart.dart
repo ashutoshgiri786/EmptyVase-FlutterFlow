@@ -25,9 +25,9 @@ Future<dynamic> updateCart(
   final String mutation = '''
     mutation {
       cartLinesUpdate(
-          cartId: "gid://shopify/Cart/$cart_id"
+          cartId: "$cart_id"
     lines: {
-      id: $cartproductId
+      id: "$cartproductId"
       quantity: $quantity
           attributes: {
             key: "cart_attribute"
