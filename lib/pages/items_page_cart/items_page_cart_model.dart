@@ -14,26 +14,43 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ItemsPageCartModel extends FlutterFlowModel {
   ///  Local state fields for this page.
 
   bool expaded = false;
 
-  int? productid;
+  String productid = ' ';
 
   bool productVariants = true;
 
   bool wishlist = false;
 
+  String variantId = '';
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
   // Stores action output result for [Backend Call - API (Product)] action in items_page_cart widget.
-  ApiCallResponse? apiResultsqe;
+  ApiCallResponse? prductdetails;
+  // State field(s) for PageView widget.
+  PageController? pageViewController;
+
+  int get pageViewCurrentIndex => pageViewController != null &&
+          pageViewController!.hasClients &&
+          pageViewController!.page != null
+      ? pageViewController!.page!.round()
+      : 0;
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
+  // Stores action output result for [Backend Call - API (Create Metafields)] action in ToggleIcon widget.
+  ApiCallResponse? addwishlist;
+  // Stores action output result for [Backend Call - API (Retrieve Specific Metafield)] action in ToggleIcon widget.
+  ApiCallResponse? productMetafieldData;
+  // Stores action output result for [Backend Call - API (Delete Metafields)] action in ToggleIcon widget.
+  ApiCallResponse? deleteMetafield;
   // Stores action output result for [Custom Action - createCart] action in Button widget.
   dynamic? out;
   // Stores action output result for [Custom Action - addMoreItemsInCart] action in Button widget.

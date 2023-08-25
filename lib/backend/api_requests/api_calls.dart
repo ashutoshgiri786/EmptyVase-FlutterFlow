@@ -23,9 +23,20 @@ class ShopifyAdminGroup {
   static ProductCall productCall = ProductCall();
   static OrdersCall ordersCall = OrdersCall();
   static ProductVariantCall productVariantCall = ProductVariantCall();
-  static RetrieveCollectionsProductFirstResponseCall
-      retrieveCollectionsProductFirstResponseCall =
-      RetrieveCollectionsProductFirstResponseCall();
+  static CreateMetafieldsCall createMetafieldsCall = CreateMetafieldsCall();
+  static GetMetafieldsCall getMetafieldsCall = GetMetafieldsCall();
+  static GetproductlistCall getproductlistCall = GetproductlistCall();
+  static GiftShopsCategoryCall giftShopsCategoryCall = GiftShopsCategoryCall();
+  static DeleteMetafieldsCall deleteMetafieldsCall = DeleteMetafieldsCall();
+  static RetrieveSpecificMetafieldCall retrieveSpecificMetafieldCall =
+      RetrieveSpecificMetafieldCall();
+  static CustomerDetailsCall customerDetailsCall = CustomerDetailsCall();
+  static ListOfShippingZonesCall listOfShippingZonesCall =
+      ListOfShippingZonesCall();
+  static FetchCustomerInfoCall fetchCustomerInfoCall = FetchCustomerInfoCall();
+  static FlowersCategoryCall flowersCategoryCall = FlowersCategoryCall();
+  static SearchProductCall searchProductCall = SearchProductCall();
+  static FlowersClubCall flowersClubCall = FlowersClubCall();
 }
 
 class RetrieveCollectionsProductCall {
@@ -187,6 +198,10 @@ class ProductCall {
         response,
         r'''$.product.images[0].src''',
       );
+  dynamic productId(dynamic response) => getJsonField(
+        response,
+        r'''$.product.id''',
+      );
 }
 
 class OrdersCall {
@@ -247,19 +262,87 @@ class ProductVariantCall {
       );
 }
 
-class RetrieveCollectionsProductFirstResponseCall {
+class CreateMetafieldsCall {
   Future<ApiCallResponse> call({
-    String? id = '',
+    String? customerId = '',
+    int? productId,
+    int? productVariant,
+  }) {
+    final body = '''
+{
+  "metafield": {
+    "namespace": "product",
+    "key": ${productId},
+    "type": "multi_line_text_field",
+    "value": ${productVariant}
+  }
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'Create Metafields',
+      apiUrl:
+          '${ShopifyAdminGroup.baseUrl}customers/${customerId}/metafields.json',
+      callType: ApiCallType.POST,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      body: body,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+}
+
+class GetMetafieldsCall {
+  Future<ApiCallResponse> call({
+    String? customerId = '',
   }) {
     return ApiManager.instance.makeApiCall(
-      callName: 'Retrieve Collections Product First Response',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}collections/${id}/products.json',
+      callName: 'Get Metafields',
+      apiUrl:
+          '${ShopifyAdminGroup.baseUrl}customers/${customerId}/metafields.json',
       callType: ApiCallType.GET,
       headers: {
         ...ShopifyAdminGroup.headers,
       },
       params: {
-        'limit': 10,
+        'namespace': "product",
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic metafieldsValue(dynamic response) => getJsonField(
+        response,
+        r'''$.metafields..key''',
+        true,
+      );
+  dynamic metafieldsKey(dynamic response) => getJsonField(
+        response,
+        r'''$.metafields..value''',
+        true,
+      );
+}
+
+class GetproductlistCall {
+  Future<ApiCallResponse> call({
+    String? ids = '',
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Getproductlist',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}products.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {
+        'ids': ids,
       },
       returnBody: true,
       encodeBodyUtf8: false,
@@ -273,15 +356,283 @@ class RetrieveCollectionsProductFirstResponseCall {
         r'''$.products''',
         true,
       );
-  dynamic productid(dynamic response) => getJsonField(
+}
+
+class GiftShopsCategoryCall {
+  Future<ApiCallResponse> call() {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Gift Shops Category',
+      apiUrl:
+          '${ShopifyAdminGroup.baseUrl}custom_collections.json?ids=230519144603,231548813467,231550025883,230519177371,231549010075,231549075611,231549141147,266731585691,273095098523',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic collections(dynamic response) => getJsonField(
         response,
-        r'''$.products..id''',
+        r'''$.custom_collections''',
+        true,
+      );
+  dynamic title(dynamic response) => getJsonField(
+        response,
+        r'''$.custom_collections..title''',
+        true,
+      );
+  dynamic id(dynamic response) => getJsonField(
+        response,
+        r'''$.custom_collections..id''',
         true,
       );
   dynamic images(dynamic response) => getJsonField(
         response,
-        r'''$.products..images..src''',
+        r'''$.custom_collections..image..src''',
         true,
+      );
+}
+
+class DeleteMetafieldsCall {
+  Future<ApiCallResponse> call({
+    String? customerId = '',
+    String? metafieldId = '',
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Delete Metafields',
+      apiUrl:
+          '${ShopifyAdminGroup.baseUrl}customers/${customerId}/metafields/${metafieldId}.json',
+      callType: ApiCallType.DELETE,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+}
+
+class RetrieveSpecificMetafieldCall {
+  Future<ApiCallResponse> call({
+    String? customerId = '',
+    String? productid = '',
+    String? productVariant = '',
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Retrieve Specific Metafield',
+      apiUrl:
+          '${ShopifyAdminGroup.baseUrl}customers/${customerId}/metafields.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {
+        'key': productid,
+        'value': productVariant,
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic metafieldId(dynamic response) => getJsonField(
+        response,
+        r'''$.metafields[0]..id''',
+      );
+}
+
+class CustomerDetailsCall {
+  Future<ApiCallResponse> call({
+    String? customerId = '',
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Customer Details',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}customers/${customerId}.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic defaultAddress(dynamic response) => getJsonField(
+        response,
+        r'''$..customer.default_address''',
+      );
+}
+
+class ListOfShippingZonesCall {
+  Future<ApiCallResponse> call() {
+    return ApiManager.instance.makeApiCall(
+      callName: 'List of shipping zones',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}shipping_zones.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic countries(dynamic response) => getJsonField(
+        response,
+        r'''$.shipping_zones..countries[0].name''',
+        true,
+      );
+  dynamic provinces(dynamic response) => getJsonField(
+        response,
+        r'''$.shipping_zones..countries..name''',
+        true,
+      );
+}
+
+class FetchCustomerInfoCall {
+  Future<ApiCallResponse> call({
+    String? customerid = '',
+  }) {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Fetch customer info',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}customers/${customerid}.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic customerEmail(dynamic response) => getJsonField(
+        response,
+        r'''$.customer.email''',
+      );
+  dynamic firstName(dynamic response) => getJsonField(
+        response,
+        r'''$.customer.first_name''',
+      );
+  dynamic lastName(dynamic response) => getJsonField(
+        response,
+        r'''$.customer.last_name''',
+      );
+}
+
+class FlowersCategoryCall {
+  Future<ApiCallResponse> call() {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Flowers Category ',
+      apiUrl:
+          '${ShopifyAdminGroup.baseUrl}custom_collections.json?ids=405240676598,227433545883,404392313078,265837969563,207275622555,207275393179,391735836918,402852380918,207275458715,207275753627,',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic collections(dynamic response) => getJsonField(
+        response,
+        r'''$.custom_collections''',
+        true,
+      );
+  dynamic title(dynamic response) => getJsonField(
+        response,
+        r'''$.custom_collections..title''',
+        true,
+      );
+}
+
+class SearchProductCall {
+  Future<ApiCallResponse> call() {
+    return ApiManager.instance.makeApiCall(
+      callName: 'search product',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}products.json?title=100*',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+}
+
+class FlowersClubCall {
+  Future<ApiCallResponse> call() {
+    return ApiManager.instance.makeApiCall(
+      callName: 'Flowers Club',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}products/5496359616667.json',
+      callType: ApiCallType.GET,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
+
+  dynamic duration(dynamic response) => getJsonField(
+        response,
+        r'''$.product..options[1].values''',
+        true,
+      );
+  dynamic pricing(dynamic response) => getJsonField(
+        response,
+        r'''$.product..options[0].values''',
+        true,
+      );
+  dynamic title(dynamic response) => getJsonField(
+        response,
+        r'''$.product.title''',
+      );
+  dynamic description(dynamic response) => getJsonField(
+        response,
+        r'''$.product.body_html''',
+      );
+  dynamic images(dynamic response) => getJsonField(
+        response,
+        r'''$.product.images..src''',
+        true,
+      );
+  dynamic initialPricing(dynamic response) => getJsonField(
+        response,
+        r'''$.product..options[0].values[0]''',
+      );
+  dynamic initialDuration(dynamic response) => getJsonField(
+        response,
+        r'''$.product..options[1].values[0]''',
       );
 }
 
@@ -291,7 +642,8 @@ class ProductsCall {
   static Future<ApiCallResponse> call() {
     return ApiManager.instance.makeApiCall(
       callName: 'Products',
-      apiUrl: 'https://EmptyVase.myshopify.com/admin/api/2023-04/products.json',
+      apiUrl:
+          'https://EmptyVase.myshopify.com/admin/api/2023-04/products/5496359616667.json',
       callType: ApiCallType.GET,
       headers: {
         'X-Shopify-Access-Token': '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',

@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "582933870509",
+    "project_id": "empty-vase-ff",
+    "storage_bucket": "empty-vase-ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:582933870509:android:07be29b3dd50bcd32b5324",
+        "android_client_info": {
+          "package_name": "com.flutterflow.emptyvase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "582933870509-9978nrv0ptcl93beg0n3ni6mgs4f2h8h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnOYK9V51MRzpDguV8iW_cG7cnj-hgXSo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "582933870509-9978nrv0ptcl93beg0n3ni6mgs4f2h8h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "582933870509-f0r4d2accr55f3k48238shbstq3m8n4h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.flutterflow.emptyvase"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

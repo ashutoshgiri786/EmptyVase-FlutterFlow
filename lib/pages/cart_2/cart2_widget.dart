@@ -31,17 +31,56 @@ class _Cart2WidgetState extends State<Cart2Widget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.cart = await actions.getCart(
-        FFAppState().cartId,
-      );
-      setState(() {
-        _model.cartItem = getJsonField(
-          _model.cart,
-          r'''$.lines.edges''',
-        )!
-            .toList()
-            .cast<dynamic>();
-      });
+      if (FFAppState().cartId == null || FFAppState().cartId == '') {
+        await showDialog(
+          context: context,
+          builder: (alertDialogContext) {
+            return AlertDialog(
+              title: Text('Alert'),
+              content: Text('The cart is empty '),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(alertDialogContext),
+                  child: Text('Ok'),
+                ),
+              ],
+            );
+          },
+        );
+
+        context.pushNamed('Homepage');
+      } else {
+        _model.cart = await actions.getCart(
+          FFAppState().cartId,
+        );
+        setState(() {
+          _model.cartItem = getJsonField(
+            _model.cart,
+            r'''$.lines.edges''',
+          )!
+              .toList()
+              .cast<dynamic>();
+        });
+        if (_model.cartItem.length <= 0) {
+          await showDialog(
+            context: context,
+            builder: (alertDialogContext) {
+              return AlertDialog(
+                title: Text('Alert'),
+                content: Text('The cart is empty '),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(alertDialogContext),
+                    child: Text('Ok'),
+                  ),
+                ],
+              );
+            },
+          );
+
+          context.pushNamed('Homepage');
+        }
+      }
     });
   }
 

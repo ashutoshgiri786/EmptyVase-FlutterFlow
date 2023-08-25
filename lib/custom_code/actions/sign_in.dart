@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Future<dynamic> signIn(
+Future<String> signIn(
   String email,
   String password,
 ) async {
@@ -49,15 +50,19 @@ Future<dynamic> signIn(
 
   if (result.hasException) {
     print('Error: ${result.exception.toString()}');
+    return "Invalid Error";
+  }
+  try {
+    FFAppState().update(() {
+      FFAppState().accessToken = (result.data!["customerAccessTokenCreate"]
+                  ["customerAccessToken"]["accessToken"] ??
+              "")
+          .toString();
+    });
+    return "Logged In";
+  } catch (e) {
     return "Invalid Id Or Password";
   }
-  FFAppState().update(() {
-    FFAppState().accessToken = (result.data!["customerAccessTokenCreate"]
-                ["customerAccessToken"]["accessToken"] ??
-            "")
-        .toString();
-  });
-  return "Logged In";
 }
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the button on the right!

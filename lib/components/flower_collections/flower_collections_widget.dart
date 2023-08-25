@@ -3,7 +3,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_toggle_icon.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -31,17 +30,6 @@ class _FlowerCollectionsWidgetState extends State<FlowerCollectionsWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => FlowerCollectionsModel());
-
-    // On component load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.apiresult = await ShopifyAdminGroup.collectionsListCall.call(
-        limit: 10,
-      );
-      _model.apiResultjao =
-          await ShopifyAdminGroup.retrieveCollectionsProductCall.call(
-        id: 230519144603,
-      );
-    });
   }
 
   @override
@@ -69,186 +57,261 @@ class _FlowerCollectionsWidgetState extends State<FlowerCollectionsWidget> {
             topRight: Radius.circular(12.0),
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                Navigator.pop(context);
-              },
-              child: Icon(
-                Icons.keyboard_arrow_down,
-                color: FlutterFlowTheme.of(context).secondaryText,
-                size: 24.0,
-              ),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'FLOWERS',
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        fontFamily: 'Montserrat',
-                        color: Color(0xFF2B4244),
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
-                ToggleIcon(
-                  onPressed: () async {
-                    setState(() => _model.condition = !_model.condition);
-                  },
-                  value: _model.condition,
-                  onIcon: FaIcon(
-                    FontAwesomeIcons.minus,
-                    color: FlutterFlowTheme.of(context).secondaryText,
-                    size: 18.0,
-                  ),
-                  offIcon: Icon(
-                    Icons.add,
-                    color: FlutterFlowTheme.of(context).secondaryText,
-                    size: 15.0,
-                  ),
-                ),
-              ],
-            ),
-            if (_model.condition)
-              Builder(
-                builder: (context) {
-                  final collections = ShopifyAdminGroup.collectionsListCall
-                          .collections(
-                            (_model.apiresult?.jsonBody ?? ''),
-                          )
-                          ?.toList() ??
-                      [];
-                  return ListView.separated(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: collections.length,
-                    separatorBuilder: (_, __) => SizedBox(height: 5.0),
-                    itemBuilder: (context, collectionsIndex) {
-                      final collectionsItem = collections[collectionsIndex];
-                      return Align(
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Text(
-                          getJsonField(
-                            collectionsItem,
-                            r'''$..title''',
-                          ).toString(),
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Montserrat',
-                                    color: Color(0xFF2B4244),
-                                  ),
-                        ),
-                      );
-                    },
-                  );
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              InkWell(
+                splashColor: Colors.transparent,
+                focusColor: Colors.transparent,
+                hoverColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onTap: () async {
+                  Navigator.pop(context);
                 },
+                child: Icon(
+                  Icons.keyboard_arrow_down,
+                  color: FlutterFlowTheme.of(context).secondaryText,
+                  size: 24.0,
+                ),
               ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: AlignmentDirectional(-1.0, -1.0),
-                  child: Text(
-                    'GIFT SHOP',
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'FLOWERS',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Montserrat',
                           color: Color(0xFF2B4244),
                           fontWeight: FontWeight.w500,
                         ),
                   ),
-                ),
-                ToggleIcon(
-                  onPressed: () async {
-                    setState(() => _model.conditon2 = !_model.conditon2);
-                  },
-                  value: _model.conditon2,
-                  onIcon: FaIcon(
-                    FontAwesomeIcons.minus,
-                    color: FlutterFlowTheme.of(context).secondaryText,
-                    size: 15.0,
+                  ToggleIcon(
+                    onPressed: () async {
+                      setState(() => _model.condition = !_model.condition);
+                    },
+                    value: _model.condition,
+                    onIcon: FaIcon(
+                      FontAwesomeIcons.minus,
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                      size: 18.0,
+                    ),
+                    offIcon: Icon(
+                      Icons.add,
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                      size: 15.0,
+                    ),
                   ),
-                  offIcon: Icon(
-                    Icons.add,
-                    color: FlutterFlowTheme.of(context).secondaryText,
-                    size: 15.0,
-                  ),
-                ),
-              ].divide(SizedBox(width: 10.0)),
-            ),
-            if (_model.conditon2 == true)
-              Builder(
-                builder: (context) {
-                  final gifts = ShopifyAdminGroup.retrieveCollectionsProductCall
-                          .product(
-                            (_model.apiResultjao?.jsonBody ?? ''),
-                          )
-                          ?.toList() ??
-                      [];
-                  return ListView.separated(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.vertical,
-                    itemCount: gifts.length,
-                    separatorBuilder: (_, __) => SizedBox(height: 5.0),
-                    itemBuilder: (context, giftsIndex) {
-                      final giftsItem = gifts[giftsIndex];
-                      return Align(
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () async {
-                            context.pushNamed(
-                              'items_page_cart',
-                              queryParameters: {
-                                'id': serializeParam(
-                                  getJsonField(
-                                    giftsItem,
-                                    r'''$.id''',
-                                  ),
-                                  ParamType.int,
-                                ),
-                                'productName': serializeParam(
-                                  'adwe',
-                                  ParamType.String,
-                                ),
-                                'productDescription': serializeParam(
-                                  '02',
-                                  ParamType.String,
-                                ),
-                              }.withoutNulls,
-                            );
-                          },
-                          child: Text(
-                            getJsonField(
-                              giftsItem,
-                              r'''$.title''',
-                            ).toString(),
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFF2B4244),
-                                ),
+                ],
+              ),
+              if (_model.condition)
+                FutureBuilder<ApiCallResponse>(
+                  future: ShopifyAdminGroup.flowersCategoryCall.call(),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: SizedBox(
+                          width: 50.0,
+                          height: 50.0,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              FlutterFlowTheme.of(context).primary,
+                            ),
                           ),
                         ),
                       );
+                    }
+                    final listViewFlowersCategoryResponse = snapshot.data!;
+                    return Builder(
+                      builder: (context) {
+                        final collections =
+                            ShopifyAdminGroup.flowersCategoryCall
+                                    .collections(
+                                      listViewFlowersCategoryResponse.jsonBody,
+                                    )
+                                    ?.toList() ??
+                                [];
+                        return ListView.separated(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: collections.length,
+                          separatorBuilder: (_, __) => SizedBox(height: 5.0),
+                          itemBuilder: (context, collectionsIndex) {
+                            final collectionsItem =
+                                collections[collectionsIndex];
+                            return Align(
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  context.pushNamed(
+                                    'FlowersPage',
+                                    queryParameters: {
+                                      'id': serializeParam(
+                                        getJsonField(
+                                          collectionsItem,
+                                          r'''$..id''',
+                                        ),
+                                        ParamType.int,
+                                      ),
+                                      'categorytitle': serializeParam(
+                                        getJsonField(
+                                          collectionsItem,
+                                          r'''$..title''',
+                                        ).toString(),
+                                        ParamType.String,
+                                      ),
+                                    }.withoutNulls,
+                                  );
+                                },
+                                child: Text(
+                                  getJsonField(
+                                    collectionsItem,
+                                    r'''$..title''',
+                                  )
+                                      .toString()
+                                      .maybeHandleOverflow(maxChars: 10),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        color: Color(0xFF2B4244),
+                                      ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional(-1.0, -1.0),
+                    child: Text(
+                      'GIFT SHOP',
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Montserrat',
+                            color: Color(0xFF2B4244),
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                  ),
+                  ToggleIcon(
+                    onPressed: () async {
+                      setState(() => _model.conditon2 = !_model.conditon2);
                     },
-                  );
-                },
+                    value: _model.conditon2,
+                    onIcon: FaIcon(
+                      FontAwesomeIcons.minus,
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                      size: 15.0,
+                    ),
+                    offIcon: Icon(
+                      Icons.add,
+                      color: FlutterFlowTheme.of(context).secondaryText,
+                      size: 15.0,
+                    ),
+                  ),
+                ].divide(SizedBox(width: 10.0)),
               ),
-          ].divide(SizedBox(height: 10.0)).around(SizedBox(height: 10.0)),
+              if (_model.conditon2 == true)
+                FutureBuilder<ApiCallResponse>(
+                  future: ShopifyAdminGroup.giftShopsCategoryCall.call(),
+                  builder: (context, snapshot) {
+                    // Customize what your widget looks like when it's loading.
+                    if (!snapshot.hasData) {
+                      return Center(
+                        child: SizedBox(
+                          width: 50.0,
+                          height: 50.0,
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              FlutterFlowTheme.of(context).primary,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    final listViewGiftShopsCategoryResponse = snapshot.data!;
+                    return Builder(
+                      builder: (context) {
+                        final gifts = ShopifyAdminGroup.giftShopsCategoryCall
+                                .collections(
+                                  listViewGiftShopsCategoryResponse.jsonBody,
+                                )
+                                ?.toList() ??
+                            [];
+                        return ListView.separated(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: gifts.length,
+                          separatorBuilder: (_, __) => SizedBox(height: 5.0),
+                          itemBuilder: (context, giftsIndex) {
+                            final giftsItem = gifts[giftsIndex];
+                            return Align(
+                              alignment: AlignmentDirectional(0.0, 0.0),
+                              child: InkWell(
+                                splashColor: Colors.transparent,
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () async {
+                                  context.pushNamed(
+                                    'GiftShopPage',
+                                    queryParameters: {
+                                      'id': serializeParam(
+                                        getJsonField(
+                                          giftsItem,
+                                          r'''$..id''',
+                                        ),
+                                        ParamType.int,
+                                      ),
+                                      'categorytitle': serializeParam(
+                                        getJsonField(
+                                          giftsItem,
+                                          r'''$..title''',
+                                        ).toString(),
+                                        ParamType.String,
+                                      ),
+                                    }.withoutNulls,
+                                  );
+                                },
+                                child: Text(
+                                  getJsonField(
+                                    giftsItem,
+                                    r'''$.title''',
+                                  )
+                                      .toString()
+                                      .maybeHandleOverflow(maxChars: 15),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        color: Color(0xFF2B4244),
+                                      ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    );
+                  },
+                ),
+            ].divide(SizedBox(height: 10.0)).around(SizedBox(height: 10.0)),
+          ),
         ),
       ),
     );

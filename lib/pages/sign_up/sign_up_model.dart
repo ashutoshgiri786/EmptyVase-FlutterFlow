@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -34,10 +35,10 @@ class SignUpModel extends FlutterFlowModel {
     return null;
   }
 
-  // State field(s) for TextField widget.
-  TextEditingController? textController3;
-  String? Function(BuildContext, String?)? textController3Validator;
-  String? _textController3Validator(BuildContext context, String? val) {
+  // State field(s) for Email widget.
+  TextEditingController? emailController;
+  String? Function(BuildContext, String?)? emailControllerValidator;
+  String? _emailControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Field is required';
     }
@@ -45,10 +46,11 @@ class SignUpModel extends FlutterFlowModel {
     return null;
   }
 
-  // State field(s) for TextField widget.
-  TextEditingController? textController4;
-  String? Function(BuildContext, String?)? textController4Validator;
-  String? _textController4Validator(BuildContext context, String? val) {
+  // State field(s) for Password widget.
+  TextEditingController? passwordController;
+  late bool passwordVisibility;
+  String? Function(BuildContext, String?)? passwordControllerValidator;
+  String? _passwordControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Field is required';
     }
@@ -56,10 +58,12 @@ class SignUpModel extends FlutterFlowModel {
     return null;
   }
 
-  // State field(s) for TextField widget.
-  TextEditingController? textController5;
-  String? Function(BuildContext, String?)? textController5Validator;
-  String? _textController5Validator(BuildContext context, String? val) {
+  // State field(s) for ConfirmPassword widget.
+  TextEditingController? confirmPasswordController;
+  late bool confirmPasswordVisibility;
+  String? Function(BuildContext, String?)? confirmPasswordControllerValidator;
+  String? _confirmPasswordControllerValidator(
+      BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Field is required';
     }
@@ -79,18 +83,20 @@ class SignUpModel extends FlutterFlowModel {
   void initState(BuildContext context) {
     firstnameControllerValidator = _firstnameControllerValidator;
     textController2Validator = _textController2Validator;
-    textController3Validator = _textController3Validator;
-    textController4Validator = _textController4Validator;
-    textController5Validator = _textController5Validator;
+    emailControllerValidator = _emailControllerValidator;
+    passwordVisibility = false;
+    passwordControllerValidator = _passwordControllerValidator;
+    confirmPasswordVisibility = false;
+    confirmPasswordControllerValidator = _confirmPasswordControllerValidator;
   }
 
   void dispose() {
     unfocusNode.dispose();
     firstnameController?.dispose();
     textController2?.dispose();
-    textController3?.dispose();
-    textController4?.dispose();
-    textController5?.dispose();
+    emailController?.dispose();
+    passwordController?.dispose();
+    confirmPasswordController?.dispose();
   }
 
   /// Action blocks are added here.

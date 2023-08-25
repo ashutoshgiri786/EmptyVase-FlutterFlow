@@ -1,7 +1,13 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
+import '/backend/backend.dart';
 import '/components/forgot_password/forgot_password_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -12,14 +18,28 @@ class LoginPageModel extends FlutterFlowModel {
 
   final unfocusNode = FocusNode();
   // State field(s) for TextField widget.
-  TextEditingController? textController1;
-  String? Function(BuildContext, String?)? textController1Validator;
+  TextEditingController? emailTextController;
+  String? Function(BuildContext, String?)? emailTextControllerValidator;
   // State field(s) for TextField widget.
-  TextEditingController? textController2;
+  TextEditingController? passwordTextController;
   late bool passwordVisibility;
-  String? Function(BuildContext, String?)? textController2Validator;
-  // Stores action output result for [Custom Action - signIn] action in Row widget.
-  dynamic? signin;
+  String? Function(BuildContext, String?)? passwordTextControllerValidator;
+  // Stores action output result for [Custom Action - signIn] action in Button widget.
+  String? signin;
+  // Stores action output result for [Custom Action - customerId] action in Button widget.
+  dynamic? customerId;
+  // Stores action output result for [Backend Call - API (Fetch customer info)] action in Button widget.
+  ApiCallResponse? customerInfo;
+  // Stores action output result for [Backend Call - API (Get Metafields)] action in Button widget.
+  ApiCallResponse? wishlists;
+  // Stores action output result for [Custom Action - signIn] action in Button widget.
+  String? signinSignin;
+  // Stores action output result for [Custom Action - customerId] action in Button widget.
+  dynamic? customerIdSignIn;
+  // Stores action output result for [Backend Call - API (Fetch customer info)] action in Button widget.
+  ApiCallResponse? customerInfoSignIn;
+  // Stores action output result for [Backend Call - API (Get Metafields)] action in Button widget.
+  ApiCallResponse? wishlistsSignIn;
 
   /// Initialization and disposal methods.
 
@@ -29,8 +49,8 @@ class LoginPageModel extends FlutterFlowModel {
 
   void dispose() {
     unfocusNode.dispose();
-    textController1?.dispose();
-    textController2?.dispose();
+    emailTextController?.dispose();
+    passwordTextController?.dispose();
   }
 
   /// Action blocks are added here.

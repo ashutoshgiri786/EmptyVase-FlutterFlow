@@ -8,6 +8,9 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'lat_lng.dart';
 import 'place.dart';
 import 'uploaded_file.dart';
+import '/backend/backend.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '/auth/firebase_auth/auth_util.dart';
 
 int getFlowersId(
   String title,
@@ -104,4 +107,32 @@ String removeletters(
 
 int addOne(int input) {
   return input + 1;
+}
+
+String urlDecoder(List<String> input) {
+  String result = input.join(',');
+
+  return result;
+}
+
+String getCountryProvinces(
+  String countryId,
+  List<dynamic> provinces,
+) {
+  for (var collection in provinces) {
+    if (collection['country_id'] == countryId) {
+      return collection['name'] as String;
+    }
+  }
+  return "";
+}
+
+List<dynamic> listconcat(
+  List<dynamic> list1,
+  List<dynamic> list2,
+) {
+  List<dynamic> concatenatedList = [];
+  concatenatedList.addAll(list1);
+  concatenatedList.addAll(list2);
+  return concatenatedList;
 }

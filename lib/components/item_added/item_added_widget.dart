@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -133,20 +134,92 @@ class _ItemAddedWidgetState extends State<ItemAddedWidget> {
                           ),
                     ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          widget.productimage!,
-                          width: 149.0,
-                          height: 132.0,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ],
+                  FutureBuilder<ApiCallResponse>(
+                    future: ShopifyAdminGroup.giftShopsCategoryCall.call(),
+                    builder: (context, snapshot) {
+                      // Customize what your widget looks like when it's loading.
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: SizedBox(
+                            width: 50.0,
+                            height: 50.0,
+                            child: CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                FlutterFlowTheme.of(context).primary,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+                      final rowGiftShopsCategoryResponse = snapshot.data!;
+                      return Builder(
+                        builder: (context) {
+                          final images = ShopifyAdminGroup.giftShopsCategoryCall
+                                  .collections(
+                                    rowGiftShopsCategoryResponse.jsonBody,
+                                  )
+                                  ?.toList() ??
+                              [];
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children:
+                                  List.generate(images.length, (imagesIndex) {
+                                final imagesItem = images[imagesIndex];
+                                return Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10.0, 10.0, 10.0, 10.0),
+                                  child: InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.pushNamed(
+                                        'GiftShopPage',
+                                        queryParameters: {
+                                          'id': serializeParam(
+                                            getJsonField(
+                                              imagesItem,
+                                              r'''$..id''',
+                                            ),
+                                            ParamType.int,
+                                          ),
+                                          'categorytitle': serializeParam(
+                                            getJsonField(
+                                              imagesItem,
+                                              r'''$..title''',
+                                            ).toString(),
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                      );
+                                    },
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      child: Image.network(
+                                        valueOrDefault<String>(
+                                          getJsonField(
+                                            imagesItem,
+                                            r'''$..image..src''',
+                                          ),
+                                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNuvafpok1f34VfmtLMX_0RYNYnJ-aSpv0qQ&usqp=CAU',
+                                        ),
+                                        width: 146.0,
+                                        height: 136.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ),
+                          );
+                        },
+                      );
+                    },
                   ),
                   Padding(
                     padding:

@@ -28,7 +28,7 @@ class _ResetWidgetState extends State<ResetWidget> {
     super.initState();
     _model = createModel(context, () => ResetModel());
 
-    _model.textController ??= TextEditingController();
+    _model.textController ??= TextEditingController(text: FFAppState().email);
   }
 
   @override
@@ -47,89 +47,85 @@ class _ResetWidgetState extends State<ResetWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Color(0xFFF6F6F6),
-        appBar: PreferredSize(
-          preferredSize:
-              Size.fromHeight(MediaQuery.sizeOf(context).height * 0.1),
-          child: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-            automaticallyImplyLeading: false,
-            actions: [],
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                width: MediaQuery.sizeOf(context).width * 1.0,
-                height: MediaQuery.sizeOf(context).height * 0.1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFFF2EFEB), Colors.white],
-                    stops: [0.0, 1.0],
-                    begin: AlignmentDirectional(-1.0, 0.0),
-                    end: AlignmentDirectional(1.0, 0),
-                  ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Welcome ,\n',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Montserrat',
-                                    color: Color(0xFF2B4244),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                            TextSpan(
-                              text: 'ASH',
-                              style: GoogleFonts.getFont(
-                                'Montserrat',
-                                color: Color(0xFF2B4244),
-                                fontWeight: FontWeight.w500,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            )
-                          ],
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Montserrat',
-                                    color: Color(0xFF2B4244),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                      child: FlutterFlowIconButton(
-                        borderColor: Colors.transparent,
-                        borderRadius: 30.0,
-                        buttonSize: 40.0,
-                        icon: Icon(
-                          Icons.shopping_cart_outlined,
-                          color: Color(0xFF2B4244),
-                          size: 30.0,
-                        ),
-                        onPressed: () async {
-                          context.pushNamed('Cart_2');
-                        },
-                      ),
-                    ),
-                  ],
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+          automaticallyImplyLeading: false,
+          actions: [],
+          flexibleSpace: FlexibleSpaceBar(
+            background: Container(
+              width: MediaQuery.sizeOf(context).width * 1.0,
+              height: MediaQuery.sizeOf(context).height * 0.1,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xFFF2EFEB), Colors.white],
+                  stops: [0.0, 1.0],
+                  begin: AlignmentDirectional(-1.0, 0.0),
+                  end: AlignmentDirectional(1.0, 0),
                 ),
               ),
-              centerTitle: true,
-              expandedTitleScale: 1.0,
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Welcome ,\n',
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  fontFamily: 'Montserrat',
+                                  color: Color(0xFF2B4244),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                          TextSpan(
+                            text: FFAppState().firstName,
+                            style: GoogleFonts.getFont(
+                              'Montserrat',
+                              color: Color(0xFF2B4244),
+                              fontWeight: FontWeight.w500,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          )
+                        ],
+                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                              fontFamily: 'Montserrat',
+                              color: Color(0xFF2B4244),
+                              fontWeight: FontWeight.w500,
+                            ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                    child: FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 30.0,
+                      buttonSize: 40.0,
+                      icon: Icon(
+                        Icons.shopping_cart_outlined,
+                        color: Color(0xFF2B4244),
+                        size: 30.0,
+                      ),
+                      onPressed: () async {
+                        context.pushNamed('Cart_2');
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
-            elevation: 0.0,
+            centerTitle: true,
+            expandedTitleScale: 1.0,
           ),
+          toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
+          elevation: 0.0,
         ),
         body: Column(
           mainAxisSize: MainAxisSize.max,
@@ -170,6 +166,7 @@ class _ResetWidgetState extends State<ResetWidget> {
                             child: TextFormField(
                               controller: _model.textController,
                               autofocus: true,
+                              readOnly: true,
                               obscureText: false,
                               decoration: InputDecoration(
                                 labelStyle: FlutterFlowTheme.of(context)

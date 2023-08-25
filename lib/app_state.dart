@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'flutter_flow/request_manager.dart';
+import '/backend/backend.dart';
 import 'backend/api_requests/api_manager.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:csv/csv.dart';
@@ -35,6 +37,24 @@ class FFAppState extends ChangeNotifier {
     });
     await _safeInitAsync(() async {
       _cartId = await secureStorage.getString('ff_cartId') ?? _cartId;
+    });
+    await _safeInitAsync(() async {
+      _customerId =
+          await secureStorage.getString('ff_customerId') ?? _customerId;
+    });
+    await _safeInitAsync(() async {
+      _wishlistProducts =
+          await secureStorage.getStringList('ff_wishlistProducts') ??
+              _wishlistProducts;
+    });
+    await _safeInitAsync(() async {
+      _firstName = await secureStorage.getString('ff_firstName') ?? _firstName;
+    });
+    await _safeInitAsync(() async {
+      _lastName = await secureStorage.getString('ff_lastName') ?? _lastName;
+    });
+    await _safeInitAsync(() async {
+      _email = await secureStorage.getString('ff_email') ?? _email;
     });
   }
 
@@ -111,7 +131,94 @@ class FFAppState extends ChangeNotifier {
   String get customerId => _customerId;
   set customerId(String _value) {
     _customerId = _value;
+    secureStorage.setString('ff_customerId', _value);
   }
+
+  void deleteCustomerId() {
+    secureStorage.delete(key: 'ff_customerId');
+  }
+
+  List<String> _wishlistProducts = [];
+  List<String> get wishlistProducts => _wishlistProducts;
+  set wishlistProducts(List<String> _value) {
+    _wishlistProducts = _value;
+    secureStorage.setStringList('ff_wishlistProducts', _value);
+  }
+
+  void deleteWishlistProducts() {
+    secureStorage.delete(key: 'ff_wishlistProducts');
+  }
+
+  void addToWishlistProducts(String _value) {
+    _wishlistProducts.add(_value);
+    secureStorage.setStringList('ff_wishlistProducts', _wishlistProducts);
+  }
+
+  void removeFromWishlistProducts(String _value) {
+    _wishlistProducts.remove(_value);
+    secureStorage.setStringList('ff_wishlistProducts', _wishlistProducts);
+  }
+
+  void removeAtIndexFromWishlistProducts(int _index) {
+    _wishlistProducts.removeAt(_index);
+    secureStorage.setStringList('ff_wishlistProducts', _wishlistProducts);
+  }
+
+  void updateWishlistProductsAtIndex(
+    int _index,
+    String Function(String) updateFn,
+  ) {
+    _wishlistProducts[_index] = updateFn(_wishlistProducts[_index]);
+    secureStorage.setStringList('ff_wishlistProducts', _wishlistProducts);
+  }
+
+  String _firstName = '';
+  String get firstName => _firstName;
+  set firstName(String _value) {
+    _firstName = _value;
+    secureStorage.setString('ff_firstName', _value);
+  }
+
+  void deleteFirstName() {
+    secureStorage.delete(key: 'ff_firstName');
+  }
+
+  String _lastName = '';
+  String get lastName => _lastName;
+  set lastName(String _value) {
+    _lastName = _value;
+    secureStorage.setString('ff_lastName', _value);
+  }
+
+  void deleteLastName() {
+    secureStorage.delete(key: 'ff_lastName');
+  }
+
+  String _email = '';
+  String get email => _email;
+  set email(String _value) {
+    _email = _value;
+    secureStorage.setString('ff_email', _value);
+  }
+
+  void deleteEmail() {
+    secureStorage.delete(key: 'ff_email');
+  }
+
+  final _collectionsListManager = FutureRequestManager<ApiCallResponse>();
+  Future<ApiCallResponse> collectionsList({
+    String? uniqueQueryKey,
+    bool? overrideCache,
+    required Future<ApiCallResponse> Function() requestFn,
+  }) =>
+      _collectionsListManager.performRequest(
+        uniqueQueryKey: uniqueQueryKey,
+        overrideCache: overrideCache,
+        requestFn: requestFn,
+      );
+  void clearCollectionsListCache() => _collectionsListManager.clear();
+  void clearCollectionsListCacheKey(String? uniqueKey) =>
+      _collectionsListManager.clearRequest(uniqueKey);
 }
 
 LatLng? _latLngFromString(String? val) {

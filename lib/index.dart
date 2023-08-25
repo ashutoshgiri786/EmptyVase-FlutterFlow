@@ -28,9 +28,12 @@ export '/pages/order_recieved/order_recieved_widget.dart'
     show OrderRecievedWidget;
 export '/pages/items_page_cart/items_page_cart_widget.dart'
     show ItemsPageCartWidget;
-export '/pages/items_page/items_page_widget.dart' show ItemsPageWidget;
 export '/pages/terms_and_condition/terms_and_condition_widget.dart'
     show TermsAndConditionWidget;
 export '/pages/gift_shop/gift_shop_widget.dart' show GiftShopWidget;
-export '/pages/specific_product_page/specific_product_page_widget.dart'
-    show SpecificProductPageWidget;
+export '/pages/flowers_page/flowers_page_widget.dart' show FlowersPageWidget;
+export '/pages/wishlist/wishlist_widget.dart' show WishlistWidget;
+export '/pages/flowers_club/flowers_club_widget.dart' show FlowersClubWidget;
+export '/pages/search/search_widget.dart' show SearchWidget;
+export '/pages/gift_shop_page/gift_shop_page_widget.dart'
+    show GiftShopPageWidget;

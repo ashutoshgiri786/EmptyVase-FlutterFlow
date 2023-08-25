@@ -5,7 +5,7 @@
 
 
     <application
-        android:label="EmptyVase"
+        android:label="Empty Vase"
         tools:replace="android:label"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true">

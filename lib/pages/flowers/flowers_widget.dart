@@ -1,15 +1,17 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/navbar/navbar_widget.dart';
+import '/components/product_card_widget.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_toggle_icon.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'flowers_model.dart';
@@ -29,10 +31,27 @@ class FlowersWidget extends StatefulWidget {
   _FlowersWidgetState createState() => _FlowersWidgetState();
 }
 
-class _FlowersWidgetState extends State<FlowersWidget> {
+class _FlowersWidgetState extends State<FlowersWidget>
+    with TickerProviderStateMixin {
   late FlowersModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final animationsMap = {
+    'containerOnActionTriggerAnimation': AnimationInfo(
+      trigger: AnimationTrigger.onActionTrigger,
+      applyInitialState: true,
+      effects: [
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: Offset(0.0, 0.0),
+          end: Offset(0.0, 0.0),
+        ),
+      ],
+    ),
+  };
 
   @override
   void initState() {
@@ -45,7 +64,6 @@ class _FlowersWidgetState extends State<FlowersWidget> {
           await ShopifyAdminGroup.retrieveCollectionsProductCall.call(
         id: widget.id,
       );
-      await Future.delayed(const Duration(milliseconds: 250));
       setState(() {
         _model.nextpageInfo = functions.removeBetween('page_info=',
             '>; rel=\"next\"', (_model.firstResponse?.getHeader('link') ?? ''));
@@ -57,6 +75,13 @@ class _FlowersWidgetState extends State<FlowersWidget> {
             .cast<dynamic>();
       });
     });
+
+    setupAnimations(
+      animationsMap.values.where((anim) =>
+          anim.trigger == AnimationTrigger.onActionTrigger ||
+          !anim.applyInitialState),
+      this,
+    );
   }
 
   @override
@@ -81,83 +106,77 @@ class _FlowersWidgetState extends State<FlowersWidget> {
           child: AppBar(
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
             automaticallyImplyLeading: false,
-            actions: [],
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                width: MediaQuery.sizeOf(context).width * 1.0,
-                height: MediaQuery.sizeOf(context).height * 0.1,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Color(0xFFF2EFEB), Colors.white],
-                    stops: [0.0, 1.0],
-                    begin: AlignmentDirectional(-1.0, 0.0),
-                    end: AlignmentDirectional(1.0, 0),
-                  ),
+            leading: Align(
+              alignment: AlignmentDirectional(0.0, 0.0),
+              child: FlutterFlowIconButton(
+                borderColor: Colors.transparent,
+                borderRadius: 20.0,
+                borderWidth: 1.0,
+                buttonSize: 40.0,
+                icon: Icon(
+                  Icons.chevron_left,
+                  color: Colors.black,
+                  size: 30.0,
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: 'Welcome ,\n',
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Montserrat',
-                                    color: Color(0xFF2B4244),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                            ),
-                            TextSpan(
-                              text: 'ASH',
-                              style: GoogleFonts.getFont(
-                                'Montserrat',
-                                color: Color(0xFF2B4244),
-                                fontWeight: FontWeight.w500,
-                                fontStyle: FontStyle.italic,
-                              ),
-                            )
-                          ],
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    fontFamily: 'Montserrat',
-                                    color: Color(0xFF2B4244),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                        ),
+                onPressed: () async {
+                  context.pushNamed('Homepage');
+                },
+              ),
+            ),
+            actions: [
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  if (_model.searchbox == false)
+                    ToggleIcon(
+                      onPressed: () async {
+                        setState(() => _model.searchbox = !_model.searchbox);
+                      },
+                      value: _model.searchbox,
+                      onIcon: Icon(
+                        Icons.search,
+                        color: FlutterFlowTheme.of(context).primary,
+                        size: 25.0,
+                      ),
+                      offIcon: Icon(
+                        Icons.search,
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        size: 25.0,
                       ),
                     ),
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 10.0, 0.0),
-                          child: FlutterFlowIconButton(
-                            borderColor: Colors.transparent,
-                            borderRadius: 30.0,
-                            buttonSize: 40.0,
-                            icon: Icon(
-                              Icons.shopping_cart_outlined,
-                              color: Color(0xFF2B4244),
-                              size: 30.0,
-                            ),
-                            onPressed: () async {
-                              context.pushNamed('Cart_2');
-                            },
-                          ),
-                        ),
-                      ],
+                  Align(
+                    alignment: AlignmentDirectional(0.0, 0.0),
+                    child: FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 20.0,
+                      buttonSize: 40.0,
+                      icon: Icon(
+                        Icons.shopping_cart_outlined,
+                        color: Color(0xFF2B4244),
+                        size: 30.0,
+                      ),
+                      onPressed: () async {
+                        context.pushNamed('Cart_2');
+                      },
                     ),
-                  ],
+                  ),
+                ],
+              ),
+            ],
+            flexibleSpace: FlexibleSpaceBar(
+              title: Align(
+                alignment: AlignmentDirectional(0.0, 0.0),
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width * 0.813,
+                  height: 42.0,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).secondaryBackground,
+                  ),
+                ).animateOnActionTrigger(
+                  animationsMap['containerOnActionTriggerAnimation']!,
                 ),
               ),
+              background: Container(),
               centerTitle: true,
               expandedTitleScale: 1.0,
             ),
@@ -175,8 +194,10 @@ class _FlowersWidgetState extends State<FlowersWidget> {
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 16.0, 8.0),
                 child: FutureBuilder<ApiCallResponse>(
-                  future: ShopifyAdminGroup.collectionsListCall.call(
-                    limit: 5,
+                  future: FFAppState().collectionsList(
+                    requestFn: () => ShopifyAdminGroup.collectionsListCall.call(
+                      limit: 5,
+                    ),
                   ),
                   builder: (context, snapshot) {
                     // Customize what your widget looks like when it's loading.
@@ -215,6 +236,9 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                         .toList())) &&
                             (widget.choiceinitialvalue !=
                                 _model.choiceChipsValue)) {
+                          if (Navigator.of(context).canPop()) {
+                            context.pop();
+                          }
                           context.pushNamed(
                             'Flowers',
                             queryParameters: {
@@ -234,6 +258,13 @@ class _FlowersWidgetState extends State<FlowersWidget> {
                                 ParamType.String,
                               ),
                             }.withoutNulls,
+                            extra: <String, dynamic>{
+                              kTransitionInfoKey: TransitionInfo(
+                                hasTransition: true,
+                                transitionType: PageTransitionType.fade,
+                                duration: Duration(milliseconds: 0),
+                              ),
+                            },
                           );
                         }
                       },
@@ -281,298 +312,70 @@ class _FlowersWidgetState extends State<FlowersWidget> {
               ),
             ),
             Expanded(
-              child: Builder(
-                builder: (context) {
-                  final product = _model.response.toList();
-                  return GridView.builder(
-                    padding: EdgeInsets.zero,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 0.0,
-                      childAspectRatio: 0.8,
-                    ),
-                    scrollDirection: Axis.vertical,
-                    itemCount: product.length,
-                    itemBuilder: (context, productIndex) {
-                      final productItem = product[productIndex];
-                      return Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            16.0, 16.0, 16.0, 16.0),
-                        child: InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () async {
-                            context.pushNamed(
-                              'items_page_cart',
-                              queryParameters: {
-                                'productName': serializeParam(
-                                  getJsonField(
-                                    productItem,
-                                    r'''$..title''',
-                                  ).toString(),
-                                  ParamType.String,
-                                ),
-                                'productDescription': serializeParam(
-                                  getJsonField(
-                                    productItem,
-                                    r'''$..body_html''',
-                                  ).toString(),
-                                  ParamType.String,
-                                ),
-                                'id': serializeParam(
-                                  valueOrDefault<int>(
-                                    getJsonField(
-                                      productItem,
-                                      r'''$.id''',
-                                    ),
-                                    5403721891995,
-                                  ),
-                                  ParamType.int,
-                                ),
-                              }.withoutNulls,
-                            );
-                          },
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  width: MediaQuery.sizeOf(context).width * 0.4,
-                                  height:
-                                      MediaQuery.sizeOf(context).height * 0.2,
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryBackground,
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: Image.network(
-                                        getJsonField(
-                                          productItem,
-                                          r'''$.image.src''',
-                                        ),
-                                      ).image,
-                                    ),
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-1.0, 0.0),
-                                child: Text(
-                                  getJsonField(
-                                    productItem,
-                                    r'''$..title''',
-                                  ).toString(),
-                                  textAlign: TextAlign.center,
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xFF2B4244),
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                              ),
-                              Align(
-                                alignment: AlignmentDirectional(-1.0, 0.0),
-                                child: FutureBuilder<ApiCallResponse>(
-                                  future: ShopifyAdminGroup.productCall.call(
-                                    prId: getJsonField(
-                                      productItem,
-                                      r'''$.id''',
-                                    ).toString(),
-                                  ),
-                                  builder: (context, snapshot) {
-                                    // Customize what your widget looks like when it's loading.
-                                    if (!snapshot.hasData) {
-                                      return Center(
-                                        child: SizedBox(
-                                          width: 50.0,
-                                          height: 50.0,
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                              FlutterFlowTheme.of(context)
-                                                  .primary,
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }
-                                    final textProductResponse = snapshot.data!;
-                                    return Text(
-                                      ShopifyAdminGroup.productCall
-                                          .price(
-                                            textProductResponse.jsonBody,
-                                          )
-                                          .toString(),
-                                      textAlign: TextAlign.center,
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            fontFamily: 'Montserrat',
-                                            color: Color(0xFF2B4244),
-                                            fontSize: 12.0,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            ].divide(SizedBox(height: 8.0)),
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-            Align(
-              alignment: AlignmentDirectional(0.0, 1.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 1.0),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          10.0, 10.0, 10.0, 10.0),
-                      child: FFButtonWidget(
-                        onPressed: () async {
-                          _model.prevpageresponse = await ShopifyAdminGroup
-                              .retrieveCollectionsProductCall
-                              .call(
-                            id: widget.id,
-                            pageInfo: _model.prevpageinfo,
-                          );
-                          await showDialog(
-                            context: context,
-                            builder: (alertDialogContext) {
-                              return AlertDialog(
-                                title: Text('ok'),
-                                content: Text((_model.prevpageresponse
-                                        ?.getHeader('link') ??
-                                    '')),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(alertDialogContext),
-                                    child: Text('Ok'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                          setState(() {
-                            _model.response =
-                                ShopifyAdminGroup.retrieveCollectionsProductCall
-                                    .product(
-                                      (_model.prevpageresponse?.jsonBody ?? ''),
-                                    )!
-                                    .toList()
-                                    .cast<dynamic>();
-                          });
-
-                          setState(() {});
-                        },
-                        text: 'Previous',
-                        options: FFButtonOptions(
-                          width: 150.0,
-                          height: 40.0,
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color: Color(0xFF2B4244),
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                  ),
-                          elevation: 3.0,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+              child: Align(
+                alignment: AlignmentDirectional(0.0, 0.0),
+                child: Builder(
+                  builder: (context) {
+                    final product = _model.response.toList();
+                    return GridView.builder(
+                      padding: EdgeInsets.zero,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 0.0,
+                        childAspectRatio: 0.8,
                       ),
-                    ),
-                  ),
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 1.0),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          10.0, 10.0, 10.0, 10.0),
-                      child: FFButtonWidget(
-                        onPressed: () async {
-                          _model.nextpageresponse = await ShopifyAdminGroup
-                              .retrieveCollectionsProductCall
-                              .call(
-                            id: widget.id,
-                            pageInfo: _model.nextpageInfo,
-                          );
-                          setState(() {
-                            _model.prevpageinfo =
-                                functions.removeBetweenOccurence(
-                                    (_model.nextpageresponse
-                                            ?.getHeader('link') ??
-                                        ''),
-                                    1,
-                                    'page_info=',
-                                    '>');
-                            _model.nextpageInfo =
-                                functions.removeBetweenOccurence(
-                                    (_model.nextpageresponse
-                                            ?.getHeader('link') ??
-                                        ''),
-                                    2,
-                                    'page_info=',
-                                    '>');
-                            _model.response =
-                                ShopifyAdminGroup.retrieveCollectionsProductCall
-                                    .product(
-                                      (_model.nextpageresponse?.jsonBody ?? ''),
-                                    )!
-                                    .toList()
-                                    .cast<dynamic>();
-                          });
+                      scrollDirection: Axis.vertical,
+                      itemCount: product.length,
+                      itemBuilder: (context, productIndex) {
+                        final productItem = product[productIndex];
+                        return Align(
+                          alignment: AlignmentDirectional(0.0, 0.0),
+                          child: wrapWithModel(
+                            model: _model.productCardModels.getModel(
+                              productIndex.toString(),
+                              productIndex,
+                            ),
+                            updateCallback: () => setState(() {}),
+                            updateOnChange: true,
+                            child: ProductCardWidget(
+                              key: Key(
+                                'Key679_${productIndex.toString()}',
+                              ),
+                              islast: _model.response.last == productItem,
+                              productData: productItem,
+                              getMoreProduct: () async {
+                                _model.nextpageinfo = await ShopifyAdminGroup
+                                    .retrieveCollectionsProductCall
+                                    .call(
+                                  id: widget.id,
+                                  pageInfo: _model.nextpageInfo,
+                                );
+                                setState(() {
+                                  _model.response = functions
+                                      .listconcat(
+                                          _model.response.toList(),
+                                          ShopifyAdminGroup
+                                              .retrieveCollectionsProductCall
+                                              .product(
+                                                (_model.nextpageinfo
+                                                        ?.jsonBody ??
+                                                    ''),
+                                              )!
+                                              .toList())
+                                      .toList()
+                                      .cast<dynamic>();
+                                });
 
-                          setState(() {});
-                        },
-                        text: 'Next',
-                        options: FFButtonOptions(
-                          width: 150.0,
-                          height: 40.0,
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          iconPadding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 0.0),
-                          color: Color(0xFF2B4244),
-                          textStyle:
-                              FlutterFlowTheme.of(context).titleSmall.override(
-                                    fontFamily: 'Montserrat',
-                                    color: Colors.white,
-                                  ),
-                          elevation: 3.0,
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 1.0,
+                                setState(() {});
+                              },
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
             wrapWithModel(

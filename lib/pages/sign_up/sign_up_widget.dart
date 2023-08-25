@@ -1,3 +1,4 @@
+import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -28,9 +29,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
     _model.firstnameController ??= TextEditingController();
     _model.textController2 ??= TextEditingController();
-    _model.textController3 ??= TextEditingController();
-    _model.textController4 ??= TextEditingController();
-    _model.textController5 ??= TextEditingController();
+    _model.emailController ??= TextEditingController();
+    _model.passwordController ??= TextEditingController();
+    _model.confirmPasswordController ??= TextEditingController();
   }
 
   @override
@@ -256,7 +257,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               child: Container(
                                 width: MediaQuery.sizeOf(context).width * 0.8,
                                 child: TextFormField(
-                                  controller: _model.textController3,
+                                  controller: _model.emailController,
                                   autofocus: true,
                                   obscureText: false,
                                   decoration: InputDecoration(
@@ -314,7 +315,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                   ),
                                   style:
                                       FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.textController3Validator
+                                  validator: _model.emailControllerValidator
                                       .asValidator(context),
                                 ),
                               ),
@@ -328,9 +329,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               child: Container(
                                 width: MediaQuery.sizeOf(context).width * 0.8,
                                 child: TextFormField(
-                                  controller: _model.textController4,
+                                  controller: _model.passwordController,
                                   autofocus: true,
-                                  obscureText: false,
+                                  obscureText: !_model.passwordVisibility,
                                   decoration: InputDecoration(
                                     labelText: 'Password',
                                     labelStyle: FlutterFlowTheme.of(context)
@@ -388,14 +389,23 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                       Icons.lock,
                                       size: 20.0,
                                     ),
-                                    suffixIcon: Icon(
-                                      Icons.remove_red_eye_outlined,
-                                      size: 20.0,
+                                    suffixIcon: InkWell(
+                                      onTap: () => setState(
+                                        () => _model.passwordVisibility =
+                                            !_model.passwordVisibility,
+                                      ),
+                                      focusNode: FocusNode(skipTraversal: true),
+                                      child: Icon(
+                                        _model.passwordVisibility
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
+                                        size: 20.0,
+                                      ),
                                     ),
                                   ),
                                   style:
                                       FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.textController4Validator
+                                  validator: _model.passwordControllerValidator
                                       .asValidator(context),
                                 ),
                               ),
@@ -409,9 +419,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                               child: Container(
                                 width: MediaQuery.sizeOf(context).width * 0.8,
                                 child: TextFormField(
-                                  controller: _model.textController5,
+                                  controller: _model.confirmPasswordController,
                                   autofocus: true,
-                                  obscureText: false,
+                                  obscureText:
+                                      !_model.confirmPasswordVisibility,
                                   decoration: InputDecoration(
                                     labelText: 'Confirm Password',
                                     labelStyle: FlutterFlowTheme.of(context)
@@ -462,14 +473,24 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                       Icons.lock,
                                       size: 20.0,
                                     ),
-                                    suffixIcon: Icon(
-                                      Icons.remove_red_eye_outlined,
-                                      size: 20.0,
+                                    suffixIcon: InkWell(
+                                      onTap: () => setState(
+                                        () => _model.confirmPasswordVisibility =
+                                            !_model.confirmPasswordVisibility,
+                                      ),
+                                      focusNode: FocusNode(skipTraversal: true),
+                                      child: Icon(
+                                        _model.confirmPasswordVisibility
+                                            ? Icons.visibility_outlined
+                                            : Icons.visibility_off_outlined,
+                                        size: 20.0,
+                                      ),
                                     ),
                                   ),
                                   style:
                                       FlutterFlowTheme.of(context).bodyMedium,
-                                  validator: _model.textController5Validator
+                                  validator: _model
+                                      .confirmPasswordControllerValidator
                                       .asValidator(context),
                                 ),
                               ),
@@ -578,23 +599,68 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                           ),
                           FFButtonWidget(
                             onPressed: () async {
+                              Function() _navigate = () {};
                               if (FFAppState().TermsAndCondition == true) {
                                 if (_model.formKey.currentState == null ||
                                     !_model.formKey.currentState!.validate()) {
                                   return;
                                 }
                                 _model.signup = await actions.signUp(
-                                  _model.textController3.text,
-                                  _model.textController4.text,
+                                  _model.emailController.text,
+                                  _model.passwordController.text,
                                   _model.firstnameController.text,
                                   _model.textController2.text,
                                   true,
-                                  _model.textController5.text,
+                                  _model.confirmPasswordController.text,
                                 );
                                 if (_model.signup != null) {
-                                  context.pushNamed('LoginPage');
+                                  GoRouter.of(context).prepareAuthEvent();
+                                  if (_model.passwordController.text !=
+                                      _model.confirmPasswordController.text) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'Passwords don\'t match!',
+                                        ),
+                                      ),
+                                    );
+                                    return;
+                                  }
+
+                                  final user =
+                                      await authManager.createAccountWithEmail(
+                                    context,
+                                    _model.emailController.text,
+                                    _model.passwordController.text,
+                                  );
+                                  if (user == null) {
+                                    return;
+                                  }
+
+                                  _navigate = () => context.goNamedAuth(
+                                      'Homepage', context.mounted);
                                 }
+                              } else {
+                                await showDialog(
+                                  context: context,
+                                  builder: (alertDialogContext) {
+                                    return AlertDialog(
+                                      title: Text('Alert'),
+                                      content: Text(
+                                          'Please accept terms and conditions for signup'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(alertDialogContext),
+                                          child: Text('Ok'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               }
+
+                              _navigate();
 
                               setState(() {});
                             },

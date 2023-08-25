@@ -115,68 +115,49 @@ class _DeliveryPickupSelectedWidgetState
                     child: Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
-                      child: InkWell(
-                        splashColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onTap: () async {
-                          final _datePicked1Date = await showDatePicker(
-                            context: context,
-                            initialDate: getCurrentTimestamp,
-                            firstDate: getCurrentTimestamp,
-                            lastDate: DateTime(2050),
-                          );
-
-                          if (_datePicked1Date != null) {
-                            setState(() {
-                              _model.datePicked1 = DateTime(
-                                _datePicked1Date.year,
-                                _datePicked1Date.month,
-                                _datePicked1Date.day,
-                              );
-                            });
-                          }
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            valueOrDefault<String>(
+                              _model.datePicked != null
+                                  ? _model.datePicked?.toString()
+                                  : 'Select',
                               'Select',
-                              style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
-                            FlutterFlowIconButton(
-                              borderColor: Colors.transparent,
-                              borderRadius: 20.0,
-                              borderWidth: 1.0,
-                              buttonSize: 40.0,
-                              icon: Icon(
-                                Icons.calendar_today,
-                                color: Color(0xFF2B4244),
-                                size: 24.0,
-                              ),
-                              onPressed: () async {
-                                final _datePicked2Date = await showDatePicker(
-                                  context: context,
-                                  initialDate: getCurrentTimestamp,
-                                  firstDate: getCurrentTimestamp,
-                                  lastDate: DateTime(2050),
-                                );
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                          ),
+                          FlutterFlowIconButton(
+                            borderColor: Colors.transparent,
+                            borderRadius: 20.0,
+                            borderWidth: 1.0,
+                            buttonSize: 40.0,
+                            icon: Icon(
+                              Icons.calendar_today,
+                              color: Color(0xFF2B4244),
+                              size: 24.0,
+                            ),
+                            onPressed: () async {
+                              final _datePickedDate = await showDatePicker(
+                                context: context,
+                                initialDate: getCurrentTimestamp,
+                                firstDate: getCurrentTimestamp,
+                                lastDate: DateTime(2050),
+                              );
 
-                                if (_datePicked2Date != null) {
-                                  setState(() {
-                                    _model.datePicked2 = DateTime(
-                                      _datePicked2Date.year,
-                                      _datePicked2Date.month,
-                                      _datePicked2Date.day,
-                                    );
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        ),
+                              if (_datePickedDate != null) {
+                                setState(() {
+                                  _model.datePicked = DateTime(
+                                    _datePickedDate.year,
+                                    _datePickedDate.month,
+                                    _datePickedDate.day,
+                                  );
+                                });
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),

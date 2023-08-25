@@ -1,4 +1,5 @@
 // Automatic FlutterFlow imports
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'index.dart'; // Imports other custom actions
@@ -12,7 +13,6 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 Future<dynamic> createAddress(
   String customerAccessToken,
   String address1,
-  String country,
   String province,
   String city,
   String zip,
@@ -61,7 +61,7 @@ Future<dynamic> createAddress(
     variables: {
       "customerAccessToken": customerAccessToken,
       'address1': address1,
-      'country': country,
+      'country': "United States",
       "province": province,
       "city": city,
       "zip": zip,

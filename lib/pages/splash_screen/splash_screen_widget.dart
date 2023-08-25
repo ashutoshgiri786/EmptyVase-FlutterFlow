@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -57,50 +58,33 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
-                splashColor: Colors.transparent,
-                focusColor: Colors.transparent,
-                hoverColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onTap: () async {
-                  context.pushNamed('LoginPage');
+              FFButtonWidget(
+                onPressed: () {
+                  print('Button pressed ...');
                 },
-                child: Container(
+                text: 'START HERE ',
+                icon: Icon(
+                  Icons.login,
+                  size: 15.0,
+                ),
+                options: FFButtonOptions(
                   width: MediaQuery.sizeOf(context).width * 0.6,
-                  height: MediaQuery.sizeOf(context).height * 0.06,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(80.0),
-                    border: Border.all(
-                      color: Colors.white,
-                    ),
-                  ),
-                  alignment: AlignmentDirectional(0.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            'START HERE ',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFFF6F6F6),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                        ],
+                  height: 49.0,
+                  padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                  iconPadding:
+                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  color: Color(0x004B39EF),
+                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                        fontFamily: 'Montserrat',
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.normal,
                       ),
-                      Icon(
-                        Icons.chevron_right_sharp,
-                        color: Color(0xFFF6F6F6),
-                        size: 24.0,
-                      ),
-                    ],
+                  elevation: 3.0,
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                    width: 1.0,
                   ),
+                  borderRadius: BorderRadius.circular(80.0),
                 ),
               ),
             ].addToEnd(SizedBox(height: 70.0)),
