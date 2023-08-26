@@ -36,58 +36,66 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: Colors.white,
-      body: Container(
-        width: MediaQuery.sizeOf(context).width * 1.0,
-        height: MediaQuery.sizeOf(context).height * 1.0,
-        decoration: BoxDecoration(
-          color: FlutterFlowTheme.of(context).secondaryBackground,
-          image: DecorationImage(
-            fit: BoxFit.fill,
-            image: Image.asset(
-              'assets/images/Copy_of_EV_APP_(1).png',
-            ).image,
-          ),
-        ),
-        child: Align(
-          alignment: AlignmentDirectional(0.0, 0.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              FFButtonWidget(
-                onPressed: () {
-                  print('Button pressed ...');
-                },
-                text: 'START HERE ',
-                icon: Icon(
-                  Icons.login,
-                  size: 15.0,
-                ),
-                options: FFButtonOptions(
-                  width: MediaQuery.sizeOf(context).width * 0.6,
-                  height: 49.0,
-                  padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
-                  iconPadding:
-                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                  color: Color(0x004B39EF),
-                  textStyle: FlutterFlowTheme.of(context).titleSmall.override(
-                        fontFamily: 'Montserrat',
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.normal,
-                      ),
-                  elevation: 3.0,
-                  borderSide: BorderSide(
-                    color: Colors.white,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(80.0),
-                ),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(_model.unfocusNode),
+      child: WillPopScope(
+        onWillPop: () async => false,
+        child: Scaffold(
+          key: scaffoldKey,
+          backgroundColor: Colors.white,
+          body: Container(
+            width: MediaQuery.sizeOf(context).width * 1.0,
+            height: MediaQuery.sizeOf(context).height * 1.0,
+            decoration: BoxDecoration(
+              color: FlutterFlowTheme.of(context).secondaryBackground,
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: Image.asset(
+                  'assets/images/Copy_of_EV_APP_(2).png',
+                ).image,
               ),
-            ].addToEnd(SizedBox(height: 70.0)),
+            ),
+            child: Align(
+              alignment: AlignmentDirectional(0.0, 0.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  FFButtonWidget(
+                    onPressed: () async {
+                      context.pushNamed('LoginPage');
+                    },
+                    text: 'START HERE ',
+                    icon: Icon(
+                      Icons.login,
+                      size: 15.0,
+                    ),
+                    options: FFButtonOptions(
+                      width: MediaQuery.sizeOf(context).width * 0.6,
+                      height: 49.0,
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                      iconPadding:
+                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                      color: Color(0x004B39EF),
+                      textStyle:
+                          FlutterFlowTheme.of(context).titleSmall.override(
+                                fontFamily: 'Montserrat',
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                      elevation: 3.0,
+                      borderSide: BorderSide(
+                        color: Colors.white,
+                        width: 1.0,
+                      ),
+                      borderRadius: BorderRadius.circular(80.0),
+                    ),
+                  ),
+                ].addToEnd(SizedBox(height: 70.0)),
+              ),
+            ),
           ),
         ),
       ),

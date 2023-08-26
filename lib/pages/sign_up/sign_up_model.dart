@@ -1,8 +1,10 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -43,6 +45,9 @@ class SignUpModel extends FlutterFlowModel {
       return 'Field is required';
     }
 
+    if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {
+      return 'Has to be a valid email address.';
+    }
     return null;
   }
 
@@ -53,6 +58,10 @@ class SignUpModel extends FlutterFlowModel {
   String? _passwordControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Field is required';
+    }
+
+    if (val.length < 6) {
+      return 'Requires at least 6 characters.';
     }
 
     return null;
@@ -68,6 +77,10 @@ class SignUpModel extends FlutterFlowModel {
       return 'Field is required';
     }
 
+    if (val.length < 6) {
+      return 'Requires at least 6 characters.';
+    }
+
     return null;
   }
 
@@ -77,6 +90,12 @@ class SignUpModel extends FlutterFlowModel {
   bool? checkboxValue2;
   // Stores action output result for [Custom Action - signUp] action in Button widget.
   dynamic? signup;
+  // Stores action output result for [Custom Action - signIn] action in Button widget.
+  String? signin;
+  // Stores action output result for [Custom Action - customerId] action in Button widget.
+  dynamic? customerId;
+  // Stores action output result for [Backend Call - API (Fetch customer info)] action in Button widget.
+  ApiCallResponse? customerInfo;
 
   /// Initialization and disposal methods.
 

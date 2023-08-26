@@ -1,20 +1,28 @@
 import '/backend/api_requests/api_calls.dart';
 import '/components/navbar/navbar_widget.dart';
+import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
+import '/custom_code/actions/index.dart' as actions;
 import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'gift_shop_model.dart';
 export 'gift_shop_model.dart';
 
 class GiftShopWidget extends StatefulWidget {
-  const GiftShopWidget({Key? key}) : super(key: key);
+  const GiftShopWidget({
+    Key? key,
+    String? initialChoice,
+  })  : this.initialChoice = initialChoice ?? 'Flowers',
+        super(key: key);
+
+  final String initialChoice;
 
   @override
   _GiftShopWidgetState createState() => _GiftShopWidgetState();
@@ -30,36 +38,7 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
     super.initState();
     _model = createModel(context, () => GiftShopModel());
 
-    // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.firstpageresponse =
-          await ShopifyAdminGroup.collectionsListCall.call(
-        limit: 10,
-      );
-      if (_model.nextpageinfo != null && _model.nextpageinfo != '') {
-        setState(() {
-          _model.response = ShopifyAdminGroup.collectionsListCall
-              .collections(
-                (_model.firstpageresponse?.jsonBody ?? ''),
-              )!
-              .toList()
-              .cast<dynamic>();
-        });
-      } else {
-        _model.nextpageinfo = functions.removeBetween(
-            'page_info=',
-            '>; rel=\"next\"',
-            (_model.firstpageresponse?.getHeader('link') ?? ''));
-        setState(() {
-          _model.response = ShopifyAdminGroup.collectionsListCall
-              .collections(
-                (_model.firstpageresponse?.jsonBody ?? ''),
-              )!
-              .toList()
-              .cast<dynamic>();
-        });
-      }
-    });
+    _model.textController ??= TextEditingController();
   }
 
   @override
@@ -82,7 +61,7 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
           preferredSize:
               Size.fromHeight(MediaQuery.sizeOf(context).height * 0.1),
           child: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+            backgroundColor: Color(0xFFF2EFEB),
             automaticallyImplyLeading: false,
             leading: Align(
               alignment: AlignmentDirectional(0.0, 0.0),
@@ -97,7 +76,13 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
                   size: 30.0,
                 ),
                 onPressed: () async {
-                  context.pushNamed('Homepage');
+                  if (_model.searchDisplay) {
+                    setState(() {
+                      _model.searchDisplay = false;
+                    });
+                  } else {
+                    context.pushNamed('Homepage');
+                  }
                 },
               ),
             ),
@@ -105,28 +90,22 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  FlutterFlowIconButton(
-                    borderRadius: 20.0,
-                    borderWidth: 1.0,
-                    buttonSize: 40.0,
-                    icon: Icon(
-                      Icons.search,
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      size: 24.0,
+                  if (!_model.searchDisplay)
+                    FlutterFlowIconButton(
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      icon: Icon(
+                        Icons.search,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 30.0,
+                      ),
+                      onPressed: () async {
+                        setState(() {
+                          _model.searchDisplay = true;
+                        });
+                      },
                     ),
-                    onPressed: () async {
-                      context.pushNamed(
-                        'search',
-                        extra: <String, dynamic>{
-                          kTransitionInfoKey: TransitionInfo(
-                            hasTransition: true,
-                            transitionType: PageTransitionType.fade,
-                            duration: Duration(milliseconds: 0),
-                          ),
-                        },
-                      );
-                    },
-                  ),
                   Align(
                     alignment: AlignmentDirectional(0.0, 0.0),
                     child: FlutterFlowIconButton(
@@ -147,6 +126,126 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
+              title: Visibility(
+                visible: _model.searchDisplay,
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width * 0.7,
+                  child: Autocomplete<String>(
+                    initialValue: TextEditingValue(),
+                    optionsBuilder: (textEditingValue) {
+                      if (textEditingValue.text == '') {
+                        return const Iterable<String>.empty();
+                      }
+                      return (getJsonField(
+                        _model.search,
+                        r'''$..title''',
+                      ) as List)
+                          .map<String>((s) => s.toString())
+                          .toList()!
+                          .where((option) {
+                        final lowercaseOption = option.toLowerCase();
+                        return lowercaseOption
+                            .contains(textEditingValue.text.toLowerCase());
+                      });
+                    },
+                    optionsViewBuilder: (context, onSelected, options) {
+                      return AutocompleteOptionsList(
+                        textFieldKey: _model.textFieldKey,
+                        textController: _model.textController!,
+                        options: options.toList(),
+                        onSelected: onSelected,
+                        textStyle: FlutterFlowTheme.of(context).bodyMedium,
+                        textHighlightStyle: TextStyle(),
+                        elevation: 4.0,
+                        optionBackgroundColor:
+                            FlutterFlowTheme.of(context).primaryBackground,
+                        optionHighlightColor:
+                            FlutterFlowTheme.of(context).secondaryBackground,
+                        maxHeight: 200.0,
+                      );
+                    },
+                    onSelected: (String selection) {
+                      setState(
+                          () => _model.textFieldSelectedOption = selection);
+                      FocusScope.of(context).unfocus();
+                    },
+                    fieldViewBuilder: (
+                      context,
+                      textEditingController,
+                      focusNode,
+                      onEditingComplete,
+                    ) {
+                      _model.textController = textEditingController;
+                      return TextFormField(
+                        key: _model.textFieldKey,
+                        controller: textEditingController,
+                        focusNode: focusNode,
+                        onEditingComplete: onEditingComplete,
+                        onChanged: (_) => EasyDebounce.debounce(
+                          '_model.textController',
+                          Duration(milliseconds: 300),
+                          () async {
+                            _model.search = await actions.search(
+                              _model.textController.text,
+                            );
+                            setState(() {
+                              _model.searchProducts = getJsonField(
+                                _model.search,
+                                r'''$..node''',
+                              )!
+                                  .toList()
+                                  .cast<dynamic>();
+                            });
+
+                            setState(() {});
+                          },
+                        ),
+                        autofocus: true,
+                        obscureText: false,
+                        decoration: InputDecoration(
+                          labelText: 'Search',
+                          labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                          hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).alternate,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(80.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).primary,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(80.0),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(80.0),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: FlutterFlowTheme.of(context).error,
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(80.0),
+                          ),
+                          suffixIcon: Icon(
+                            Icons.search,
+                          ),
+                        ),
+                        style: FlutterFlowTheme.of(context).bodyMedium,
+                        validator:
+                            _model.textControllerValidator.asValidator(context),
+                      );
+                    },
+                  ),
+                ),
+              ),
               background: Container(),
               centerTitle: true,
               expandedTitleScale: 1.0,
@@ -162,103 +261,183 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
               decoration: BoxDecoration(
                 color: FlutterFlowTheme.of(context).secondaryBackground,
               ),
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 8.0, 16.0, 8.0),
-                child: FutureBuilder<ApiCallResponse>(
-                  future: _model.giftShopChoiceChips(
-                    requestFn: () =>
-                        ShopifyAdminGroup.collectionsListCall.call(),
-                  ),
-                  builder: (context, snapshot) {
-                    // Customize what your widget looks like when it's loading.
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: SizedBox(
-                          width: 50.0,
-                          height: 50.0,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              FlutterFlowTheme.of(context).primary,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (!_model.searchDisplay)
+                    Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                      child: FutureBuilder<ApiCallResponse>(
+                        future: _model.giftShopChoiceChips(
+                          requestFn: () =>
+                              ShopifyAdminGroup.collectionsListCall.call(),
+                        ),
+                        builder: (context, snapshot) {
+                          // Customize what your widget looks like when it's loading.
+                          if (!snapshot.hasData) {
+                            return Center(
+                              child: SizedBox(
+                                width: 50.0,
+                                height: 50.0,
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    FlutterFlowTheme.of(context).primary,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                          final choiceChipsCollectionsListResponse =
+                              snapshot.data!;
+                          return FlutterFlowChoiceChips(
+                            options: [
+                              ChipData('Flowers'),
+                              ChipData('Gift Shop')
+                            ],
+                            onChanged: (val) async {
+                              setState(
+                                  () => _model.choiceChipsValue1 = val?.first);
+                              if (_model.choiceChipsValue1 != 'Gift Shop') {
+                                _model.flowerresponse = await ShopifyAdminGroup
+                                    .flowersCategoryCall
+                                    .call();
+                                setState(() {
+                                  _model.response = ShopifyAdminGroup
+                                      .flowersCategoryCall
+                                      .collections(
+                                        (_model.flowerresponse?.jsonBody ?? ''),
+                                      )!
+                                      .toList()
+                                      .cast<dynamic>();
+                                });
+                              } else {
+                                _model.giftShop = await ShopifyAdminGroup
+                                    .giftShopsCategoryCall
+                                    .call();
+                                setState(() {
+                                  _model.response =
+                                      ShopifyAdminGroup.giftShopsCategoryCall
+                                          .collections(
+                                            (_model.giftShop?.jsonBody ?? ''),
+                                          )!
+                                          .toList()
+                                          .cast<dynamic>();
+                                });
+                              }
+
+                              setState(() {});
+                            },
+                            selectedChipStyle: ChipStyle(
+                              backgroundColor: Color(0xFF2B4244),
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Color(0xFFF6F6F6),
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                              iconColor: Colors.white,
+                              iconSize: 18.0,
+                              elevation: 0.0,
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            unselectedChipStyle: ChipStyle(
+                              backgroundColor: Color(0x00000000),
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                              iconColor: Color(0x00000000),
+                              iconSize: 18.0,
+                              elevation: 0.0,
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            chipSpacing: 12.0,
+                            rowSpacing: 12.0,
+                            multiselect: false,
+                            initialized: _model.choiceChipsValue1 != null,
+                            alignment: WrapAlignment.start,
+                            controller: _model.choiceChipsValueController1 ??=
+                                FormFieldController<List<String>>(
+                              [widget.initialChoice],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        if (_model.searchDisplay && (_model.search != null))
+                          FlutterFlowChoiceChips(
+                            options: functions
+                                .stringListToSet((getJsonField(
+                                  _model.search,
+                                  r'''$..collections..channelTitle''',
+                                ) as List)
+                                    .map<String>((s) => s.toString())
+                                    .toList())
+                                .map((label) => ChipData(label))
+                                .toList(),
+                            onChanged: (val) => setState(
+                                () => _model.choiceChipsValue2 = val?.first),
+                            selectedChipStyle: ChipStyle(
+                              backgroundColor: Color(0xFF2B4244),
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Color(0xFFF6F6F6),
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                              iconColor: Colors.white,
+                              iconSize: 18.0,
+                              elevation: 0.0,
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            unselectedChipStyle: ChipStyle(
+                              backgroundColor: Color(0x00000000),
+                              textStyle: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: FlutterFlowTheme.of(context)
+                                        .secondaryText,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                              iconColor: Color(0x00000000),
+                              iconSize: 18.0,
+                              elevation: 0.0,
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
+                            chipSpacing: 12.0,
+                            rowSpacing: 12.0,
+                            multiselect: false,
+                            initialized: _model.choiceChipsValue2 != null,
+                            alignment: WrapAlignment.start,
+                            controller: _model.choiceChipsValueController2 ??=
+                                FormFieldController<List<String>>(
+                              ['Everything'],
                             ),
                           ),
-                        ),
-                      );
-                    }
-                    final choiceChipsCollectionsListResponse = snapshot.data!;
-                    return FlutterFlowChoiceChips(
-                      options: [ChipData('Flowers'), ChipData('Gift')],
-                      onChanged: (val) async {
-                        setState(() => _model.choiceChipsValue = val?.first);
-                        if (_model.choiceChipsValue == 'Gift') {
-                          _model.giftShop = await ShopifyAdminGroup
-                              .giftShopsCategoryCall
-                              .call();
-                          setState(() {
-                            _model.response =
-                                ShopifyAdminGroup.giftShopsCategoryCall
-                                    .collections(
-                                      (_model.giftShop?.jsonBody ?? ''),
-                                    )!
-                                    .toList()
-                                    .cast<dynamic>();
-                            _model.category = true;
-                          });
-                        } else {
-                          _model.flowerresponse = await ShopifyAdminGroup
-                              .flowersCategoryCall
-                              .call();
-                          _model.response =
-                              ShopifyAdminGroup.flowersCategoryCall
-                                  .collections(
-                                    (_model.flowerresponse?.jsonBody ?? ''),
-                                  )!
-                                  .toList()
-                                  .cast<dynamic>();
-                        }
-
-                        setState(() {});
-                      },
-                      selectedChipStyle: ChipStyle(
-                        backgroundColor: Color(0xFF2B4244),
-                        textStyle:
-                            FlutterFlowTheme.of(context).bodyMedium.override(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFFF6F6F6),
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                        iconColor: Colors.white,
-                        iconSize: 18.0,
-                        elevation: 0.0,
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      unselectedChipStyle: ChipStyle(
-                        backgroundColor: Color(0x00000000),
-                        textStyle: FlutterFlowTheme.of(context)
-                            .bodyMedium
-                            .override(
-                              fontFamily: 'Montserrat',
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                        iconColor: Color(0x00000000),
-                        iconSize: 18.0,
-                        elevation: 0.0,
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                      chipSpacing: 12.0,
-                      rowSpacing: 12.0,
-                      multiselect: false,
-                      initialized: _model.choiceChipsValue != null,
-                      alignment: WrapAlignment.start,
-                      controller: _model.choiceChipsValueController ??=
-                          FormFieldController<List<String>>(
-                        ['Flowers'],
-                      ),
-                    );
-                  },
-                ),
+                      ]
+                          .divide(SizedBox(width: 16.0))
+                          .around(SizedBox(width: 16.0)),
+                    ),
+                  ),
+                ].divide(SizedBox(height: 8.0)).around(SizedBox(height: 8.0)),
               ),
             ),
             Expanded(
@@ -268,133 +447,251 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Builder(
-                        builder: (context) {
-                          final products = _model.response.toList();
-                          return GridView.builder(
-                            padding: EdgeInsets.zero,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10.0,
-                              mainAxisSpacing: 10.0,
-                              childAspectRatio: 1.0,
-                            ),
-                            shrinkWrap: true,
-                            scrollDirection: Axis.vertical,
-                            itemCount: products.length,
-                            itemBuilder: (context, productsIndex) {
-                              final productsItem = products[productsIndex];
-                              return InkWell(
-                                splashColor: Colors.transparent,
-                                focusColor: Colors.transparent,
-                                hoverColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () async {
-                                  if (_model.choiceChipsValue == 'Flowers') {
+                    if (!_model.searchDisplay)
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
+                            final products = _model.response.toList();
+                            return GridView.builder(
+                              padding: EdgeInsets.zero,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10.0,
+                                mainAxisSpacing: 10.0,
+                                childAspectRatio: 1.0,
+                              ),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: products.length,
+                              itemBuilder: (context, productsIndex) {
+                                final productsItem = products[productsIndex];
+                                return InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
+                                    if (_model.choiceChipsValue1 ==
+                                        'Gift Shop') {
+                                      context.pushNamed(
+                                        'GiftShopPage',
+                                        queryParameters: {
+                                          'id': serializeParam(
+                                            getJsonField(
+                                              productsItem,
+                                              r'''$..id''',
+                                            ),
+                                            ParamType.int,
+                                          ),
+                                          'categorytitle': serializeParam(
+                                            getJsonField(
+                                              productsItem,
+                                              r'''$..title''',
+                                            ).toString(),
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                      );
+                                    } else {
+                                      context.pushNamed(
+                                        'FlowersPage',
+                                        queryParameters: {
+                                          'id': serializeParam(
+                                            getJsonField(
+                                              productsItem,
+                                              r'''$..id''',
+                                            ),
+                                            ParamType.int,
+                                          ),
+                                          'categorytitle': serializeParam(
+                                            getJsonField(
+                                              productsItem,
+                                              r'''$.title''',
+                                            ).toString(),
+                                            ParamType.String,
+                                          ),
+                                        }.withoutNulls,
+                                      );
+                                    }
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.4,
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.172,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: Image.network(
+                                              valueOrDefault<String>(
+                                                getJsonField(
+                                                  productsItem,
+                                                  r'''$.image.src''',
+                                                ),
+                                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNuvafpok1f34VfmtLMX_0RYNYnJ-aSpv0qQ&usqp=CAU',
+                                              ),
+                                            ).image,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(-1.0, 0.0),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  10.0, 0.0, 0.0, 0.0),
+                                          child: Text(
+                                            getJsonField(
+                                              productsItem,
+                                              r'''$..title''',
+                                            ).toString(),
+                                            textAlign: TextAlign.center,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Montserrat',
+                                                  color: Color(0xFF2B4244),
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ].divide(SizedBox(height: 8.0)),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    if (_model.searchDisplay)
+                      Expanded(
+                        child: Builder(
+                          builder: (context) {
+                            final products = _model.searchProducts
+                                .where((e) => functions
+                                    .stringListToSet((getJsonField(
+                                      e,
+                                      r'''$..channelTitle''',
+                                    ) as List)
+                                        .map<String>((s) => s.toString())
+                                        .toList())
+                                    .contains(_model.choiceChipsValue2))
+                                .toList();
+                            return GridView.builder(
+                              padding: EdgeInsets.zero,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10.0,
+                                mainAxisSpacing: 10.0,
+                                childAspectRatio: 0.78,
+                              ),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              itemCount: products.length,
+                              itemBuilder: (context, productsIndex) {
+                                final productsItem = products[productsIndex];
+                                return InkWell(
+                                  splashColor: Colors.transparent,
+                                  focusColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onTap: () async {
                                     context.pushNamed(
-                                      'FlowersPage',
+                                      'items_page_cart',
                                       queryParameters: {
                                         'id': serializeParam(
-                                          getJsonField(
-                                            productsItem,
-                                            r'''$..id''',
-                                          ),
-                                          ParamType.int,
-                                        ),
-                                        'categorytitle': serializeParam(
-                                          getJsonField(
-                                            productsItem,
-                                            r'''$..title''',
-                                          ).toString(),
-                                          ParamType.String,
-                                        ),
-                                      }.withoutNulls,
-                                    );
-                                  } else {
-                                    context.pushNamed(
-                                      'GiftShopPage',
-                                      queryParameters: {
-                                        'id': serializeParam(
-                                          getJsonField(
-                                            productsItem,
-                                            r'''$..id''',
-                                          ),
-                                          ParamType.int,
-                                        ),
-                                        'categorytitle': serializeParam(
-                                          getJsonField(
-                                            productsItem,
-                                            r'''$..title''',
-                                          ).toString(),
-                                          ParamType.String,
-                                        ),
-                                      }.withoutNulls,
-                                    );
-                                  }
-                                },
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.sizeOf(context).width *
-                                          0.4,
-                                      height:
-                                          MediaQuery.sizeOf(context).height *
-                                              0.172,
-                                      decoration: BoxDecoration(
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: Image.network(
-                                            valueOrDefault<String>(
+                                          functions.removeletters(
+                                              'Product/',
                                               getJsonField(
                                                 productsItem,
-                                                r'''$.image.src''',
-                                              ),
-                                              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNuvafpok1f34VfmtLMX_0RYNYnJ-aSpv0qQ&usqp=CAU',
-                                            ),
-                                          ).image,
+                                                r'''$.id''',
+                                              ).toString()),
+                                          ParamType.String,
                                         ),
-                                        borderRadius:
-                                            BorderRadius.circular(30.0),
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment:
-                                          AlignmentDirectional(-1.0, 0.0),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            10.0, 0.0, 0.0, 0.0),
-                                        child: Text(
-                                          getJsonField(
-                                            productsItem,
-                                            r'''$..title''',
-                                          ).toString(),
-                                          textAlign: TextAlign.center,
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Montserrat',
-                                                color: Color(0xFF2B4244),
-                                                fontSize: 12.0,
-                                                fontWeight: FontWeight.w500,
+                                      }.withoutNulls,
+                                    );
+                                  },
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                0.4,
+                                        height:
+                                            MediaQuery.sizeOf(context).height *
+                                                0.172,
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: Image.network(
+                                              valueOrDefault<String>(
+                                                getJsonField(
+                                                  productsItem,
+                                                  r'''$..url''',
+                                                ),
+                                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNuvafpok1f34VfmtLMX_0RYNYnJ-aSpv0qQ&usqp=CAU',
                                               ),
+                                            ).image,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
                                         ),
                                       ),
-                                    ),
-                                  ].divide(SizedBox(height: 8.0)),
-                                ),
-                              );
-                            },
-                          );
-                        },
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(-1.0, 0.0),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  10.0, 0.0, 0.0, 0.0),
+                                          child: Text(
+                                            getJsonField(
+                                              productsItem,
+                                              r'''$.title''',
+                                            ).toString(),
+                                            textAlign: TextAlign.center,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Montserrat',
+                                                  color: Color(0xFF2B4244),
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ].divide(SizedBox(height: 8.0)),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        ),
                       ),
-                    ),
                   ]
                       .divide(SizedBox(height: 10.0))
                       .around(SizedBox(height: 10.0)),

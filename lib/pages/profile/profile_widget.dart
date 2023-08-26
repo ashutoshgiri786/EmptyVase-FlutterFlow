@@ -83,7 +83,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   ),
                             ),
                             TextSpan(
-                              text: 'ASH',
+                              text: FFAppState().firstName,
                               style: GoogleFonts.getFont(
                                 'Montserrat',
                                 color: Color(0xFF2B4244),

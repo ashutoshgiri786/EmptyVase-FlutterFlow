@@ -23,18 +23,15 @@ class NewAddressModel extends FlutterFlowModel {
   // State field(s) for TextField widget.
   TextEditingController? textController1;
   String? Function(BuildContext, String?)? textController1Validator;
-  // State field(s) for TextField widget.
-  TextEditingController? textController2;
-  String? Function(BuildContext, String?)? textController2Validator;
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
   // State field(s) for TextField widget.
+  TextEditingController? textController2;
+  String? Function(BuildContext, String?)? textController2Validator;
+  // State field(s) for TextField widget.
   TextEditingController? textController3;
   String? Function(BuildContext, String?)? textController3Validator;
-  // State field(s) for TextField widget.
-  TextEditingController? textController4;
-  String? Function(BuildContext, String?)? textController4Validator;
   // State field(s) for Checkbox widget.
   bool? checkboxValue;
   // Stores action output result for [Custom Action - updateAddress] action in Button widget.
@@ -51,7 +48,6 @@ class NewAddressModel extends FlutterFlowModel {
     textController1?.dispose();
     textController2?.dispose();
     textController3?.dispose();
-    textController4?.dispose();
   }
 
   /// Action blocks are added here.

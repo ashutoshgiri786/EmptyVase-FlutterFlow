@@ -121,7 +121,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
             child: FaIcon(
               FontAwesomeIcons.bell,
               color: Color(0xFF2B4244),
-              size: 35.0,
+              size: 32.0,
             ),
           ),
         ],

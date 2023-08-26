@@ -79,18 +79,18 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? HomepageWidget() : LoginPageWidget(),
+          appStateNotifier.loggedIn ? HomepageWidget() : SplashScreenWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) =>
-              appStateNotifier.loggedIn ? HomepageWidget() : LoginPageWidget(),
+          builder: (context, _) => appStateNotifier.loggedIn
+              ? HomepageWidget()
+              : SplashScreenWidget(),
         ),
         FFRoute(
           name: 'SplashScreen',
           path: '/splashScreen',
-          requireAuth: true,
           builder: (context, params) => SplashScreenWidget(),
         ),
         FFRoute(
@@ -178,7 +178,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'Reset',
           path: '/reset',
-          requireAuth: true,
           builder: (context, params) => ResetWidget(),
         ),
         FFRoute(
@@ -253,7 +252,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'GiftShop',
           path: '/giftShop',
           requireAuth: true,
-          builder: (context, params) => GiftShopWidget(),
+          builder: (context, params) => GiftShopWidget(
+            initialChoice: params.getParam('initialChoice', ParamType.String),
+          ),
         ),
         FFRoute(
           name: 'FlowersPage',
@@ -456,7 +457,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.location);
-            return '/loginPage';
+            return '/splashScreen';
           }
           return null;
         },
@@ -471,9 +472,13 @@ class FFRoute {
           final child = appStateNotifier.loading
               ? Container(
                   color: Colors.transparent,
-                  child: Image.asset(
-                    'assets/images/Copy_of_EV_APP.png',
-                    fit: BoxFit.cover,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/Copy_of_EV_APP_(2).png',
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      height: MediaQuery.sizeOf(context).height * 1.0,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 )
               : PushNotificationsHandler(child: page);
@@ -511,5 +516,9 @@ class TransitionInfo {
   final Duration duration;
   final Alignment? alignment;
 
-  static TransitionInfo appDefault() => TransitionInfo(hasTransition: false);
+  static TransitionInfo appDefault() => TransitionInfo(
+        hasTransition: true,
+        transitionType: PageTransitionType.fade,
+        duration: Duration(milliseconds: 0),
+      );
 }

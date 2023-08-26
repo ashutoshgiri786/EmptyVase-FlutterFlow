@@ -37,6 +37,7 @@ class ShopifyAdminGroup {
   static FlowersCategoryCall flowersCategoryCall = FlowersCategoryCall();
   static SearchProductCall searchProductCall = SearchProductCall();
   static FlowersClubCall flowersClubCall = FlowersClubCall();
+  static ResetPasswordCall resetPasswordCall = ResetPasswordCall();
 }
 
 class RetrieveCollectionsProductCall {
@@ -634,6 +635,37 @@ class FlowersClubCall {
         response,
         r'''$.product..options[1].values[0]''',
       );
+}
+
+class ResetPasswordCall {
+  Future<ApiCallResponse> call({
+    String? customerId = '',
+    String? password = '',
+  }) {
+    final body = '''
+{
+  "customer": {
+"id":"${customerId}",
+    "password": "${password}",
+    "password_confirmation": "${password}"
+  }
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'Reset Password',
+      apiUrl: '${ShopifyAdminGroup.baseUrl}customers/${customerId}.json',
+      callType: ApiCallType.PUT,
+      headers: {
+        ...ShopifyAdminGroup.headers,
+      },
+      params: {},
+      body: body,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+    );
+  }
 }
 
 /// End Shopify Admin Group Code

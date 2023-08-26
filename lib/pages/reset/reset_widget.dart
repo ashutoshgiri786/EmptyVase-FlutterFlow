@@ -1,3 +1,5 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/components/navbar/navbar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -28,7 +30,8 @@ class _ResetWidgetState extends State<ResetWidget> {
     super.initState();
     _model = createModel(context, () => ResetModel());
 
-    _model.textController ??= TextEditingController(text: FFAppState().email);
+    _model.textController1 ??= TextEditingController(text: FFAppState().email);
+    _model.textController2 ??= TextEditingController();
   }
 
   @override
@@ -164,7 +167,7 @@ class _ResetWidgetState extends State<ResetWidget> {
                           child: Container(
                             width: MediaQuery.sizeOf(context).width * 0.95,
                             child: TextFormField(
-                              controller: _model.textController,
+                              controller: _model.textController1,
                               autofocus: true,
                               readOnly: true,
                               obscureText: false,
@@ -216,7 +219,83 @@ class _ResetWidgetState extends State<ResetWidget> {
                                 ),
                               ),
                               style: FlutterFlowTheme.of(context).bodyMedium,
-                              validator: _model.textControllerValidator
+                              validator: _model.textController1Validator
+                                  .asValidator(context),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0.02, 0.23),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              8.0, 0.0, 8.0, 0.0),
+                          child: Container(
+                            width: MediaQuery.sizeOf(context).width * 0.95,
+                            child: TextFormField(
+                              controller: _model.textController2,
+                              autofocus: true,
+                              obscureText: !_model.passwordVisibility,
+                              decoration: InputDecoration(
+                                labelStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.w500,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                hintText: 'Password',
+                                hintStyle:
+                                    FlutterFlowTheme.of(context).labelMedium,
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0xFF191414),
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(80.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(80.0),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context).error,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(80.0),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context).error,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(80.0),
+                                ),
+                                filled: true,
+                                fillColor: Color(0xA4FFFFFF),
+                                suffixIcon: InkWell(
+                                  onTap: () => setState(
+                                    () => _model.passwordVisibility =
+                                        !_model.passwordVisibility,
+                                  ),
+                                  focusNode: FocusNode(skipTraversal: true),
+                                  child: Icon(
+                                    _model.passwordVisibility
+                                        ? Icons.visibility_outlined
+                                        : Icons.visibility_off_outlined,
+                                    color: Colors.black,
+                                    size: 20.0,
+                                  ),
+                                ),
+                              ),
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                              keyboardType: TextInputType.visiblePassword,
+                              validator: _model.textController2Validator
                                   .asValidator(context),
                             ),
                           ),
@@ -224,29 +303,31 @@ class _ResetWidgetState extends State<ResetWidget> {
                       ),
                       FFButtonWidget(
                         onPressed: () async {
-                          _model.result = await actions.resetLink(
-                            _model.textController.text,
+                          GoRouter.of(context).prepareAuthEvent();
+
+                          final user = await authManager.signInWithEmail(
+                            context,
+                            FFAppState().email,
+                            FFAppState().password,
                           );
-                          await showDialog(
-                            context: context,
-                            builder: (alertDialogContext) {
-                              return AlertDialog(
-                                title: Text('Alert'),
-                                content: Text(_model.result!),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.pop(alertDialogContext),
-                                    child: Text('Ok'),
-                                  ),
-                                ],
-                              );
-                            },
+                          if (user == null) {
+                            return;
+                          }
+
+                          await actions.changePassword(
+                            _model.textController2.text,
                           );
+                          _model.resetPassword =
+                              await ShopifyAdminGroup.resetPasswordCall.call(
+                            customerId: FFAppState().customerId,
+                            password: _model.textController2.text,
+                          );
+
+                          context.goNamedAuth('Homepage', context.mounted);
 
                           setState(() {});
                         },
-                        text: 'SEND RESET LINK',
+                        text: 'CHANGE PASSWORD',
                         options: FFButtonOptions(
                           width: 370.0,
                           height: 50.0,
@@ -268,33 +349,6 @@ class _ResetWidgetState extends State<ResetWidget> {
                           ),
                           borderRadius: BorderRadius.circular(80.0),
                         ),
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(-1.0, 0.0),
-                            child: Icon(
-                              Icons.check,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 24.0,
-                            ),
-                          ),
-                          Text(
-                            'A link to reset\nyour password has been sent \nto your email',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFF2B4244),
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
-                        ]
-                            .divide(SizedBox(width: 15.0))
-                            .addToStart(SizedBox(width: 20.0)),
                       ),
                     ]
                         .divide(SizedBox(height: 20.0))

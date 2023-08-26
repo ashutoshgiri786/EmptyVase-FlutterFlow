@@ -174,9 +174,7 @@ class _FlowerCollectionsWidgetState extends State<FlowerCollectionsWidget> {
                                   getJsonField(
                                     collectionsItem,
                                     r'''$..title''',
-                                  )
-                                      .toString()
-                                      .maybeHandleOverflow(maxChars: 10),
+                                  ).toString(),
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(

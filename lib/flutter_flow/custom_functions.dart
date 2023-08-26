@@ -136,3 +136,8 @@ List<dynamic> listconcat(
   concatenatedList.addAll(list2);
   return concatenatedList;
 }
+
+List<String> stringListToSet(List<String>? stringList) {
+  stringList?.sort();
+  return stringList != null ? stringList.toSet().toList() : [];
+}

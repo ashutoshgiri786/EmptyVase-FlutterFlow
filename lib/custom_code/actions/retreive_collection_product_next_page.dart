@@ -10,8 +10,9 @@ import 'package:flutter/material.dart';
 
 import 'package:graphql_flutter/graphql_flutter.dart';
 
-Future<dynamic> search(
-  String query,
+Future<dynamic> retreiveCollectionProductNextPage(
+  String collectionId,
+  String endcursor,
 ) async {
   final httpLink = HttpLink(
     FFAppState().graphqlEndpoint,
@@ -24,37 +25,48 @@ Future<dynamic> search(
 
   final String mutation = '''
 {
-    
-  products(first: 5, query: "(title:$query*) OR (inventory_total:>0)" ) {
-    edges {
-      node {
-        	collections(first: 50) {
+  collection(id: "gid://shopify/Collection/$collectionId") {
+    products(first: 10, after:endCursor) {
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
       edges {
-            channelNode : node {
-          channelTitle :title
-        }
-      }
-    }
-        id
-        title
-        createdAt
-        totalInventory
-        images(first:1){
-
-            edges{
-                imageNode:node{
-                    url
+        cursor
+        node {
+         
+          id
+          title
+          variants(first: 1) {
+            edges {
+              node {
+                price {
+                  amount
+                  currencyCode
                 }
+
+              }
+
             }
+
+          }
+           images(first: 1) {
+            edges {
+              node {
+                src
+              }
+            }
+          }
         }
       }
     }
-  }}
-
-
+  }
+}
 ''';
 
-  final MutationOptions options = MutationOptions(document: gql(mutation));
+  final MutationOptions options = MutationOptions(
+    document: gql(mutation),
+  );
 
   final QueryResult result = await client.mutate(options);
 
@@ -65,5 +77,6 @@ Future<dynamic> search(
 
   return result.data;
 }
+
 // Set your action name, define your arguments and return parameter,
 // and then add the boilerplate code using the button on the right!

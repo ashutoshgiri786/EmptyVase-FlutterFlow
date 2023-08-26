@@ -352,7 +352,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                     await authManager.signOut();
                     GoRouter.of(context).clearRedirectLocation();
 
-                    context.goNamedAuth('LoginPage', context.mounted);
+                    context.goNamedAuth('SplashScreen', context.mounted);
                   },
                   child: Text(
                     'Log Out',

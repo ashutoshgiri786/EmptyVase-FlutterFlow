@@ -1,8 +1,10 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -105,6 +107,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                     child: TextFormField(
                                       controller: _model.firstnameController,
                                       autofocus: true,
+                                      autofillHints: [AutofillHints.givenName],
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         labelStyle: FlutterFlowTheme.of(context)
@@ -165,6 +168,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium,
+                                      keyboardType: TextInputType.name,
                                       validator: _model
                                           .firstnameControllerValidator
                                           .asValidator(context),
@@ -181,6 +185,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                     child: TextFormField(
                                       controller: _model.textController2,
                                       autofocus: true,
+                                      autofillHints: [AutofillHints.familyName],
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         labelStyle: FlutterFlowTheme.of(context)
@@ -241,6 +246,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                       ),
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium,
+                                      keyboardType: TextInputType.name,
                                       validator: _model.textController2Validator
                                           .asValidator(context),
                                     ),
@@ -259,6 +265,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                 child: TextFormField(
                                   controller: _model.emailController,
                                   autofocus: true,
+                                  autofillHints: [AutofillHints.email],
                                   obscureText: false,
                                   decoration: InputDecoration(
                                     labelStyle: FlutterFlowTheme.of(context)
@@ -315,6 +322,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                   ),
                                   style:
                                       FlutterFlowTheme.of(context).bodyMedium,
+                                  keyboardType: TextInputType.emailAddress,
                                   validator: _model.emailControllerValidator
                                       .asValidator(context),
                                 ),
@@ -331,6 +339,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                 child: TextFormField(
                                   controller: _model.passwordController,
                                   autofocus: true,
+                                  autofillHints: [AutofillHints.newPassword],
                                   obscureText: !_model.passwordVisibility,
                                   decoration: InputDecoration(
                                     labelText: 'Password',
@@ -405,6 +414,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                   ),
                                   style:
                                       FlutterFlowTheme.of(context).bodyMedium,
+                                  keyboardType: TextInputType.visiblePassword,
                                   validator: _model.passwordControllerValidator
                                       .asValidator(context),
                                 ),
@@ -421,6 +431,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                 child: TextFormField(
                                   controller: _model.confirmPasswordController,
                                   autofocus: true,
+                                  autofillHints: [AutofillHints.newPassword],
                                   obscureText:
                                       !_model.confirmPasswordVisibility,
                                   decoration: InputDecoration(
@@ -489,6 +500,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                   ),
                                   style:
                                       FlutterFlowTheme.of(context).bodyMedium,
+                                  keyboardType: TextInputType.visiblePassword,
                                   validator: _model
                                       .confirmPasswordControllerValidator
                                       .asValidator(context),
@@ -614,31 +626,104 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                   _model.confirmPasswordController.text,
                                 );
                                 if (_model.signup != null) {
-                                  GoRouter.of(context).prepareAuthEvent();
-                                  if (_model.passwordController.text !=
-                                      _model.confirmPasswordController.text) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Passwords don\'t match!',
-                                        ),
-                                      ),
-                                    );
-                                    return;
-                                  }
-
-                                  final user =
-                                      await authManager.createAccountWithEmail(
-                                    context,
+                                  _model.signin = await actions.signIn(
                                     _model.emailController.text,
                                     _model.passwordController.text,
                                   );
-                                  if (user == null) {
-                                    return;
-                                  }
+                                  if (_model.signin != 'Logged In') {
+                                    await showDialog(
+                                      context: context,
+                                      builder: (alertDialogContext) {
+                                        return AlertDialog(
+                                          title: Text('alert'),
+                                          content: Text(_model.signin!),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () => Navigator.pop(
+                                                  alertDialogContext),
+                                              child: Text('Ok'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    _model.customerId =
+                                        await actions.customerId();
+                                    _model.customerInfo =
+                                        await ShopifyAdminGroup
+                                            .fetchCustomerInfoCall
+                                            .call(
+                                      customerid: functions.removeBetween(
+                                          'Customer/',
+                                          '}',
+                                          _model.customerId!.toString()),
+                                    );
+                                    if ((_model.customerInfo?.succeeded ??
+                                        true)) {
+                                      FFAppState().update(() {
+                                        FFAppState().firstName =
+                                            ShopifyAdminGroup
+                                                .fetchCustomerInfoCall
+                                                .firstName(
+                                                  (_model.customerInfo
+                                                          ?.jsonBody ??
+                                                      ''),
+                                                )
+                                                .toString();
+                                        FFAppState().lastName =
+                                            ShopifyAdminGroup
+                                                .fetchCustomerInfoCall
+                                                .lastName(
+                                                  (_model.customerInfo
+                                                          ?.jsonBody ??
+                                                      ''),
+                                                )
+                                                .toString();
+                                        FFAppState().email = ShopifyAdminGroup
+                                            .fetchCustomerInfoCall
+                                            .customerEmail(
+                                              (_model.customerInfo?.jsonBody ??
+                                                  ''),
+                                            )
+                                            .toString();
+                                        FFAppState().customerId =
+                                            functions.removeBetween(
+                                                'Customer/',
+                                                '}',
+                                                _model.customerId!.toString());
+                                        FFAppState().password =
+                                            _model.passwordController.text;
+                                      });
+                                      GoRouter.of(context).prepareAuthEvent();
+                                      if (_model.passwordController.text !=
+                                          _model
+                                              .confirmPasswordController.text) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Passwords don\'t match!',
+                                            ),
+                                          ),
+                                        );
+                                        return;
+                                      }
 
-                                  _navigate = () => context.goNamedAuth(
-                                      'Homepage', context.mounted);
+                                      final user = await authManager
+                                          .createAccountWithEmail(
+                                        context,
+                                        _model.emailController.text,
+                                        _model.passwordController.text,
+                                      );
+                                      if (user == null) {
+                                        return;
+                                      }
+
+                                      _navigate = () => context.goNamedAuth(
+                                          'Homepage', context.mounted);
+                                    }
+                                  }
                                 }
                               } else {
                                 await showDialog(

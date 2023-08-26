@@ -106,10 +106,13 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                 child: Text(
-                  getJsonField(
-                    widget.productData,
-                    r'''$..title''',
-                  ).toString().maybeHandleOverflow(maxChars: 15),
+                  valueOrDefault<String>(
+                    getJsonField(
+                      widget.productData,
+                      r'''$..title''',
+                    ).toString(),
+                    'title',
+                  ).maybeHandleOverflow(maxChars: 15),
                   textAlign: TextAlign.center,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Montserrat',
@@ -125,11 +128,13 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                 child: FutureBuilder<ApiCallResponse>(
-                  future: ShopifyAdminGroup.productCall.call(
-                    prId: getJsonField(
-                      widget.productData,
-                      r'''$.id''',
-                    ).toString(),
+                  future: FFAppState().pricing(
+                    requestFn: () => ShopifyAdminGroup.productCall.call(
+                      prId: getJsonField(
+                        widget.productData,
+                        r'''$.id''',
+                      ).toString(),
+                    ),
                   ),
                   builder: (context, snapshot) {
                     // Customize what your widget looks like when it's loading.
@@ -148,11 +153,14 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                     }
                     final textProductResponse = snapshot.data!;
                     return Text(
-                      ShopifyAdminGroup.productCall
-                          .price(
-                            textProductResponse.jsonBody,
-                          )
-                          .toString(),
+                      valueOrDefault<String>(
+                        ShopifyAdminGroup.productCall
+                            .price(
+                              textProductResponse.jsonBody,
+                            )
+                            .toString(),
+                        '0.00',
+                      ),
                       textAlign: TextAlign.center,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Montserrat',

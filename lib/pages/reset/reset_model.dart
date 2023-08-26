@@ -1,3 +1,5 @@
+import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/components/navbar/navbar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -14,22 +16,28 @@ class ResetModel extends FlutterFlowModel {
 
   final unfocusNode = FocusNode();
   // State field(s) for TextField widget.
-  TextEditingController? textController;
-  String? Function(BuildContext, String?)? textControllerValidator;
-  // Stores action output result for [Custom Action - resetLink] action in Button widget.
-  String? result;
+  TextEditingController? textController1;
+  String? Function(BuildContext, String?)? textController1Validator;
+  // State field(s) for TextField widget.
+  TextEditingController? textController2;
+  late bool passwordVisibility;
+  String? Function(BuildContext, String?)? textController2Validator;
+  // Stores action output result for [Backend Call - API (Reset Password)] action in Button widget.
+  ApiCallResponse? resetPassword;
   // Model for navbar component.
   late NavbarModel navbarModel;
 
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
+    passwordVisibility = false;
     navbarModel = createModel(context, () => NavbarModel());
   }
 
   void dispose() {
     unfocusNode.dispose();
-    textController?.dispose();
+    textController1?.dispose();
+    textController2?.dispose();
     navbarModel.dispose();
   }
 

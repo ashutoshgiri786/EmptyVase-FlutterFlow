@@ -132,7 +132,7 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                       [];
                               return Container(
                                 width: MediaQuery.sizeOf(context).width * 1.0,
-                                height: MediaQuery.sizeOf(context).height * 0.5,
+                                height: MediaQuery.sizeOf(context).height * 0.7,
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 0.0, 40.0),
@@ -156,7 +156,9 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                           width:
                                               MediaQuery.sizeOf(context).width *
                                                   1.0,
-                                          height: 200.0,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              3.0,
                                           fit: BoxFit.cover,
                                         ),
                                       );
@@ -172,25 +174,29 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                         alignment: AlignmentDirectional(0.0, 0.0),
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 10.0, 0.0, 0.0),
+                              0.0, 30.0, 0.0, 0.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 20.0,
-                                borderWidth: 1.0,
-                                buttonSize: 40.0,
-                                icon: Icon(
-                                  Icons.close_outlined,
-                                  color: Colors.black,
-                                  size: 24.0,
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 0.0, 0.0, 0.0),
+                                child: FlutterFlowIconButton(
+                                  borderRadius: 20.0,
+                                  borderWidth: 1.0,
+                                  buttonSize: 40.0,
+                                  fillColor: Color(0xFF013220),
+                                  icon: Icon(
+                                    Icons.close_outlined,
+                                    color: Colors.white,
+                                    size: 24.0,
+                                  ),
+                                  onPressed: () async {
+                                    context.safePop();
+                                  },
                                 ),
-                                onPressed: () async {
-                                  context.safePop();
-                                },
                               ),
                               Expanded(
                                 child: Align(
@@ -201,9 +207,10 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                       borderRadius: 20.0,
                                       borderWidth: 1.0,
                                       buttonSize: 40.0,
+                                      fillColor: Color(0xFF013220),
                                       icon: Icon(
                                         Icons.ios_share_sharp,
-                                        color: Colors.black,
+                                        color: Colors.white,
                                         size: 24.0,
                                       ),
                                       onPressed: () async {
@@ -217,19 +224,24 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                   ),
                                 ),
                               ),
-                              FlutterFlowIconButton(
-                                borderColor: Colors.transparent,
-                                borderRadius: 20.0,
-                                borderWidth: 1.0,
-                                buttonSize: 40.0,
-                                icon: Icon(
-                                  Icons.shopping_cart_outlined,
-                                  color: Colors.white,
-                                  size: 24.0,
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    10.0, 0.0, 10.0, 0.0),
+                                child: FlutterFlowIconButton(
+                                  borderColor: Colors.transparent,
+                                  borderRadius: 20.0,
+                                  borderWidth: 1.0,
+                                  buttonSize: 40.0,
+                                  fillColor: Color(0xFF013220),
+                                  icon: Icon(
+                                    Icons.shopping_cart_outlined,
+                                    color: Colors.white,
+                                    size: 24.0,
+                                  ),
+                                  onPressed: () async {
+                                    context.pushNamed('Cart_2');
+                                  },
                                 ),
-                                onPressed: () async {
-                                  context.pushNamed('Cart_2');
-                                },
                               ),
                             ],
                           ),
@@ -238,85 +250,85 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Align(
-                    alignment: AlignmentDirectional(0.0, 1.0),
-                    child: Container(
-                      width: MediaQuery.sizeOf(context).width * 1.0,
-                      decoration: BoxDecoration(
-                        color: Color(0xE0F2EFEB),
-                        borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(0.0),
-                          bottomRight: Radius.circular(0.0),
-                          topLeft: Radius.circular(16.0),
-                          topRight: Radius.circular(16.0),
-                        ),
+                Align(
+                  alignment: AlignmentDirectional(0.0, 1.0),
+                  child: Container(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    decoration: BoxDecoration(
+                      color: Color(0xE0F2EFEB),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(0.0),
+                        bottomRight: Radius.circular(0.0),
+                        topLeft: Radius.circular(16.0),
+                        topRight: Radius.circular(16.0),
                       ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            20.0, 0.0, 20.0, 20.0),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ToggleIcon(
-                                onPressed: () async {
-                                  setState(
-                                      () => _model.expaded = !_model.expaded);
-                                },
-                                value: _model.expaded,
-                                onIcon: Icon(
-                                  Icons.keyboard_arrow_down_sharp,
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  size: 25.0,
-                                ),
-                                offIcon: Icon(
-                                  Icons.keyboard_arrow_up,
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryText,
-                                  size: 25.0,
-                                ),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 20.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ToggleIcon(
+                              onPressed: () async {
+                                setState(
+                                    () => _model.expaded = !_model.expaded);
+                              },
+                              value: _model.expaded,
+                              onIcon: Icon(
+                                Icons.keyboard_arrow_down_sharp,
+                                color: FlutterFlowTheme.of(context).primary,
+                                size: 25.0,
                               ),
-                              Align(
-                                alignment: AlignmentDirectional(-1.0, -1.0),
-                                child: Text(
-                                  ShopifyAdminGroup.productCall
-                                      .productitle(
-                                        itemsPageCartProductResponse.jsonBody,
-                                      )
-                                      .toString(),
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                ),
+                              offIcon: Icon(
+                                Icons.keyboard_arrow_up,
+                                color:
+                                    FlutterFlowTheme.of(context).secondaryText,
+                                size: 25.0,
                               ),
-                              Align(
-                                alignment: AlignmentDirectional(-1.0, -1.0),
-                                child: Text(
-                                  ShopifyAdminGroup.productCall
-                                      .price(
-                                        itemsPageCartProductResponse.jsonBody,
-                                      )
-                                      .toString(),
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                ),
+                            ),
+                            Align(
+                              alignment: AlignmentDirectional(-1.0, -1.0),
+                              child: Text(
+                                ShopifyAdminGroup.productCall
+                                    .productitle(
+                                      itemsPageCartProductResponse.jsonBody,
+                                    )
+                                    .toString(),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontWeight: FontWeight.normal,
+                                    ),
                               ),
-                              if (_model.expaded == true)
-                                Html(
-                                  data: getJsonField(
-                                    itemsPageCartProductResponse.jsonBody,
-                                    r'''$.product.body_html''',
-                                  ).toString(),
-                                ),
+                            ),
+                            Align(
+                              alignment: AlignmentDirectional(-1.0, -1.0),
+                              child: Text(
+                                ShopifyAdminGroup.productCall
+                                    .price(
+                                      itemsPageCartProductResponse.jsonBody,
+                                    )
+                                    .toString(),
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                              ),
+                            ),
+                            if (_model.expaded == true)
+                              Html(
+                                data: getJsonField(
+                                  itemsPageCartProductResponse.jsonBody,
+                                  r'''$.product.body_html''',
+                                ).toString(),
+                              ),
+                            if (_model.expaded)
                               Row(
                                 mainAxisSize: MainAxisSize.max,
                                 mainAxisAlignment:
@@ -445,101 +457,100 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                   ),
                                 ],
                               ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 20.0),
-                                child: FFButtonWidget(
-                                  onPressed: () async {
-                                    if (FFAppState().cartId == null ||
-                                        FFAppState().cartId == '') {
-                                      _model.out = await actions.createCart(
-                                        ShopifyAdminGroup.productCall
-                                            .productVariant(
-                                              itemsPageCartProductResponse
-                                                  .jsonBody,
-                                            )
-                                            .toString(),
-                                        1,
-                                      );
-                                      setState(() {
-                                        FFAppState().cartId = getJsonField(
-                                          _model.out,
-                                          r'''$.cart.id''',
-                                        ).toString();
-                                      });
-                                    } else {
-                                      _model.added =
-                                          await actions.addMoreItemsInCart(
-                                        ShopifyAdminGroup.productCall
-                                            .productVariant(
-                                              itemsPageCartProductResponse
-                                                  .jsonBody,
-                                            )
-                                            .toString(),
-                                        1,
-                                      );
-                                    }
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 20.0),
+                              child: FFButtonWidget(
+                                onPressed: () async {
+                                  if (FFAppState().cartId == null ||
+                                      FFAppState().cartId == '') {
+                                    _model.out = await actions.createCart(
+                                      ShopifyAdminGroup.productCall
+                                          .productVariant(
+                                            itemsPageCartProductResponse
+                                                .jsonBody,
+                                          )
+                                          .toString(),
+                                      1,
+                                    );
+                                    setState(() {
+                                      FFAppState().cartId = getJsonField(
+                                        _model.out,
+                                        r'''$.cart.id''',
+                                      ).toString();
+                                    });
+                                  } else {
+                                    _model.added =
+                                        await actions.addMoreItemsInCart(
+                                      ShopifyAdminGroup.productCall
+                                          .productVariant(
+                                            itemsPageCartProductResponse
+                                                .jsonBody,
+                                          )
+                                          .toString(),
+                                      1,
+                                    );
+                                  }
 
-                                    await showModalBottomSheet(
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      enableDrag: false,
-                                      context: context,
-                                      builder: (context) {
-                                        return GestureDetector(
-                                          onTap: () => FocusScope.of(context)
-                                              .requestFocus(_model.unfocusNode),
-                                          child: Padding(
-                                            padding: MediaQuery.viewInsetsOf(
-                                                context),
-                                            child: ItemAddedWidget(
-                                              productimage: ShopifyAdminGroup
-                                                  .productCall
-                                                  .coverimage(
-                                                itemsPageCartProductResponse
-                                                    .jsonBody,
-                                              ),
+                                  await showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    enableDrag: false,
+                                    context: context,
+                                    builder: (context) {
+                                      return GestureDetector(
+                                        onTap: () => FocusScope.of(context)
+                                            .requestFocus(_model.unfocusNode),
+                                        child: Padding(
+                                          padding:
+                                              MediaQuery.viewInsetsOf(context),
+                                          child: ItemAddedWidget(
+                                            productimage: ShopifyAdminGroup
+                                                .productCall
+                                                .coverimage(
+                                              itemsPageCartProductResponse
+                                                  .jsonBody,
                                             ),
                                           ),
-                                        );
-                                      },
-                                    ).then((value) => setState(() {}));
-
-                                    setState(() {});
-                                  },
-                                  text: 'ADD',
-                                  icon: Icon(
-                                    Icons.shopping_cart_outlined,
-                                    size: 15.0,
-                                  ),
-                                  options: FFButtonOptions(
-                                    width: 313.0,
-                                    height: 50.0,
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 0.0, 0.0),
-                                    color: Color(0xFF2B4244),
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .titleMedium
-                                        .override(
-                                          fontFamily: 'Montserrat',
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w500,
                                         ),
-                                    elevation: 3.0,
-                                    borderSide: BorderSide(
-                                      color: Colors.transparent,
-                                      width: 1.0,
-                                    ),
-                                    borderRadius: BorderRadius.circular(80.0),
+                                      );
+                                    },
+                                  ).then((value) => setState(() {}));
+
+                                  setState(() {});
+                                },
+                                text: 'ADD',
+                                icon: Icon(
+                                  Icons.shopping_cart_outlined,
+                                  size: 15.0,
+                                ),
+                                options: FFButtonOptions(
+                                  width: 313.0,
+                                  height: 50.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color: Color(0xFF2B4244),
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleMedium
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                  elevation: 3.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
                                   ),
+                                  borderRadius: BorderRadius.circular(80.0),
                                 ),
                               ),
-                            ]
-                                .divide(SizedBox(height: 20.0))
-                                .around(SizedBox(height: 20.0)),
-                          ),
+                            ),
+                          ]
+                              .divide(SizedBox(height: 20.0))
+                              .around(SizedBox(height: 20.0)),
                         ),
                       ),
                     ),

@@ -79,9 +79,13 @@ class _PushNotificationsHandlerState extends State<PushNotificationsHandler> {
   Widget build(BuildContext context) => _loading
       ? Container(
           color: Colors.transparent,
-          child: Image.asset(
-            'assets/images/Copy_of_EV_APP.png',
-            fit: BoxFit.cover,
+          child: Center(
+            child: Image.asset(
+              'assets/images/Copy_of_EV_APP_(2).png',
+              width: MediaQuery.sizeOf(context).width * 1.0,
+              height: MediaQuery.sizeOf(context).height * 1.0,
+              fit: BoxFit.cover,
+            ),
           ),
         )
       : widget.child;
@@ -153,7 +157,11 @@ final parametersBuilderMap =
         },
       ),
   'TermsAndCondition': ParameterData.none(),
-  'GiftShop': ParameterData.none(),
+  'GiftShop': (data) async => ParameterData(
+        allParams: {
+          'initialChoice': getParameter<String>(data, 'initialChoice'),
+        },
+      ),
   'FlowersPage': (data) async => ParameterData(
         allParams: {
           'id': getParameter<int>(data, 'id'),
