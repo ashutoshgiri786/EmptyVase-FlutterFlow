@@ -457,95 +457,89 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                   ),
                                 ],
                               ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 20.0),
-                              child: FFButtonWidget(
-                                onPressed: () async {
-                                  if (FFAppState().cartId == null ||
-                                      FFAppState().cartId == '') {
-                                    _model.out = await actions.createCart(
-                                      ShopifyAdminGroup.productCall
-                                          .productVariant(
-                                            itemsPageCartProductResponse
-                                                .jsonBody,
-                                          )
-                                          .toString(),
-                                      1,
-                                    );
-                                    setState(() {
-                                      FFAppState().cartId = getJsonField(
-                                        _model.out,
-                                        r'''$.cart.id''',
-                                      ).toString();
-                                    });
-                                  } else {
-                                    _model.added =
-                                        await actions.addMoreItemsInCart(
-                                      ShopifyAdminGroup.productCall
-                                          .productVariant(
-                                            itemsPageCartProductResponse
-                                                .jsonBody,
-                                          )
-                                          .toString(),
-                                      1,
-                                    );
-                                  }
+                            FFButtonWidget(
+                              onPressed: () async {
+                                if (FFAppState().cartId == null ||
+                                    FFAppState().cartId == '') {
+                                  _model.out = await actions.createCart(
+                                    ShopifyAdminGroup.productCall
+                                        .productVariant(
+                                          itemsPageCartProductResponse.jsonBody,
+                                        )
+                                        .toString(),
+                                    1,
+                                  );
+                                  setState(() {
+                                    FFAppState().cartId = getJsonField(
+                                      _model.out,
+                                      r'''$.cart.id''',
+                                    ).toString();
+                                  });
+                                } else {
+                                  _model.added =
+                                      await actions.addMoreItemsInCart(
+                                    ShopifyAdminGroup.productCall
+                                        .productVariant(
+                                          itemsPageCartProductResponse.jsonBody,
+                                        )
+                                        .toString(),
+                                    1,
+                                  );
+                                }
 
-                                  await showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    backgroundColor: Colors.transparent,
-                                    enableDrag: false,
-                                    context: context,
-                                    builder: (context) {
-                                      return GestureDetector(
-                                        onTap: () => FocusScope.of(context)
-                                            .requestFocus(_model.unfocusNode),
-                                        child: Padding(
-                                          padding:
-                                              MediaQuery.viewInsetsOf(context),
-                                          child: ItemAddedWidget(
-                                            productimage: ShopifyAdminGroup
-                                                .productCall
-                                                .coverimage(
-                                              itemsPageCartProductResponse
-                                                  .jsonBody,
-                                            ),
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  enableDrag: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return GestureDetector(
+                                      onTap: () => FocusScope.of(context)
+                                          .requestFocus(_model.unfocusNode),
+                                      child: Padding(
+                                        padding:
+                                            MediaQuery.viewInsetsOf(context),
+                                        child: ItemAddedWidget(
+                                          productimage: ShopifyAdminGroup
+                                              .productCall
+                                              .coverimage(
+                                            itemsPageCartProductResponse
+                                                .jsonBody,
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ).then((value) => setState(() {}));
-
-                                  setState(() {});
-                                },
-                                text: 'ADD',
-                                icon: Icon(
-                                  Icons.shopping_cart_outlined,
-                                  size: 15.0,
-                                ),
-                                options: FFButtonOptions(
-                                  width: 313.0,
-                                  height: 50.0,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
-                                  color: Color(0xFF2B4244),
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .titleMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w500,
                                       ),
-                                  elevation: 3.0,
-                                  borderSide: BorderSide(
-                                    color: Colors.transparent,
-                                    width: 1.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(80.0),
+                                    );
+                                  },
+                                ).then((value) => setState(() {}));
+
+                                setState(() {});
+                              },
+                              text: 'ADD',
+                              icon: Icon(
+                                Icons.shopping_cart_outlined,
+                                size: 15.0,
+                              ),
+                              options: FFButtonOptions(
+                                width: 313.0,
+                                height: 50.0,
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 0.0),
+                                color: Color(0xFF2B4244),
+                                textStyle: FlutterFlowTheme.of(context)
+                                    .titleMedium
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                elevation: 3.0,
+                                borderSide: BorderSide(
+                                  color: Colors.transparent,
+                                  width: 1.0,
                                 ),
+                                borderRadius: BorderRadius.circular(80.0),
                               ),
                             ),
                           ]

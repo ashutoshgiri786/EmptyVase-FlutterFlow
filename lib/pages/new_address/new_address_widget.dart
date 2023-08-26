@@ -260,10 +260,8 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
                         color: FlutterFlowTheme.of(context).secondaryText,
                         size: 24.0,
                       ),
-                      fillColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
                       elevation: 0.0,
-                      borderColor: FlutterFlowTheme.of(context).alternate,
+                      borderColor: Colors.transparent,
                       borderWidth: 2.0,
                       borderRadius: 8.0,
                       margin:

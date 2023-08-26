@@ -233,21 +233,6 @@ class FFAppState extends ChangeNotifier {
   void clearCollectionsListCache() => _collectionsListManager.clear();
   void clearCollectionsListCacheKey(String? uniqueKey) =>
       _collectionsListManager.clearRequest(uniqueKey);
-
-  final _pricingManager = FutureRequestManager<ApiCallResponse>();
-  Future<ApiCallResponse> pricing({
-    String? uniqueQueryKey,
-    bool? overrideCache,
-    required Future<ApiCallResponse> Function() requestFn,
-  }) =>
-      _pricingManager.performRequest(
-        uniqueQueryKey: uniqueQueryKey,
-        overrideCache: overrideCache,
-        requestFn: requestFn,
-      );
-  void clearPricingCache() => _pricingManager.clear();
-  void clearPricingCacheKey(String? uniqueKey) =>
-      _pricingManager.clearRequest(uniqueKey);
 }
 
 LatLng? _latLngFromString(String? val) {

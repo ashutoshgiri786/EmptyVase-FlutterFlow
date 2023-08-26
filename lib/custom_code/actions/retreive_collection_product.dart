@@ -22,8 +22,8 @@ Future<dynamic> retreiveCollectionProduct(
 
   final client = GraphQLClient(link: httpLink, cache: GraphQLCache());
   final String mutation = '''
-  mutation {
-{
+   {
+
   collection(id: "gid://shopify/Collection/$collectionId") {
     products(first: 10) {
       pageInfo {

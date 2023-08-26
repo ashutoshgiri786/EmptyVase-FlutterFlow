@@ -1,6 +1,6 @@
-import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -70,10 +70,12 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
             'items_page_cart',
             queryParameters: {
               'id': serializeParam(
-                getJsonField(
-                  widget.productData,
-                  r'''$.id''',
-                ).toString(),
+                functions.removeletters(
+                    'Product/',
+                    getJsonField(
+                      widget.productData,
+                      r'''$.node.id''',
+                    ).toString()),
                 ParamType.String,
               ),
             }.withoutNulls,
@@ -92,9 +94,12 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   image: Image.network(
-                    getJsonField(
-                      widget.productData,
-                      r'''$.image.src''',
+                    valueOrDefault<String>(
+                      getJsonField(
+                        widget.productData,
+                        r'''$.node.images.edges[0].node.src''',
+                      ),
+                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNuvafpok1f34VfmtLMX_0RYNYnJ-aSpv0qQ&usqp=CAU',
                     ),
                   ).image,
                 ),
@@ -109,7 +114,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                   valueOrDefault<String>(
                     getJsonField(
                       widget.productData,
-                      r'''$..title''',
+                      r'''$.node.title''',
                     ).toString(),
                     'title',
                   ).maybeHandleOverflow(maxChars: 15),
@@ -127,49 +132,21 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
               alignment: AlignmentDirectional(-1.0, 0.0),
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
-                child: FutureBuilder<ApiCallResponse>(
-                  future: FFAppState().pricing(
-                    requestFn: () => ShopifyAdminGroup.productCall.call(
-                      prId: getJsonField(
-                        widget.productData,
-                        r'''$.id''',
-                      ).toString(),
-                    ),
+                child: Text(
+                  valueOrDefault<String>(
+                    getJsonField(
+                      widget.productData,
+                      r'''$.node.variants.edges[0].node.price.amount''',
+                    ).toString(),
+                    '0.00',
                   ),
-                  builder: (context, snapshot) {
-                    // Customize what your widget looks like when it's loading.
-                    if (!snapshot.hasData) {
-                      return Center(
-                        child: SizedBox(
-                          width: 40.0,
-                          height: 40.0,
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              Colors.black,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-                    final textProductResponse = snapshot.data!;
-                    return Text(
-                      valueOrDefault<String>(
-                        ShopifyAdminGroup.productCall
-                            .price(
-                              textProductResponse.jsonBody,
-                            )
-                            .toString(),
-                        '0.00',
+                  textAlign: TextAlign.center,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Montserrat',
+                        color: Color(0xFF2B4244),
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w500,
                       ),
-                      textAlign: TextAlign.center,
-                      style: FlutterFlowTheme.of(context).bodyMedium.override(
-                            fontFamily: 'Montserrat',
-                            color: Color(0xFF2B4244),
-                            fontSize: 12.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    );
-                  },
                 ),
               ),
             ),

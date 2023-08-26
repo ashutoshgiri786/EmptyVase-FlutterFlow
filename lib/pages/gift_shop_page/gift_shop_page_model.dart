@@ -24,7 +24,7 @@ class GiftShopPageModel extends FlutterFlowModel {
 
   String? nextpageinfo = '';
 
-  String? prevpageinfo = '';
+  bool hasNextPage = false;
 
   List<dynamic> response = [];
   void addToResponse(dynamic item) => response.add(item);
@@ -53,8 +53,8 @@ class GiftShopPageModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // Stores action output result for [Backend Call - API (Retrieve Collections Product)] action in GiftShopPage widget.
-  ApiCallResponse? firstpageresponse;
+  // Stores action output result for [Custom Action - retreiveCollectionProduct] action in GiftShopPage widget.
+  dynamic? coll;
   // State field(s) for ChoiceChips widget.
   String? choiceChipsValue1;
   FormFieldController<List<String>>? choiceChipsValueController1;
@@ -65,8 +65,8 @@ class GiftShopPageModel extends FlutterFlowModel {
   FormFieldController<List<String>>? choiceChipsValueController2;
   // Models for productCard dynamic component.
   late FlutterFlowDynamicModels<ProductCardModel> productCardModels;
-  // Stores action output result for [Backend Call - API (Retrieve Collections Product)] action in productCard widget.
-  ApiCallResponse? nextpage;
+  // Stores action output result for [Custom Action - retreiveCollectionProductNextPage] action in productCard widget.
+  dynamic? nextpage;
   // Model for navbar component.
   late NavbarModel navbarModel;
   // State field(s) for TextField widget.

@@ -43,19 +43,24 @@ class _GiftShopPageWidgetState extends State<GiftShopPageWidget> {
 
     // On page load action.
     SchedulerBinding.instance.addPostFrameCallback((_) async {
-      _model.firstpageresponse =
-          await ShopifyAdminGroup.retrieveCollectionsProductCall.call(
-        id: widget.id,
+      _model.coll = await actions.retreiveCollectionProduct(
+        widget.id!.toString(),
       );
       setState(() {
-        _model.response = ShopifyAdminGroup.retrieveCollectionsProductCall
-            .product(
-              (_model.firstpageresponse?.jsonBody ?? ''),
-            )!
+        _model.response = getJsonField(
+          _model.coll,
+          r'''$.collection.products.edges''',
+        )!
             .toList()
             .cast<dynamic>();
-        _model.nextpageinfo = functions.removeBetween('page_info=', '>',
-            (_model.firstpageresponse?.getHeader('link') ?? ''));
+        _model.nextpageinfo = getJsonField(
+          _model.coll,
+          r'''$.collection.products.pageInfo.endCursor''',
+        ).toString().toString();
+        _model.hasNextPage = getJsonField(
+          _model.coll,
+          r'''$.collection.products.pageInfo.hasNextPage''',
+        );
       });
     });
 
@@ -508,36 +513,29 @@ class _GiftShopPageWidgetState extends State<GiftShopPageWidget> {
                                           _model.response.last == productsItem,
                                       productData: productsItem,
                                       getMoreProduct: () async {
-                                        _model.nextpage =
-                                            await ShopifyAdminGroup
-                                                .retrieveCollectionsProductCall
-                                                .call(
-                                          id: _model.id,
-                                          pageInfo: _model.nextpageinfo,
-                                        );
-                                        setState(() {
-                                          _model.nextpageinfo =
-                                              functions.removeBetweenOccurence(
-                                                  (_model.nextpage
-                                                          ?.getHeader('link') ??
-                                                      ''),
-                                                  2,
-                                                  'page_info=',
-                                                  '>');
-                                          _model.response = functions
-                                              .listconcat(
-                                                  _model.response.toList(),
-                                                  ShopifyAdminGroup
-                                                      .retrieveCollectionsProductCall
-                                                      .product(
-                                                        (_model.nextpage
-                                                                ?.jsonBody ??
-                                                            ''),
-                                                      )!
-                                                      .toList())
-                                              .toList()
-                                              .cast<dynamic>();
-                                        });
+                                        if (_model.hasNextPage) {
+                                          _model.nextpage = await actions
+                                              .retreiveCollectionProductNextPage(
+                                            widget.id!.toString(),
+                                            _model.nextpageinfo!,
+                                          );
+                                          setState(() {
+                                            _model.response = getJsonField(
+                                              _model.nextpage,
+                                              r'''$.collection.products.edges''',
+                                            )!
+                                                .toList()
+                                                .cast<dynamic>();
+                                            _model.hasNextPage = getJsonField(
+                                              _model.nextpage,
+                                              r'''$.collection.products.pageInfo.hasNextPage''',
+                                            );
+                                            _model.nextpageinfo = getJsonField(
+                                              _model.nextpage,
+                                              r'''$.collection.products.pageInfo.endCursor''',
+                                            ).toString();
+                                          });
+                                        }
 
                                         setState(() {});
                                       },
