@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import '../../flutter_flow/flutter_flow_util.dart';
+import '../cloud_functions/cloud_functions.dart';
 
 import 'api_manager.dart';
 
@@ -12,10 +13,6 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start Shopify Admin Group Code
 
 class ShopifyAdminGroup {
-  static String baseUrl = 'https://EmptyVase.myshopify.com/admin/api/2023-04/';
-  static Map<String, String> headers = {
-    'X-Shopify-Access-Token': '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',
-  };
   static RetrieveCollectionsProductCall retrieveCollectionsProductCall =
       RetrieveCollectionsProductCall();
   static CollectionsListCall collectionsListCall = CollectionsListCall();
@@ -44,23 +41,18 @@ class RetrieveCollectionsProductCall {
   Future<ApiCallResponse> call({
     int? id,
     String? pageInfo = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Retrieve Collections Product',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}collections/${id}/products.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'RetrieveCollectionsProductCall',
+        'variables': {
+          'id': id,
+          'pageInfo': pageInfo,
+        },
       },
-      params: {
-        'limit': 10,
-        'page_info': pageInfo,
-      },
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: true,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic product(dynamic response) => getJsonField(
@@ -84,23 +76,18 @@ class CollectionsListCall {
   Future<ApiCallResponse> call({
     int? limit = 50,
     String? pageInfo = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: ' Collections List ',
-      apiUrl:
-          '${ShopifyAdminGroup.baseUrl}custom_collections.json?limit=${limit}',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'CollectionsListCall',
+        'variables': {
+          'limit': limit,
+          'pageInfo': pageInfo,
+        },
       },
-      params: {
-        'page_info': pageInfo,
-      },
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: true,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic title(dynamic response) => getJsonField(
@@ -126,20 +113,17 @@ class CollectionsListCall {
 class ProductImageCall {
   Future<ApiCallResponse> call({
     int? id = 7867779186934,
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Product Image',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}products/${id}/images.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'ProductImageCall',
+        'variables': {
+          'id': id,
+        },
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: true,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic image(dynamic response) => getJsonField(
@@ -152,20 +136,17 @@ class ProductImageCall {
 class ProductCall {
   Future<ApiCallResponse> call({
     String? prId = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Product',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}/products/${prId}.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'ProductCall',
+        'variables': {
+          'prId': prId,
+        },
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: true,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic price(dynamic response) => getJsonField(
@@ -208,23 +189,17 @@ class ProductCall {
 class OrdersCall {
   Future<ApiCallResponse> call({
     String? id = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Orders',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}customers/${id}/orders.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'OrdersCall',
+        'variables': {
+          'id': id,
+        },
       },
-      params: {
-        'status': "any",
-        'limit': 1,
-      },
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic id(dynamic response) => getJsonField(
@@ -237,20 +212,17 @@ class OrdersCall {
 class ProductVariantCall {
   Future<ApiCallResponse> call({
     String? vrId = '35107817717915',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Product Variant',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}variants/${vrId}.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'ProductVariantCall',
+        'variables': {
+          'vrId': vrId,
+        },
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: true,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic productid(dynamic response) => getJsonField(
@@ -268,55 +240,36 @@ class CreateMetafieldsCall {
     String? customerId = '',
     int? productId,
     int? productVariant,
-  }) {
-    final body = '''
-{
-  "metafield": {
-    "namespace": "product",
-    "key": ${productId},
-    "type": "multi_line_text_field",
-    "value": ${productVariant}
-  }
-}''';
-    return ApiManager.instance.makeApiCall(
-      callName: 'Create Metafields',
-      apiUrl:
-          '${ShopifyAdminGroup.baseUrl}customers/${customerId}/metafields.json',
-      callType: ApiCallType.POST,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'CreateMetafieldsCall',
+        'variables': {
+          'customerId': customerId,
+          'productId': productId,
+          'productVariant': productVariant,
+        },
       },
-      params: {},
-      body: body,
-      bodyType: BodyType.JSON,
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 }
 
 class GetMetafieldsCall {
   Future<ApiCallResponse> call({
     String? customerId = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Get Metafields',
-      apiUrl:
-          '${ShopifyAdminGroup.baseUrl}customers/${customerId}/metafields.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'GetMetafieldsCall',
+        'variables': {
+          'customerId': customerId,
+        },
       },
-      params: {
-        'namespace': "product",
-      },
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic metafieldsValue(dynamic response) => getJsonField(
@@ -334,22 +287,17 @@ class GetMetafieldsCall {
 class GetproductlistCall {
   Future<ApiCallResponse> call({
     String? ids = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Getproductlist',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}products.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'GetproductlistCall',
+        'variables': {
+          'ids': ids,
+        },
       },
-      params: {
-        'ids': ids,
-      },
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: true,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic product(dynamic response) => getJsonField(
@@ -360,21 +308,15 @@ class GetproductlistCall {
 }
 
 class GiftShopsCategoryCall {
-  Future<ApiCallResponse> call() {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Gift Shops Category',
-      apiUrl:
-          '${ShopifyAdminGroup.baseUrl}custom_collections.json?ids=230519144603,231548813467,231550025883,230519177371,231549010075,231549075611,231549141147,266731585691,273095098523',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  Future<ApiCallResponse> call() async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'GiftShopsCategoryCall',
+        'variables': {},
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: true,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic collections(dynamic response) => getJsonField(
@@ -403,21 +345,18 @@ class DeleteMetafieldsCall {
   Future<ApiCallResponse> call({
     String? customerId = '',
     String? metafieldId = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Delete Metafields',
-      apiUrl:
-          '${ShopifyAdminGroup.baseUrl}customers/${customerId}/metafields/${metafieldId}.json',
-      callType: ApiCallType.DELETE,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'DeleteMetafieldsCall',
+        'variables': {
+          'customerId': customerId,
+          'metafieldId': metafieldId,
+        },
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 }
 
@@ -426,24 +365,19 @@ class RetrieveSpecificMetafieldCall {
     String? customerId = '',
     String? productid = '',
     String? productVariant = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Retrieve Specific Metafield',
-      apiUrl:
-          '${ShopifyAdminGroup.baseUrl}customers/${customerId}/metafields.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'RetrieveSpecificMetafieldCall',
+        'variables': {
+          'customerId': customerId,
+          'productid': productid,
+          'productVariant': productVariant,
+        },
       },
-      params: {
-        'key': productid,
-        'value': productVariant,
-      },
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic metafieldId(dynamic response) => getJsonField(
@@ -455,20 +389,17 @@ class RetrieveSpecificMetafieldCall {
 class CustomerDetailsCall {
   Future<ApiCallResponse> call({
     String? customerId = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Customer Details',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}customers/${customerId}.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'CustomerDetailsCall',
+        'variables': {
+          'customerId': customerId,
+        },
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic defaultAddress(dynamic response) => getJsonField(
@@ -478,20 +409,15 @@ class CustomerDetailsCall {
 }
 
 class ListOfShippingZonesCall {
-  Future<ApiCallResponse> call() {
-    return ApiManager.instance.makeApiCall(
-      callName: 'List of shipping zones',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}shipping_zones.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  Future<ApiCallResponse> call() async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'ListOfShippingZonesCall',
+        'variables': {},
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: true,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic countries(dynamic response) => getJsonField(
@@ -509,20 +435,17 @@ class ListOfShippingZonesCall {
 class FetchCustomerInfoCall {
   Future<ApiCallResponse> call({
     String? customerid = '',
-  }) {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Fetch customer info',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}customers/${customerid}.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'FetchCustomerInfoCall',
+        'variables': {
+          'customerid': customerid,
+        },
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic customerEmail(dynamic response) => getJsonField(
@@ -540,21 +463,15 @@ class FetchCustomerInfoCall {
 }
 
 class FlowersCategoryCall {
-  Future<ApiCallResponse> call() {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Flowers Category ',
-      apiUrl:
-          '${ShopifyAdminGroup.baseUrl}custom_collections.json?ids=405240676598,227433545883,404392313078,265837969563,207275622555,207275393179,391735836918,402852380918,207275458715,207275753627,',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  Future<ApiCallResponse> call() async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'FlowersCategoryCall',
+        'variables': {},
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: true,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic collections(dynamic response) => getJsonField(
@@ -570,38 +487,28 @@ class FlowersCategoryCall {
 }
 
 class SearchProductCall {
-  Future<ApiCallResponse> call() {
-    return ApiManager.instance.makeApiCall(
-      callName: 'search product',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}products.json?title=100*',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  Future<ApiCallResponse> call() async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'SearchProductCall',
+        'variables': {},
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 }
 
 class FlowersClubCall {
-  Future<ApiCallResponse> call() {
-    return ApiManager.instance.makeApiCall(
-      callName: 'Flowers Club',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}products/5496359616667.json',
-      callType: ApiCallType.GET,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  Future<ApiCallResponse> call() async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'FlowersClubCall',
+        'variables': {},
       },
-      params: {},
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 
   dynamic duration(dynamic response) => getJsonField(
@@ -641,30 +548,18 @@ class ResetPasswordCall {
   Future<ApiCallResponse> call({
     String? customerId = '',
     String? password = '',
-  }) {
-    final body = '''
-{
-  "customer": {
-"id":"${customerId}",
-    "password": "${password}",
-    "password_confirmation": "${password}"
-  }
-}''';
-    return ApiManager.instance.makeApiCall(
-      callName: 'Reset Password',
-      apiUrl: '${ShopifyAdminGroup.baseUrl}customers/${customerId}.json',
-      callType: ApiCallType.PUT,
-      headers: {
-        ...ShopifyAdminGroup.headers,
+  }) async {
+    final response = await makeCloudCall(
+      _kPrivateApiFunctionName,
+      {
+        'callName': 'ResetPasswordCall',
+        'variables': {
+          'customerId': customerId,
+          'password': password,
+        },
       },
-      params: {},
-      body: body,
-      bodyType: BodyType.JSON,
-      returnBody: true,
-      encodeBodyUtf8: false,
-      decodeUtf8: false,
-      cache: false,
     );
+    return ApiCallResponse.fromCloudCallResponse(response);
   }
 }
 
