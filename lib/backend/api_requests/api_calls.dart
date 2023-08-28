@@ -59,7 +59,7 @@ class RetrieveCollectionsProductCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
@@ -99,7 +99,7 @@ class CollectionsListCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
@@ -138,7 +138,7 @@ class ProductImageCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
@@ -164,7 +164,7 @@ class ProductCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
@@ -249,7 +249,7 @@ class ProductVariantCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
@@ -348,7 +348,7 @@ class GetproductlistCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
@@ -373,7 +373,7 @@ class GiftShopsCategoryCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
@@ -490,7 +490,7 @@ class ListOfShippingZonesCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
@@ -553,7 +553,7 @@ class FlowersCategoryCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
@@ -684,7 +684,7 @@ class ProductsCall {
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
-      cache: false,
+      cache: true,
     );
   }
 
