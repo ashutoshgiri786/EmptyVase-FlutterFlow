@@ -26,7 +26,7 @@ Future<dynamic> retreiveCollectionProductNextPage(
   final String mutation = '''
 {
   collection(id: "gid://shopify/Collection/$collectionId") {
-    products(first: 10, after:endCursor) {
+    products(first: 10, after:"$endcursor") {
       pageInfo {
         hasNextPage
         endCursor

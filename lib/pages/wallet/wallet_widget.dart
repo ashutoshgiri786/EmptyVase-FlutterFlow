@@ -42,84 +42,122 @@ class _WalletWidgetState extends State<WalletWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-        body: SafeArea(
-          top: true,
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Align(
-                alignment: AlignmentDirectional(0.0, 1.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.start,
+        appBar: AppBar(
+          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+          automaticallyImplyLeading: false,
+          leading: FlutterFlowIconButton(
+            borderRadius: 20.0,
+            borderWidth: 1.0,
+            buttonSize: 60.0,
+            icon: Icon(
+              Icons.chevron_left_sharp,
+              color: FlutterFlowTheme.of(context).primaryText,
+              size: 24.0,
+            ),
+            onPressed: () async {
+              context.safePop();
+            },
+          ),
+          title: Text(
+            'WALLET',
+            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+          actions: [],
+          centerTitle: false,
+          toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
+          elevation: 0.0,
+        ),
+        body: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Align(
+              alignment: AlignmentDirectional(0.0, 1.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.9,
+                    height: MediaQuery.sizeOf(context).height * 0.1,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF2EFEB),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Align(
-                          alignment: AlignmentDirectional(-0.8, 0.0),
-                          child: FlutterFlowIconButton(
-                            borderRadius: 20.0,
-                            borderWidth: 1.0,
-                            buttonSize: 40.0,
-                            icon: Icon(
-                              Icons.chevron_left_sharp,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 24.0,
+                          alignment: AlignmentDirectional(-1.0, -1.0),
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                10.0, 10.0, 0.0, 0.0),
+                            child: Text(
+                              'Balance',
+                              style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
-                            onPressed: () async {
-                              context.safePop();
-                            },
                           ),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Text(
-                            'WALLET',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.w500,
-                                ),
+                        Expanded(
+                          child: Align(
+                            alignment: AlignmentDirectional(0.0, -1.0),
+                            child: Text(
+                              '\$250',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    Container(
-                      width: MediaQuery.sizeOf(context).width * 0.9,
-                      height: MediaQuery.sizeOf(context).height * 0.1,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF2EFEB),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
+                  ),
+                  Align(
+                    alignment: AlignmentDirectional(-0.8, -1.0),
+                    child: Text(
+                      'Your Balance will be automatically\n applied at checkout',
+                      style: FlutterFlowTheme.of(context).bodyMedium,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.9,
+                    height: MediaQuery.sizeOf(context).height * 0.1,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF2EFEB),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Align(
                             alignment: AlignmentDirectional(-1.0, -1.0),
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  10.0, 10.0, 0.0, 0.0),
-                              child: Text(
-                                'Balance',
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                              ),
+                            child: Text(
+                              '6/16/23',
+                              style: FlutterFlowTheme.of(context).bodyMedium,
                             ),
                           ),
                           Expanded(
                             child: Align(
-                              alignment: AlignmentDirectional(0.0, -1.0),
+                              alignment: AlignmentDirectional(-1.0, 0.0),
                               child: Text(
-                                '\$250',
+                                'You received a store credit of \$200',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
                                       fontFamily: 'Montserrat',
                                       fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.normal,
                                     ),
                               ),
                             ),
@@ -127,150 +165,103 @@ class _WalletWidgetState extends State<WalletWidget> {
                         ],
                       ),
                     ),
-                    Align(
-                      alignment: AlignmentDirectional(-0.8, -1.0),
-                      child: Text(
-                        'Your Balance will be automatically\n applied at checkout',
-                        style: FlutterFlowTheme.of(context).bodyMedium,
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.sizeOf(context).width * 0.9,
-                      height: MediaQuery.sizeOf(context).height * 0.1,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF2EFEB),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 0.0, 0.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Align(
-                              alignment: AlignmentDirectional(-1.0, -1.0),
-                              child: Text(
-                                '6/16/23',
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                              ),
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: AlignmentDirectional(-1.0, 0.0),
-                                child: Text(
-                                  'You received a store credit of \$200',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.sizeOf(context).width * 0.9,
-                      height: MediaQuery.sizeOf(context).height * 0.1,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF2EFEB),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 0.0, 0.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Align(
-                              alignment: AlignmentDirectional(-1.0, -1.0),
-                              child: Text(
-                                '06/10/23',
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                              ),
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: AlignmentDirectional(-1.0, 0.0),
-                                child: Text(
-                                  '\$50 was applied at checkout',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.sizeOf(context).width * 0.9,
-                      height: MediaQuery.sizeOf(context).height * 0.1,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF2EFEB),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            10.0, 10.0, 0.0, 0.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Align(
-                              alignment: AlignmentDirectional(-1.0, -1.0),
-                              child: Text(
-                                '06/05/23',
-                                style: FlutterFlowTheme.of(context).bodyMedium,
-                              ),
-                            ),
-                            Expanded(
-                              child: Align(
-                                alignment: AlignmentDirectional(-1.0, 0.0),
-                                child: Text(
-                                  'You received a store credit of \$100',
-                                  style: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]
-                      .divide(SizedBox(height: 20.0))
-                      .addToStart(SizedBox(height: 10.0)),
-                ),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: AlignmentDirectional(0.0, 1.0),
-                  child: wrapWithModel(
-                    model: _model.navbarModel,
-                    updateCallback: () => setState(() {}),
-                    child: NavbarWidget(),
                   ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.9,
+                    height: MediaQuery.sizeOf(context).height * 0.1,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF2EFEB),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(-1.0, -1.0),
+                            child: Text(
+                              '06/10/23',
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                            ),
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: AlignmentDirectional(-1.0, 0.0),
+                              child: Text(
+                                '\$50 was applied at checkout',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.9,
+                    height: MediaQuery.sizeOf(context).height * 0.1,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFF2EFEB),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Padding(
+                      padding:
+                          EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 0.0, 0.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Align(
+                            alignment: AlignmentDirectional(-1.0, -1.0),
+                            child: Text(
+                              '06/05/23',
+                              style: FlutterFlowTheme.of(context).bodyMedium,
+                            ),
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: AlignmentDirectional(-1.0, 0.0),
+                              child: Text(
+                                'You received a store credit of \$100',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ]
+                    .divide(SizedBox(height: 20.0))
+                    .addToStart(SizedBox(height: 10.0)),
+              ),
+            ),
+            Expanded(
+              child: Align(
+                alignment: AlignmentDirectional(0.0, 1.0),
+                child: wrapWithModel(
+                  model: _model.navbarModel,
+                  updateCallback: () => setState(() {}),
+                  child: NavbarWidget(),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

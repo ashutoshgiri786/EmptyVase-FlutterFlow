@@ -57,201 +57,191 @@ class _GiftShopWidgetState extends State<GiftShopWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Color(0xFFF2EFEB),
-        appBar: PreferredSize(
-          preferredSize:
-              Size.fromHeight(MediaQuery.sizeOf(context).height * 0.1),
-          child: AppBar(
-            backgroundColor: Color(0xFFF2EFEB),
-            automaticallyImplyLeading: false,
-            leading: Align(
+        appBar: AppBar(
+          backgroundColor: Color(0xFFF2EFEB),
+          automaticallyImplyLeading: false,
+          leading: FlutterFlowIconButton(
+            borderColor: Colors.transparent,
+            borderRadius: 20.0,
+            borderWidth: 1.0,
+            buttonSize: 60.0,
+            icon: Icon(
+              Icons.chevron_left,
+              color: Color(0xFF2B4244),
+              size: 30.0,
+            ),
+            onPressed: () async {
+              if (_model.searchDisplay) {
+                setState(() {
+                  _model.searchDisplay = false;
+                });
+              } else {
+                context.pushNamed('Homepage');
+              }
+            },
+          ),
+          title: Visibility(
+            visible: _model.searchDisplay,
+            child: Container(
+              width: MediaQuery.sizeOf(context).width * 1.0,
+              child: Autocomplete<String>(
+                initialValue: TextEditingValue(),
+                optionsBuilder: (textEditingValue) {
+                  if (textEditingValue.text == '') {
+                    return const Iterable<String>.empty();
+                  }
+                  return (getJsonField(
+                    _model.search,
+                    r'''$..title''',
+                  ) as List)
+                      .map<String>((s) => s.toString())
+                      .toList()!
+                      .where((option) {
+                    final lowercaseOption = option.toLowerCase();
+                    return lowercaseOption
+                        .contains(textEditingValue.text.toLowerCase());
+                  });
+                },
+                optionsViewBuilder: (context, onSelected, options) {
+                  return AutocompleteOptionsList(
+                    textFieldKey: _model.textFieldKey,
+                    textController: _model.textController!,
+                    options: options.toList(),
+                    onSelected: onSelected,
+                    textStyle: FlutterFlowTheme.of(context).bodyMedium,
+                    textHighlightStyle: TextStyle(),
+                    elevation: 4.0,
+                    optionBackgroundColor:
+                        FlutterFlowTheme.of(context).primaryBackground,
+                    optionHighlightColor:
+                        FlutterFlowTheme.of(context).secondaryBackground,
+                    maxHeight: 200.0,
+                  );
+                },
+                onSelected: (String selection) {
+                  setState(() => _model.textFieldSelectedOption = selection);
+                  FocusScope.of(context).unfocus();
+                },
+                fieldViewBuilder: (
+                  context,
+                  textEditingController,
+                  focusNode,
+                  onEditingComplete,
+                ) {
+                  _model.textController = textEditingController;
+                  return TextFormField(
+                    key: _model.textFieldKey,
+                    controller: textEditingController,
+                    focusNode: focusNode,
+                    onEditingComplete: onEditingComplete,
+                    onChanged: (_) => EasyDebounce.debounce(
+                      '_model.textController',
+                      Duration(milliseconds: 300),
+                      () async {
+                        _model.search = await actions.search(
+                          _model.textController.text,
+                        );
+                        setState(() {
+                          _model.searchProducts = getJsonField(
+                            _model.search,
+                            r'''$..node''',
+                          )!
+                              .toList()
+                              .cast<dynamic>();
+                        });
+
+                        setState(() {});
+                      },
+                    ),
+                    autofocus: true,
+                    textCapitalization: TextCapitalization.words,
+                    textInputAction: TextInputAction.search,
+                    obscureText: false,
+                    decoration: InputDecoration(
+                      labelText: 'Search',
+                      labelStyle: FlutterFlowTheme.of(context).labelMedium,
+                      hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).alternate,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(80.0),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).primary,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(80.0),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(80.0),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: FlutterFlowTheme.of(context).error,
+                          width: 2.0,
+                        ),
+                        borderRadius: BorderRadius.circular(80.0),
+                      ),
+                      suffixIcon: Icon(
+                        Icons.search_outlined,
+                        color: Color(0xFF2B4244),
+                      ),
+                    ),
+                    style: FlutterFlowTheme.of(context).bodyMedium,
+                    cursorColor: FlutterFlowTheme.of(context).primary,
+                    validator:
+                        _model.textControllerValidator.asValidator(context),
+                  );
+                },
+              ),
+            ),
+          ),
+          actions: [
+            Visibility(
+              visible: !_model.searchDisplay,
+              child: FlutterFlowIconButton(
+                borderRadius: 20.0,
+                borderWidth: 1.0,
+                buttonSize: 60.0,
+                icon: Icon(
+                  Icons.search_outlined,
+                  color: Color(0xFF2B4244),
+                  size: 30.0,
+                ),
+                onPressed: () async {
+                  setState(() {
+                    _model.searchDisplay = true;
+                  });
+                },
+              ),
+            ),
+            Align(
               alignment: AlignmentDirectional(0.0, 0.0),
               child: FlutterFlowIconButton(
                 borderColor: Colors.transparent,
                 borderRadius: 20.0,
-                borderWidth: 1.0,
-                buttonSize: 40.0,
+                buttonSize: 60.0,
                 icon: Icon(
-                  Icons.chevron_left,
-                  color: Colors.black,
+                  Icons.shopping_cart_outlined,
+                  color: Color(0xFF2B4244),
                   size: 30.0,
                 ),
                 onPressed: () async {
-                  if (_model.searchDisplay) {
-                    setState(() {
-                      _model.searchDisplay = false;
-                    });
-                  } else {
-                    context.pushNamed('Homepage');
-                  }
+                  context.pushNamed('Cart_2');
                 },
               ),
             ),
-            actions: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  if (!_model.searchDisplay)
-                    FlutterFlowIconButton(
-                      borderRadius: 20.0,
-                      borderWidth: 1.0,
-                      buttonSize: 40.0,
-                      icon: Icon(
-                        Icons.search,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 30.0,
-                      ),
-                      onPressed: () async {
-                        setState(() {
-                          _model.searchDisplay = true;
-                        });
-                      },
-                    ),
-                  Align(
-                    alignment: AlignmentDirectional(0.0, 0.0),
-                    child: FlutterFlowIconButton(
-                      borderColor: Colors.transparent,
-                      borderRadius: 20.0,
-                      buttonSize: 40.0,
-                      icon: Icon(
-                        Icons.shopping_cart_outlined,
-                        color: Color(0xFF2B4244),
-                        size: 30.0,
-                      ),
-                      onPressed: () async {
-                        context.pushNamed('Cart_2');
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ],
-            flexibleSpace: FlexibleSpaceBar(
-              title: Visibility(
-                visible: _model.searchDisplay,
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width * 0.7,
-                  child: Autocomplete<String>(
-                    initialValue: TextEditingValue(),
-                    optionsBuilder: (textEditingValue) {
-                      if (textEditingValue.text == '') {
-                        return const Iterable<String>.empty();
-                      }
-                      return (getJsonField(
-                        _model.search,
-                        r'''$..title''',
-                      ) as List)
-                          .map<String>((s) => s.toString())
-                          .toList()!
-                          .where((option) {
-                        final lowercaseOption = option.toLowerCase();
-                        return lowercaseOption
-                            .contains(textEditingValue.text.toLowerCase());
-                      });
-                    },
-                    optionsViewBuilder: (context, onSelected, options) {
-                      return AutocompleteOptionsList(
-                        textFieldKey: _model.textFieldKey,
-                        textController: _model.textController!,
-                        options: options.toList(),
-                        onSelected: onSelected,
-                        textStyle: FlutterFlowTheme.of(context).bodyMedium,
-                        textHighlightStyle: TextStyle(),
-                        elevation: 4.0,
-                        optionBackgroundColor:
-                            FlutterFlowTheme.of(context).primaryBackground,
-                        optionHighlightColor:
-                            FlutterFlowTheme.of(context).secondaryBackground,
-                        maxHeight: 200.0,
-                      );
-                    },
-                    onSelected: (String selection) {
-                      setState(
-                          () => _model.textFieldSelectedOption = selection);
-                      FocusScope.of(context).unfocus();
-                    },
-                    fieldViewBuilder: (
-                      context,
-                      textEditingController,
-                      focusNode,
-                      onEditingComplete,
-                    ) {
-                      _model.textController = textEditingController;
-                      return TextFormField(
-                        key: _model.textFieldKey,
-                        controller: textEditingController,
-                        focusNode: focusNode,
-                        onEditingComplete: onEditingComplete,
-                        onChanged: (_) => EasyDebounce.debounce(
-                          '_model.textController',
-                          Duration(milliseconds: 300),
-                          () async {
-                            _model.search = await actions.search(
-                              _model.textController.text,
-                            );
-                            setState(() {
-                              _model.searchProducts = getJsonField(
-                                _model.search,
-                                r'''$..node''',
-                              )!
-                                  .toList()
-                                  .cast<dynamic>();
-                            });
-
-                            setState(() {});
-                          },
-                        ),
-                        autofocus: true,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          labelText: 'Search',
-                          labelStyle: FlutterFlowTheme.of(context).labelMedium,
-                          hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).alternate,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(80.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).primary,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(80.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).error,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(80.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).error,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(80.0),
-                          ),
-                          suffixIcon: Icon(
-                            Icons.search,
-                          ),
-                        ),
-                        style: FlutterFlowTheme.of(context).bodyMedium,
-                        validator:
-                            _model.textControllerValidator.asValidator(context),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              background: Container(),
-              centerTitle: true,
-              expandedTitleScale: 1.0,
-            ),
-            elevation: 0.0,
-          ),
+          ],
+          centerTitle: false,
+          toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
+          elevation: 0.0,
         ),
         body: Column(
           mainAxisSize: MainAxisSize.min,

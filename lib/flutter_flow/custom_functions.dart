@@ -58,6 +58,19 @@ String removeBetween(
   return extractedText;
 }
 
+List<dynamic> getVariantsIdAndPrice(
+  String title,
+  List<dynamic> variants,
+) {
+  // Get Id of collection from collection that matches the title
+  for (var variant in variants) {
+    if (variant['title'] == title) {
+      return [variant['price'], variant['id']];
+    }
+  }
+  return [];
+}
+
 String removeBetweenOccurence(
   String stringInput,
   int occurrence,

@@ -97,7 +97,7 @@ class _OrderRecievedWidgetState extends State<OrderRecievedWidget> {
                   borderRadius: BorderRadius.circular(80.0),
                 ),
               ),
-            ].divide(SizedBox(height: 20.0)).addToEnd(SizedBox(height: 10.0)),
+            ].divide(SizedBox(height: 20.0)).addToEnd(SizedBox(height: 20.0)),
           ),
         ),
       ),

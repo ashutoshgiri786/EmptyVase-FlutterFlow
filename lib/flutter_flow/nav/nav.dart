@@ -99,12 +99,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => LoginPageWidget(),
         ),
         FFRoute(
-          name: 'ForgotPasswordPage',
-          path: '/forgotPasswordPage',
-          requireAuth: true,
-          builder: (context, params) => ForgotPasswordPageWidget(),
-        ),
-        FFRoute(
           name: 'SignUp',
           path: '/signUp',
           builder: (context, params) => SignUpWidget(),
@@ -114,16 +108,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/homepage',
           requireAuth: true,
           builder: (context, params) => HomepageWidget(),
-        ),
-        FFRoute(
-          name: 'Flowers',
-          path: '/flowers',
-          requireAuth: true,
-          builder: (context, params) => FlowersWidget(
-            id: params.getParam('id', ParamType.int),
-            choiceinitialvalue:
-                params.getParam('choiceinitialvalue', ParamType.String),
-          ),
         ),
         FFRoute(
           name: 'Notification',
@@ -276,12 +260,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/flowersClub',
           requireAuth: true,
           builder: (context, params) => FlowersClubWidget(),
-        ),
-        FFRoute(
-          name: 'search',
-          path: '/search',
-          requireAuth: true,
-          builder: (context, params) => SearchWidget(),
         ),
         FFRoute(
           name: 'GiftShopPage',

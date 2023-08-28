@@ -50,9 +50,54 @@ class _HomepageWidgetState extends State<HomepageWidget> {
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          actions: [],
+          title: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Welcome ,\n',
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Montserrat',
+                        color: Color(0xFF2B4244),
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+                TextSpan(
+                  text: FFAppState().firstName,
+                  style: GoogleFonts.getFont(
+                    'Montserrat',
+                    color: Color(0xFF2B4244),
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.italic,
+                  ),
+                )
+              ],
+              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                    fontFamily: 'Montserrat',
+                    color: Color(0xFF2B4244),
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+          actions: [
+            FlutterFlowIconButton(
+              borderColor: Colors.transparent,
+              borderRadius: 30.0,
+              buttonSize: 60.0,
+              icon: Icon(
+                Icons.shopping_cart_outlined,
+                color: Color(0xFF2B4244),
+                size: 30.0,
+              ),
+              showLoadingIndicator: true,
+              onPressed: () async {
+                context.pushNamed('Cart_2');
+              },
+            ),
+          ],
           flexibleSpace: FlexibleSpaceBar(
-            background: Container(
+            background: AnimatedContainer(
+              duration: Duration(milliseconds: 100),
+              curve: Curves.easeInOut,
               width: MediaQuery.sizeOf(context).width * 1.0,
               height: MediaQuery.sizeOf(context).height * 0.1,
               decoration: BoxDecoration(
@@ -63,67 +108,9 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                   end: AlignmentDirectional(1.0, 0),
                 ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Welcome ,\n',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFF2B4244),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                          TextSpan(
-                            text: FFAppState().firstName,
-                            style: GoogleFonts.getFont(
-                              'Montserrat',
-                              color: Color(0xFF2B4244),
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          )
-                        ],
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Montserrat',
-                              color: Color(0xFF2B4244),
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                    child: FlutterFlowIconButton(
-                      borderColor: Colors.transparent,
-                      borderRadius: 30.0,
-                      buttonSize: 40.0,
-                      icon: Icon(
-                        Icons.shopping_cart_outlined,
-                        color: Color(0xFF2B4244),
-                        size: 30.0,
-                      ),
-                      onPressed: () async {
-                        context.pushNamed('Cart_2');
-                      },
-                    ),
-                  ),
-                ],
-              ),
             ),
-            centerTitle: true,
-            expandedTitleScale: 1.0,
           ),
+          centerTitle: false,
           toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
           elevation: 0.0,
         ),
@@ -161,7 +148,7 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                                         borderRadius:
                                             BorderRadius.circular(0.0),
                                         child: Image.asset(
-                                          'assets/images/page_4_HomeScreen.jpeg',
+                                          'assets/images/candyland.webp',
                                           width:
                                               MediaQuery.sizeOf(context).width *
                                                   1.0,
@@ -296,18 +283,92 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                                     ),
                                   ],
                                 ),
+                                Stack(
+                                  children: [
+                                    Align(
+                                      alignment:
+                                          AlignmentDirectional(0.0, -1.0),
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 0.0, 0.0, 4.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(0.0),
+                                          child: Image.asset(
+                                            'assets/images/WhatsApp_Image_2023-07-14_at_00.56.31_(2).jpeg',
+                                            width: MediaQuery.sizeOf(context)
+                                                    .width *
+                                                1.0,
+                                            height: MediaQuery.sizeOf(context)
+                                                    .height *
+                                                0.44,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: AlignmentDirectional(0.0, 0.8),
+                                      child: FFButtonWidget(
+                                        onPressed: () async {
+                                          context.pushNamed(
+                                            'FlowersPage',
+                                            queryParameters: {
+                                              'id': serializeParam(
+                                                391735836918,
+                                                ParamType.int,
+                                              ),
+                                              'categorytitle': serializeParam(
+                                                'All Arrangements',
+                                                ParamType.String,
+                                              ),
+                                            }.withoutNulls,
+                                          );
+                                        },
+                                        text: 'SHOP ARRANGEMENTS',
+                                        options: FFButtonOptions(
+                                          width: 296.0,
+                                          height: 48.0,
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  24.0, 0.0, 24.0, 0.0),
+                                          iconPadding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 0.0, 0.0),
+                                          color: Color(0xFFF2EFEB),
+                                          textStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmall
+                                                  .override(
+                                                    fontFamily: 'Montserrat',
+                                                    color: Colors.black,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
+                                          elevation: 0.0,
+                                          borderSide: BorderSide(
+                                            color: Color(0xFF2B4244),
+                                            width: 1.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(80.0),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                             Align(
                               alignment: AlignmentDirectional(0.0, 1.0),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 0.0, 0.0, 16.0),
+                                    0.0, 0.0, 0.0, 16.0),
                                 child:
                                     smooth_page_indicator.SmoothPageIndicator(
                                   controller: _model.pageViewController1 ??=
                                       PageController(initialPage: 0),
-                                  count: 2,
+                                  count: 3,
                                   axisDirection: Axis.horizontal,
                                   onDotClicked: (i) async {
                                     await _model.pageViewController1!
@@ -660,7 +721,7 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                                       ),
                                       ClipRRect(
                                         borderRadius:
-                                            BorderRadius.circular(8.0),
+                                            BorderRadius.circular(0.0),
                                         child: Image.asset(
                                           'assets/images/WhatsApp_Image_2023-07-14_at_00.56.30.jpeg',
                                           width: 300.0,
@@ -670,7 +731,7 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                                       ),
                                       ClipRRect(
                                         borderRadius:
-                                            BorderRadius.circular(8.0),
+                                            BorderRadius.circular(0.0),
                                         child: Image.asset(
                                           'assets/images/WhatsApp_Image_2023-07-14_at_00.56.32_(5).jpeg',
                                           width: 300.0,
@@ -685,7 +746,7 @@ class _HomepageWidgetState extends State<HomepageWidget> {
                                   alignment: AlignmentDirectional(0.0, 1.0),
                                   child: Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        16.0, 0.0, 0.0, 16.0),
+                                        0.0, 0.0, 0.0, 16.0),
                                     child: smooth_page_indicator
                                         .SmoothPageIndicator(
                                       controller: _model.pageViewController2 ??=

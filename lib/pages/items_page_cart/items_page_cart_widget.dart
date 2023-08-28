@@ -115,93 +115,72 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                 Expanded(
                   child: Stack(
                     children: [
-                      Align(
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 40.0, 0.0, 0.0),
-                          child: Builder(
-                            builder: (context) {
-                              final images =
-                                  (ShopifyAdminGroup.productCall.images(
-                                        (_model.prductdetails?.jsonBody ?? ''),
-                                      ) as List)
-                                          .map<String>((s) => s.toString())
-                                          .toList()
-                                          ?.toList() ??
-                                      [];
-                              return Container(
-                                width: MediaQuery.sizeOf(context).width * 1.0,
-                                height: MediaQuery.sizeOf(context).height * 0.7,
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 40.0),
-                                  child: PageView.builder(
-                                    controller: _model.pageViewController ??=
-                                        PageController(
-                                            initialPage:
-                                                min(0, images.length - 1)),
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: images.length,
-                                    itemBuilder: (context, imagesIndex) {
-                                      final imagesItem = images[imagesIndex];
-                                      return ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                        child: Image.network(
-                                          valueOrDefault<String>(
-                                            imagesItem,
-                                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNuvafpok1f34VfmtLMX_0RYNYnJ-aSpv0qQ&usqp=CAU',
-                                          ),
-                                          width:
-                                              MediaQuery.sizeOf(context).width *
-                                                  1.0,
-                                          height: MediaQuery.sizeOf(context)
-                                                  .height *
-                                              3.0,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 60.0, 0.0, 0.0),
+                        child: Builder(
+                          builder: (context) {
+                            final productImage =
+                                (ShopifyAdminGroup.productCall.images(
+                                      (_model.prductdetails?.jsonBody ?? ''),
+                                    ) as List)
+                                        .map<String>((s) => s.toString())
+                                        .toList()
+                                        ?.toList() ??
+                                    [];
+                            return SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                children: List.generate(productImage.length,
+                                    (productImageIndex) {
+                                  final productImageItem =
+                                      productImage[productImageIndex];
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      productImageItem,
+                                      width: MediaQuery.sizeOf(context).width *
+                                          1.0,
+                                      height:
+                                          MediaQuery.sizeOf(context).height *
+                                              0.5,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                }),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                      Align(
-                        alignment: AlignmentDirectional(0.0, 0.0),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 30.0, 0.0, 0.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 0.0, 0.0, 0.0),
-                                child: FlutterFlowIconButton(
-                                  borderRadius: 20.0,
-                                  borderWidth: 1.0,
-                                  buttonSize: 40.0,
-                                  fillColor: Color(0xFF013220),
-                                  icon: Icon(
-                                    Icons.close_outlined,
-                                    color: Colors.white,
-                                    size: 24.0,
-                                  ),
-                                  onPressed: () async {
-                                    context.safePop();
-                                  },
-                                ),
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 60.0, 0.0, 0.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FlutterFlowIconButton(
+                              borderRadius: 20.0,
+                              borderWidth: 1.0,
+                              buttonSize: 40.0,
+                              fillColor: Color(0xFF013220),
+                              icon: Icon(
+                                Icons.close_outlined,
+                                color: Colors.white,
+                                size: 24.0,
                               ),
-                              Expanded(
-                                child: Align(
-                                  alignment: AlignmentDirectional(1.0, -1.0),
-                                  child: Builder(
+                              onPressed: () async {
+                                context.safePop();
+                              },
+                            ),
+                            Expanded(
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Builder(
                                     builder: (context) => FlutterFlowIconButton(
                                       borderColor: Colors.transparent,
                                       borderRadius: 20.0,
@@ -222,29 +201,27 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                       },
                                     ),
                                   ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 0.0, 10.0, 0.0),
-                                child: FlutterFlowIconButton(
-                                  borderColor: Colors.transparent,
-                                  borderRadius: 20.0,
-                                  borderWidth: 1.0,
-                                  buttonSize: 40.0,
-                                  fillColor: Color(0xFF013220),
-                                  icon: Icon(
-                                    Icons.shopping_cart_outlined,
-                                    color: Colors.white,
-                                    size: 24.0,
+                                  FlutterFlowIconButton(
+                                    borderColor: Colors.transparent,
+                                    borderRadius: 20.0,
+                                    borderWidth: 1.0,
+                                    buttonSize: 40.0,
+                                    fillColor: Color(0xFF013220),
+                                    icon: Icon(
+                                      Icons.shopping_cart_outlined,
+                                      color: Colors.white,
+                                      size: 24.0,
+                                    ),
+                                    onPressed: () async {
+                                      context.pushNamed('Cart_2');
+                                    },
                                   ),
-                                  onPressed: () async {
-                                    context.pushNamed('Cart_2');
-                                  },
-                                ),
+                                ].divide(SizedBox(width: 10.0)),
                               ),
-                            ],
-                          ),
+                            ),
+                          ]
+                              .divide(SizedBox(width: 10.0))
+                              .around(SizedBox(width: 10.0)),
                         ),
                       ),
                     ],
@@ -269,6 +246,7 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                       child: SingleChildScrollView(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             ToggleIcon(
                               onPressed: () async {
@@ -304,23 +282,49 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                     ),
                               ),
                             ),
-                            Align(
-                              alignment: AlignmentDirectional(-1.0, -1.0),
-                              child: Text(
-                                ShopifyAdminGroup.productCall
-                                    .price(
-                                      itemsPageCartProductResponse.jsonBody,
-                                    )
-                                    .toString(),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Montserrat',
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.normal,
-                                    ),
+                            if (_model.price.length > 0)
+                              Align(
+                                alignment: AlignmentDirectional(-1.0, -1.0),
+                                child: Text(
+                                  formatNumber(
+                                    double.parse(_model.price.first.toString()),
+                                    formatType: FormatType.decimal,
+                                    decimalType: DecimalType.automatic,
+                                    currency: '',
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                ),
                               ),
-                            ),
+                            if (_model.price.length <= 0)
+                              Align(
+                                alignment: AlignmentDirectional(-1.0, -1.0),
+                                child: Text(
+                                  formatNumber(
+                                    double.parse(ShopifyAdminGroup.productCall
+                                        .price(
+                                          (_model.prductdetails?.jsonBody ??
+                                              ''),
+                                        )
+                                        .toString()),
+                                    formatType: FormatType.decimal,
+                                    decimalType: DecimalType.automatic,
+                                    currency: '',
+                                  ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        fontFamily: 'Montserrat',
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                ),
+                              ),
                             if (_model.expaded == true)
                               Html(
                                 data: getJsonField(
@@ -348,8 +352,25 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                                         ) as List)
                                             .map<String>((s) => s.toString())
                                             .toList()!,
-                                        onChanged: (val) => setState(
-                                            () => _model.dropDownValue = val),
+                                        onChanged: (val) async {
+                                          setState(
+                                              () => _model.dropDownValue = val);
+                                          setState(() {
+                                            _model.price = functions
+                                                .getVariantsIdAndPrice(
+                                                    _model.dropDownValue!,
+                                                    ShopifyAdminGroup
+                                                        .productCall
+                                                        .variants(
+                                                          (_model.prductdetails
+                                                                  ?.jsonBody ??
+                                                              ''),
+                                                        )!
+                                                        .toList())
+                                                .toList()
+                                                .cast<dynamic>();
+                                          });
+                                        },
                                         width: 159.0,
                                         height: 50.0,
                                         textStyle: FlutterFlowTheme.of(context)
@@ -461,30 +482,53 @@ class _ItemsPageCartWidgetState extends State<ItemsPageCartWidget> {
                               onPressed: () async {
                                 if (FFAppState().cartId == null ||
                                     FFAppState().cartId == '') {
-                                  _model.out = await actions.createCart(
-                                    ShopifyAdminGroup.productCall
-                                        .productVariant(
-                                          itemsPageCartProductResponse.jsonBody,
-                                        )
-                                        .toString(),
-                                    1,
-                                  );
-                                  setState(() {
-                                    FFAppState().cartId = getJsonField(
-                                      _model.out,
-                                      r'''$.cart.id''',
-                                    ).toString();
-                                  });
+                                  if (_model.price.length > 0) {
+                                    _model.out1 = await actions.createCart(
+                                      _model.price.last.toString(),
+                                      1,
+                                    );
+                                    setState(() {
+                                      FFAppState().cartId = getJsonField(
+                                        _model.out1,
+                                        r'''$.cart.id''',
+                                      ).toString();
+                                    });
+                                  } else {
+                                    _model.out2 = await actions.createCart(
+                                      ShopifyAdminGroup.productCall
+                                          .productVariant(
+                                            itemsPageCartProductResponse
+                                                .jsonBody,
+                                          )
+                                          .toString(),
+                                      1,
+                                    );
+                                    setState(() {
+                                      FFAppState().cartId = getJsonField(
+                                        _model.out2,
+                                        r'''$.cart.id''',
+                                      ).toString();
+                                    });
+                                  }
                                 } else {
-                                  _model.added =
-                                      await actions.addMoreItemsInCart(
-                                    ShopifyAdminGroup.productCall
-                                        .productVariant(
-                                          itemsPageCartProductResponse.jsonBody,
-                                        )
-                                        .toString(),
-                                    1,
-                                  );
+                                  if (_model.price.length > 0) {
+                                    _model.added1 =
+                                        await actions.addMoreItemsInCart(
+                                      _model.price.last.toString(),
+                                      1,
+                                    );
+                                  } else {
+                                    _model.added2 =
+                                        await actions.addMoreItemsInCart(
+                                      ShopifyAdminGroup.productCall
+                                          .productVariant(
+                                            itemsPageCartProductResponse
+                                                .jsonBody,
+                                          )
+                                          .toString(),
+                                      1,
+                                    );
+                                  }
                                 }
 
                                 await showModalBottomSheet(

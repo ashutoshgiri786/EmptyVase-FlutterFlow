@@ -9,6 +9,7 @@ import '/custom_code/actions/index.dart' as actions;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'new_address_model.dart';
@@ -101,7 +102,49 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
             appBar: AppBar(
               backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
               automaticallyImplyLeading: false,
-              actions: [],
+              title: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Welcome ,\n',
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Montserrat',
+                            color: Color(0xFF2B4244),
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                    TextSpan(
+                      text: FFAppState().firstName,
+                      style: GoogleFonts.getFont(
+                        'Montserrat',
+                        color: Color(0xFF2B4244),
+                        fontWeight: FontWeight.w500,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    )
+                  ],
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Montserrat',
+                        color: Color(0xFF2B4244),
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+              ),
+              actions: [
+                FlutterFlowIconButton(
+                  borderColor: Colors.transparent,
+                  borderRadius: 30.0,
+                  buttonSize: 60.0,
+                  icon: Icon(
+                    Icons.shopping_cart_outlined,
+                    color: Color(0xFF2B4244),
+                    size: 30.0,
+                  ),
+                  onPressed: () async {
+                    context.pushNamed('Cart_2');
+                  },
+                ),
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: Container(
                   width: MediaQuery.sizeOf(context).width * 1.0,
@@ -114,126 +157,88 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
                       end: AlignmentDirectional(1.0, 0),
                     ),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: 'Welcome ,\n',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      fontFamily: 'Montserrat',
-                                      color: Color(0xFF2B4244),
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                              ),
-                              TextSpan(
-                                text: FFAppState().firstName,
-                                style: GoogleFonts.getFont(
-                                  'Montserrat',
-                                  color: Color(0xFF2B4244),
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              )
-                            ],
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFF2B4244),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                        child: FlutterFlowIconButton(
-                          borderColor: Colors.transparent,
-                          borderRadius: 30.0,
-                          buttonSize: 40.0,
-                          icon: Icon(
-                            Icons.shopping_cart_outlined,
-                            color: Color(0xFF2B4244),
-                            size: 30.0,
-                          ),
-                          onPressed: () async {
-                            context.pushNamed('Cart_2');
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
-                centerTitle: true,
-                expandedTitleScale: 1.0,
               ),
+              centerTitle: false,
               toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
               elevation: 0.0,
             ),
             body: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(20.0, 20.0, 20.0, 20.0),
+              padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Align(
-                      alignment: AlignmentDirectional(-1.0, -1.0),
-                      child: FlutterFlowIconButton(
-                        borderColor: Colors.transparent,
-                        borderRadius: 20.0,
-                        borderWidth: 1.0,
-                        buttonSize: 40.0,
-                        icon: Icon(
-                          Icons.chevron_left_sharp,
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          size: 24.0,
-                        ),
-                        onPressed: () async {
-                          context.safePop();
-                        },
+                    FlutterFlowIconButton(
+                      borderColor: Colors.transparent,
+                      borderRadius: 20.0,
+                      borderWidth: 1.0,
+                      buttonSize: 40.0,
+                      icon: Icon(
+                        Icons.chevron_left_sharp,
+                        color: FlutterFlowTheme.of(context).primaryText,
+                        size: 24.0,
                       ),
+                      onPressed: () async {
+                        context.safePop();
+                      },
                     ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
-                      child: TextFormField(
-                        controller: _model.textController1,
-                        autofocus: true,
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          labelStyle:
-                              FlutterFlowTheme.of(context).labelMedium.override(
-                                    fontFamily: 'Montserrat',
-                                    color: Color(0xFF2B4244),
-                                    fontSize: 12.0,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                          hintText: 'Address 123',
-                          hintStyle: FlutterFlowTheme.of(context).labelMedium,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          errorBorder: InputBorder.none,
-                          focusedErrorBorder: InputBorder.none,
+                    TextFormField(
+                      controller: _model.textController1,
+                      autofocus: true,
+                      autofillHints: [AutofillHints.streetAddressLine1],
+                      textCapitalization: TextCapitalization.words,
+                      textInputAction: TextInputAction.next,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        labelStyle:
+                            FlutterFlowTheme.of(context).labelMedium.override(
+                                  fontFamily: 'Montserrat',
+                                  color: Color(0xFF2B4244),
+                                  fontSize: 12.0,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                        hintText: 'Address 123',
+                        hintStyle: FlutterFlowTheme.of(context).labelMedium,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Montserrat',
-                              fontSize: 12.0,
-                              fontStyle: FontStyle.italic,
-                            ),
-                        validator: _model.textController1Validator
-                            .asValidator(context),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0x00000000),
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).error,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).error,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
                       ),
+                      style: FlutterFlowTheme.of(context).bodyMedium.override(
+                            fontFamily: 'Montserrat',
+                            fontSize: 12.0,
+                            fontStyle: FontStyle.italic,
+                          ),
+                      keyboardType: TextInputType.streetAddress,
+                      validator:
+                          _model.textController1Validator.asValidator(context),
                     ),
                     FlutterFlowDropDown<String>(
                       controller: _model.dropDownValueController ??=
@@ -277,89 +282,140 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Expanded(
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  8.0, 0.0, 0.0, 0.0),
-                              child: TextFormField(
-                                controller: _model.textController2,
-                                autofocus: true,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelStyle: FlutterFlowTheme.of(context)
-                                      .labelMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12.0,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                  hintText: 'City',
-                                  hintStyle: FlutterFlowTheme.of(context)
-                                      .labelMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xFF2B4244),
-                                        fontSize: 12.0,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  focusedErrorBorder: InputBorder.none,
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
+                            child: TextFormField(
+                              controller: _model.textController2,
+                              autofocus: true,
+                              autofillHints: [AutofillHints.addressCity],
+                              textCapitalization: TextCapitalization.words,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 12.0,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                hintText: 'City',
+                                hintStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
                                     .override(
                                       fontFamily: 'Montserrat',
                                       color: Color(0xFF2B4244),
                                       fontSize: 12.0,
                                       fontStyle: FontStyle.italic,
                                     ),
-                                validator: _model.textController2Validator
-                                    .asValidator(context),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context).error,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context).error,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
                               ),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Color(0xFF2B4244),
+                                    fontSize: 12.0,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                              keyboardType: TextInputType.streetAddress,
+                              validator: _model.textController2Validator
+                                  .asValidator(context),
                             ),
                           ),
                           Expanded(
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 8.0, 0.0),
-                              child: TextFormField(
-                                controller: _model.textController3,
-                                autofocus: true,
-                                obscureText: false,
-                                decoration: InputDecoration(
-                                  labelText: 'Zip',
-                                  labelStyle: FlutterFlowTheme.of(context)
-                                      .labelMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        fontSize: 12.0,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                  hintStyle: FlutterFlowTheme.of(context)
-                                      .labelMedium
-                                      .override(
-                                        fontFamily: 'Montserrat',
-                                        color: Color(0xFF2B4244),
-                                        fontSize: 12.0,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
-                                  errorBorder: InputBorder.none,
-                                  focusedErrorBorder: InputBorder.none,
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
+                            child: TextFormField(
+                              controller: _model.textController3,
+                              autofocus: true,
+                              autofillHints: [AutofillHints.postalCode],
+                              textCapitalization: TextCapitalization.characters,
+                              textInputAction: TextInputAction.done,
+                              obscureText: false,
+                              decoration: InputDecoration(
+                                labelText: 'Zip',
+                                labelStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
+                                    .override(
+                                      fontFamily: 'Montserrat',
+                                      fontSize: 12.0,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                hintStyle: FlutterFlowTheme.of(context)
+                                    .labelMedium
                                     .override(
                                       fontFamily: 'Montserrat',
                                       color: Color(0xFF2B4244),
                                       fontSize: 12.0,
                                       fontStyle: FontStyle.italic,
                                     ),
-                                validator: _model.textController3Validator
-                                    .asValidator(context),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: Color(0x00000000),
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context).error,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                    color: FlutterFlowTheme.of(context).error,
+                                    width: 2.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
                               ),
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    fontFamily: 'Montserrat',
+                                    color: Color(0xFF2B4244),
+                                    fontSize: 12.0,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                              keyboardType: TextInputType.number,
+                              validator: _model.textController3Validator
+                                  .asValidator(context),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(
+                                    RegExp('[0-9]'))
+                              ],
                             ),
                           ),
                         ].divide(SizedBox(width: 10.0)),
@@ -409,71 +465,64 @@ class _NewAddressWidgetState extends State<NewAddressWidget> {
                           ),
                         ],
                       ),
-                    Align(
-                      alignment: AlignmentDirectional(-1.0, 0.0),
-                      child: Padding(
+                    FFButtonWidget(
+                      onPressed: () async {
+                        if (_model.updateAddress == true) {
+                          _model.updatedAddress = await actions.updateAddress(
+                            widget.id!,
+                            FFAppState().accessToken,
+                            _model.textController1.text,
+                            _model.dropDownValue!,
+                            widget.city!,
+                            _model.textController3.text,
+                          );
+                          if (_model.checkboxValue!) {
+                            await actions.defaultAddress(
+                              widget.id!,
+                              FFAppState().accessToken,
+                            );
+                          }
+                        } else {
+                          _model.createAddress = await actions.createAddress(
+                            FFAppState().accessToken,
+                            _model.textController1.text,
+                            _model.dropDownValue!,
+                            _model.textController2.text,
+                            _model.textController3.text,
+                          );
+                        }
+
+                        context.goNamed('Addresses');
+
+                        setState(() {});
+                      },
+                      text: 'SAVE',
+                      options: FFButtonOptions(
+                        width: 134.0,
+                        height: 50.0,
                         padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
-                        child: FFButtonWidget(
-                          onPressed: () async {
-                            if (_model.updateAddress == true) {
-                              _model.updatedAddress =
-                                  await actions.updateAddress(
-                                widget.id!,
-                                FFAppState().accessToken,
-                                _model.textController1.text,
-                                _model.dropDownValue!,
-                                widget.city!,
-                                _model.textController3.text,
-                              );
-                              if (_model.checkboxValue!) {
-                                await actions.defaultAddress(
-                                  widget.id!,
-                                  FFAppState().accessToken,
-                                );
-                              }
-                            } else {
-                              _model.createAddress =
-                                  await actions.createAddress(
-                                FFAppState().accessToken,
-                                _model.textController1.text,
-                                _model.dropDownValue!,
-                                _model.textController2.text,
-                                _model.textController3.text,
-                              );
-                            }
-
-                            context.goNamed('Addresses');
-
-                            setState(() {});
-                          },
-                          text: 'SAVE',
-                          options: FFButtonOptions(
-                            width: 134.0,
-                            height: 50.0,
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 0.0),
-                            color: Colors.white,
-                            textStyle: FlutterFlowTheme.of(context)
-                                .titleSmall
-                                .override(
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconPadding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: Colors.white,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleSmall.override(
                                   fontFamily: 'Montserrat',
                                   color: Color(0xFF2B4244),
                                   fontSize: 12.6,
                                   fontWeight: FontWeight.w600,
                                 ),
-                            borderSide: BorderSide(
-                              color: Color(0xFF2B4244),
-                              width: 1.0,
-                            ),
-                            borderRadius: BorderRadius.circular(80.0),
-                          ),
+                        borderSide: BorderSide(
+                          color: Color(0xFF2B4244),
+                          width: 1.0,
                         ),
+                        borderRadius: BorderRadius.circular(80.0),
                       ),
                     ),
-                  ].divide(SizedBox(height: 10.0)),
+                  ]
+                      .divide(SizedBox(height: 10.0))
+                      .addToStart(SizedBox(height: 10.0))
+                      .addToEnd(SizedBox(height: 20.0)),
                 ),
               ),
             ),

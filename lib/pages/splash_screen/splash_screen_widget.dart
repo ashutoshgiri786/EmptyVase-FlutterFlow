@@ -56,44 +56,39 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
               ),
             ),
             child: Align(
-              alignment: AlignmentDirectional(0.0, 0.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  FFButtonWidget(
-                    onPressed: () async {
-                      context.pushNamed('LoginPage');
-                    },
-                    text: 'START HERE ',
-                    icon: Icon(
-                      Icons.login,
-                      size: 15.0,
-                    ),
-                    options: FFButtonOptions(
-                      width: MediaQuery.sizeOf(context).width * 0.6,
-                      height: 49.0,
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
-                      iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: Color(0x004B39EF),
-                      textStyle:
-                          FlutterFlowTheme.of(context).titleSmall.override(
-                                fontFamily: 'Montserrat',
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.normal,
-                              ),
-                      elevation: 3.0,
-                      borderSide: BorderSide(
-                        color: Colors.white,
-                        width: 1.0,
-                      ),
-                      borderRadius: BorderRadius.circular(80.0),
-                    ),
+              alignment: AlignmentDirectional(0.0, 1.0),
+              child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 60.0),
+                child: FFButtonWidget(
+                  onPressed: () async {
+                    context.pushNamed('LoginPage');
+                  },
+                  text: 'START HERE ',
+                  icon: Icon(
+                    Icons.login,
+                    size: 15.0,
                   ),
-                ].addToEnd(SizedBox(height: 70.0)),
+                  options: FFButtonOptions(
+                    width: MediaQuery.sizeOf(context).width * 0.6,
+                    height: 49.0,
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 24.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: Color(0x004B39EF),
+                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                          fontFamily: 'Montserrat',
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                    elevation: 3.0,
+                    borderSide: BorderSide(
+                      color: Colors.white,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(80.0),
+                  ),
+                ),
               ),
             ),
           ),

@@ -42,7 +42,9 @@ class _NavbarWidgetState extends State<NavbarWidget> {
   Widget build(BuildContext context) {
     context.watch<FFAppState>();
 
-    return Container(
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 100),
+      curve: Curves.easeInOut,
       width: MediaQuery.sizeOf(context).width * 1.0,
       height: MediaQuery.sizeOf(context).height * 0.1,
       decoration: BoxDecoration(

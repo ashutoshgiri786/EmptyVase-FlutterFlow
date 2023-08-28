@@ -15,13 +15,37 @@ class ResetModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
   // State field(s) for TextField widget.
   TextEditingController? textController1;
   String? Function(BuildContext, String?)? textController1Validator;
+  String? _textController1Validator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Field is required';
+    }
+
+    if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {
+      return 'Has to be a valid email address.';
+    }
+    return null;
+  }
+
   // State field(s) for TextField widget.
   TextEditingController? textController2;
   late bool passwordVisibility;
   String? Function(BuildContext, String?)? textController2Validator;
+  String? _textController2Validator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Field is required';
+    }
+
+    if (val.length < 6) {
+      return 'Minimum 6 Characters Required';
+    }
+
+    return null;
+  }
+
   // Stores action output result for [Backend Call - API (Reset Password)] action in Button widget.
   ApiCallResponse? resetPassword;
   // Model for navbar component.
@@ -30,7 +54,9 @@ class ResetModel extends FlutterFlowModel {
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
+    textController1Validator = _textController1Validator;
     passwordVisibility = false;
+    textController2Validator = _textController2Validator;
     navbarModel = createModel(context, () => NavbarModel());
   }
 

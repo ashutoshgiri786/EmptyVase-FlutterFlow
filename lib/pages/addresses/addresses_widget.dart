@@ -63,7 +63,49 @@ class _AddressesWidgetState extends State<AddressesWidget> {
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          actions: [],
+          title: RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Welcome ,\n',
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Montserrat',
+                        color: Color(0xFF2B4244),
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+                TextSpan(
+                  text: FFAppState().firstName,
+                  style: GoogleFonts.getFont(
+                    'Montserrat',
+                    color: Color(0xFF2B4244),
+                    fontWeight: FontWeight.w500,
+                    fontStyle: FontStyle.italic,
+                  ),
+                )
+              ],
+              style: FlutterFlowTheme.of(context).bodyMedium.override(
+                    fontFamily: 'Montserrat',
+                    color: Color(0xFF2B4244),
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+          actions: [
+            FlutterFlowIconButton(
+              borderColor: Colors.transparent,
+              borderRadius: 30.0,
+              buttonSize: 60.0,
+              icon: Icon(
+                Icons.shopping_cart_outlined,
+                color: Color(0xFF2B4244),
+                size: 30.0,
+              ),
+              onPressed: () async {
+                context.pushNamed('Cart_2');
+              },
+            ),
+          ],
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
               width: MediaQuery.sizeOf(context).width * 1.0,
@@ -76,67 +118,9 @@ class _AddressesWidgetState extends State<AddressesWidget> {
                   end: AlignmentDirectional(1.0, 0),
                 ),
               ),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Welcome ,\n',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  color: Color(0xFF2B4244),
-                                  fontWeight: FontWeight.w500,
-                                ),
-                          ),
-                          TextSpan(
-                            text: FFAppState().firstName,
-                            style: GoogleFonts.getFont(
-                              'Montserrat',
-                              color: Color(0xFF2B4244),
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          )
-                        ],
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Montserrat',
-                              color: Color(0xFF2B4244),
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                    child: FlutterFlowIconButton(
-                      borderColor: Colors.transparent,
-                      borderRadius: 30.0,
-                      buttonSize: 40.0,
-                      icon: Icon(
-                        Icons.shopping_cart_outlined,
-                        color: Color(0xFF2B4244),
-                        size: 30.0,
-                      ),
-                      onPressed: () async {
-                        context.pushNamed('Cart_2');
-                      },
-                    ),
-                  ),
-                ],
-              ),
             ),
-            centerTitle: true,
-            expandedTitleScale: 1.0,
           ),
+          centerTitle: false,
           toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
           elevation: 0.0,
         ),

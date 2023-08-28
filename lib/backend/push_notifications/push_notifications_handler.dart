@@ -114,16 +114,8 @@ final parametersBuilderMap =
     <String, Future<ParameterData> Function(Map<String, dynamic>)>{
   'SplashScreen': ParameterData.none(),
   'LoginPage': ParameterData.none(),
-  'ForgotPasswordPage': ParameterData.none(),
   'SignUp': ParameterData.none(),
   'Homepage': ParameterData.none(),
-  'Flowers': (data) async => ParameterData(
-        allParams: {
-          'id': getParameter<int>(data, 'id'),
-          'choiceinitialvalue':
-              getParameter<String>(data, 'choiceinitialvalue'),
-        },
-      ),
   'Notification': ParameterData.none(),
   'Wallet': ParameterData.none(),
   'Profile': ParameterData.none(),
@@ -170,7 +162,6 @@ final parametersBuilderMap =
       ),
   'wishlist': ParameterData.none(),
   'FlowersClub': ParameterData.none(),
-  'search': ParameterData.none(),
   'GiftShopPage': (data) async => ParameterData(
         allParams: {
           'id': getParameter<int>(data, 'id'),

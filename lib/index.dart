@@ -1,11 +1,8 @@
 // Export pages
 export '/pages/splash_screen/splash_screen_widget.dart' show SplashScreenWidget;
 export '/pages/login_page/login_page_widget.dart' show LoginPageWidget;
-export '/pages/forgot_password_page/forgot_password_page_widget.dart'
-    show ForgotPasswordPageWidget;
 export '/pages/sign_up/sign_up_widget.dart' show SignUpWidget;
 export '/pages/homepage/homepage_widget.dart' show HomepageWidget;
-export '/pages/flowers/flowers_widget.dart' show FlowersWidget;
 export '/pages/notification/notification_widget.dart' show NotificationWidget;
 export '/pages/wallet/wallet_widget.dart' show WalletWidget;
 export '/pages/profile/profile_widget.dart' show ProfileWidget;
@@ -34,6 +31,5 @@ export '/pages/gift_shop/gift_shop_widget.dart' show GiftShopWidget;
 export '/pages/flowers_page/flowers_page_widget.dart' show FlowersPageWidget;
 export '/pages/wishlist/wishlist_widget.dart' show WishlistWidget;
 export '/pages/flowers_club/flowers_club_widget.dart' show FlowersClubWidget;
-export '/pages/search/search_widget.dart' show SearchWidget;
 export '/pages/gift_shop_page/gift_shop_page_widget.dart'
     show GiftShopPageWidget;

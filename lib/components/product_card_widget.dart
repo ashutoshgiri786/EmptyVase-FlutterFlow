@@ -1,6 +1,7 @@
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -93,7 +94,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                 color: FlutterFlowTheme.of(context).secondaryBackground,
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: Image.network(
+                  image: CachedNetworkImageProvider(
                     valueOrDefault<String>(
                       getJsonField(
                         widget.productData,
@@ -101,7 +102,7 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
                       ),
                       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNuvafpok1f34VfmtLMX_0RYNYnJ-aSpv0qQ&usqp=CAU',
                     ),
-                  ).image,
+                  ),
                 ),
                 borderRadius: BorderRadius.circular(30.0),
               ),
@@ -133,12 +134,17 @@ class _ProductCardWidgetState extends State<ProductCardWidget> {
               child: Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 0.0, 0.0),
                 child: Text(
-                  valueOrDefault<String>(
-                    getJsonField(
-                      widget.productData,
-                      r'''$.node.variants.edges[0].node.price.amount''',
-                    ).toString(),
-                    '0.00',
+                  formatNumber(
+                    double.parse(valueOrDefault<String>(
+                      getJsonField(
+                        widget.productData,
+                        r'''$.node.variants.edges[0].node.price.amount''',
+                      ).toString(),
+                      '0.00',
+                    )),
+                    formatType: FormatType.decimal,
+                    decimalType: DecimalType.automatic,
+                    currency: '',
                   ),
                   textAlign: TextAlign.center,
                   style: FlutterFlowTheme.of(context).bodyMedium.override(

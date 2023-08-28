@@ -26,7 +26,7 @@ class FlowersPageModel extends FlutterFlowModel {
 
   String? nextpageinfo = '';
 
-  String? prevpageinfo = '';
+  bool hasNextPage = false;
 
   List<dynamic> response = [];
   void addToResponse(dynamic item) => response.add(item);
@@ -55,8 +55,8 @@ class FlowersPageModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // Stores action output result for [Backend Call - API (Retrieve Collections Product)] action in FlowersPage widget.
-  ApiCallResponse? firstpageresponse;
+  // Stores action output result for [Custom Action - retreiveCollectionProduct] action in FlowersPage widget.
+  dynamic? coll;
   // State field(s) for TextField widget.
   final textFieldKey = GlobalKey();
   TextEditingController? textController;
@@ -74,8 +74,8 @@ class FlowersPageModel extends FlutterFlowModel {
   FormFieldController<List<String>>? choiceChipsValueController2;
   // Models for productCard dynamic component.
   late FlutterFlowDynamicModels<ProductCardModel> productCardModels;
-  // Stores action output result for [Backend Call - API (Retrieve Collections Product)] action in productCard widget.
-  ApiCallResponse? nextpage;
+  // Stores action output result for [Custom Action - retreiveCollectionProductNextPage] action in productCard widget.
+  dynamic? nextpage;
   // Model for navbar component.
   late NavbarModel navbarModel;
 

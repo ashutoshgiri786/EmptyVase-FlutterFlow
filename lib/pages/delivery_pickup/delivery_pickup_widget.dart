@@ -1,4 +1,3 @@
-import '/flutter_flow/flutter_flow_calendar.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -49,41 +48,35 @@ class _DeliveryPickupWidgetState extends State<DeliveryPickupWidget> {
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          leading: Align(
-            alignment: AlignmentDirectional(1.0, 1.0),
-            child: FlutterFlowIconButton(
-              borderColor: FlutterFlowTheme.of(context).primaryBackground,
-              borderRadius: 15.0,
-              borderWidth: 1.0,
-              buttonSize: 40.0,
-              fillColor: FlutterFlowTheme.of(context).primaryBackground,
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 14.0,
-              ),
-              onPressed: () {
-                print('IconButton pressed ...');
-              },
+          leading: FlutterFlowIconButton(
+            borderColor: FlutterFlowTheme.of(context).primaryBackground,
+            borderRadius: 15.0,
+            borderWidth: 1.0,
+            buttonSize: 60.0,
+            fillColor: FlutterFlowTheme.of(context).primaryBackground,
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: FlutterFlowTheme.of(context).primaryText,
+              size: 14.0,
             ),
+            onPressed: () {
+              print('IconButton pressed ...');
+            },
           ),
-          title: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
-            child: Text(
-              'DELIVERY / PICK UP',
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.normal,
-                  ),
-            ),
+          title: Text(
+            'DELIVERY / PICK UP',
+            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.normal,
+                ),
           ),
           actions: [],
           centerTitle: true,
-          toolbarHeight: 80.0,
+          toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
           elevation: 0.0,
         ),
         body: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(20.0, 20.0, 20.0, 20.0),
+          padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -120,27 +113,6 @@ class _DeliveryPickupWidgetState extends State<DeliveryPickupWidget> {
                           Text(
                             'Select',
                             style: FlutterFlowTheme.of(context).bodyMedium,
-                          ),
-                          FlutterFlowCalendar(
-                            color: FlutterFlowTheme.of(context).primary,
-                            iconColor:
-                                FlutterFlowTheme.of(context).secondaryText,
-                            weekFormat: false,
-                            weekStartsMonday: false,
-                            rowHeight: 64.0,
-                            onChange: (DateTimeRange? newSelectedDate) {
-                              setState(() =>
-                                  _model.calendarSelectedDay = newSelectedDate);
-                            },
-                            titleStyle:
-                                FlutterFlowTheme.of(context).headlineSmall,
-                            dayOfWeekStyle:
-                                FlutterFlowTheme.of(context).labelLarge,
-                            dateStyle: FlutterFlowTheme.of(context).bodyMedium,
-                            selectedDateStyle:
-                                FlutterFlowTheme.of(context).titleSmall,
-                            inactiveDateStyle:
-                                FlutterFlowTheme.of(context).labelMedium,
                           ),
                           FlutterFlowIconButton(
                             borderColor: Colors.transparent,
@@ -396,7 +368,7 @@ class _DeliveryPickupWidgetState extends State<DeliveryPickupWidget> {
                   ),
                 ),
               ),
-            ],
+            ].addToEnd(SizedBox(height: 20.0)),
           ),
         ),
       ),

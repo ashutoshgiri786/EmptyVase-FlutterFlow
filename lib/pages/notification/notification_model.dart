@@ -1,4 +1,3 @@
-import '/backend/api_requests/api_calls.dart';
 import '/components/navbar/navbar_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -12,8 +11,6 @@ class NotificationModel extends FlutterFlowModel {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // Stores action output result for [Backend Call - API ( Collections List )] action in Row widget.
-  ApiCallResponse? choice;
   // Model for navbar component.
   late NavbarModel navbarModel;
 

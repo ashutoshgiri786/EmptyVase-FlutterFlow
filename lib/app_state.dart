@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'flutter_flow/request_manager.dart';
 import '/backend/backend.dart';
 import 'backend/api_requests/api_manager.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -218,21 +217,6 @@ class FFAppState extends ChangeNotifier {
   void deletePassword() {
     secureStorage.delete(key: 'ff_password');
   }
-
-  final _collectionsListManager = FutureRequestManager<ApiCallResponse>();
-  Future<ApiCallResponse> collectionsList({
-    String? uniqueQueryKey,
-    bool? overrideCache,
-    required Future<ApiCallResponse> Function() requestFn,
-  }) =>
-      _collectionsListManager.performRequest(
-        uniqueQueryKey: uniqueQueryKey,
-        overrideCache: overrideCache,
-        requestFn: requestFn,
-      );
-  void clearCollectionsListCache() => _collectionsListManager.clear();
-  void clearCollectionsListCacheKey(String? uniqueKey) =>
-      _collectionsListManager.clearRequest(uniqueKey);
 }
 
 LatLng? _latLngFromString(String? val) {

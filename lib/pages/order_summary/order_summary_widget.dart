@@ -47,37 +47,31 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          leading: Align(
-            alignment: AlignmentDirectional(1.0, 1.0),
-            child: FlutterFlowIconButton(
-              borderColor: FlutterFlowTheme.of(context).primaryBackground,
-              borderRadius: 15.0,
-              borderWidth: 1.0,
-              buttonSize: 40.0,
-              fillColor: FlutterFlowTheme.of(context).primaryBackground,
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 14.0,
-              ),
-              onPressed: () async {
-                context.safePop();
-              },
+          leading: FlutterFlowIconButton(
+            borderColor: FlutterFlowTheme.of(context).primaryBackground,
+            borderRadius: 15.0,
+            borderWidth: 1.0,
+            buttonSize: 60.0,
+            fillColor: FlutterFlowTheme.of(context).primaryBackground,
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: FlutterFlowTheme.of(context).primaryText,
+              size: 14.0,
             ),
+            onPressed: () async {
+              context.safePop();
+            },
           ),
-          title: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
-            child: Text(
-              'SUMMARY',
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.normal,
-                  ),
-            ),
+          title: Text(
+            'SUMMARY',
+            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.normal,
+                ),
           ),
           actions: [],
           centerTitle: true,
-          toolbarHeight: 80.0,
+          toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
           elevation: 0.0,
         ),
         body: Padding(
@@ -86,100 +80,91 @@ class _OrderSummaryWidgetState extends State<OrderSummaryWidget> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Text(
-                            '2 items ',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Text(
+                          '2 items ',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.normal,
+                                  ),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Text(
-                            'TAXES',
-                            textAlign: TextAlign.center,
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Text(
+                          'TAXES',
+                          textAlign: TextAlign.center,
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.normal,
+                                  ),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Text(
-                            'SHIPPING',
-                            textAlign: TextAlign.center,
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Text(
+                          'SHIPPING',
+                          textAlign: TextAlign.center,
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.normal,
+                                  ),
                         ),
-                      ].divide(SizedBox(height: 5.0)),
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Text(
-                            '230.00',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
+                      ),
+                    ].divide(SizedBox(height: 5.0)),
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Text(
+                          '230.00',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.normal,
+                                  ),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Text(
-                            '23.00',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Text(
+                          '23.00',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.normal,
+                                  ),
                         ),
-                        Align(
-                          alignment: AlignmentDirectional(0.0, 0.0),
-                          child: Text(
-                            '35.00',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  fontFamily: 'Montserrat',
-                                  fontWeight: FontWeight.normal,
-                                ),
-                          ),
+                      ),
+                      Align(
+                        alignment: AlignmentDirectional(0.0, 0.0),
+                        child: Text(
+                          '35.00',
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Montserrat',
+                                    fontWeight: FontWeight.normal,
+                                  ),
                         ),
-                      ].divide(SizedBox(height: 5.0)),
-                    ),
-                  ].divide(SizedBox(width: 70.0)),
-                ),
+                      ),
+                    ].divide(SizedBox(height: 5.0)),
+                  ),
+                ].divide(SizedBox(width: 70.0)),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),

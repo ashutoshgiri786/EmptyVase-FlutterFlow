@@ -50,37 +50,31 @@ class _PaymentWidgetState extends State<PaymentWidget> {
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          leading: Align(
-            alignment: AlignmentDirectional(1.0, 1.0),
-            child: FlutterFlowIconButton(
-              borderColor: FlutterFlowTheme.of(context).primaryBackground,
-              borderRadius: 15.0,
-              borderWidth: 1.0,
-              buttonSize: 40.0,
-              fillColor: FlutterFlowTheme.of(context).primaryBackground,
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 14.0,
-              ),
-              onPressed: () async {
-                context.safePop();
-              },
+          leading: FlutterFlowIconButton(
+            borderColor: FlutterFlowTheme.of(context).primaryBackground,
+            borderRadius: 15.0,
+            borderWidth: 1.0,
+            buttonSize: 60.0,
+            fillColor: FlutterFlowTheme.of(context).primaryBackground,
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: FlutterFlowTheme.of(context).primaryText,
+              size: 14.0,
             ),
+            onPressed: () async {
+              context.safePop();
+            },
           ),
-          title: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
-            child: Text(
-              'YOUR SHOPPING CART',
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.normal,
-                  ),
-            ),
+          title: Text(
+            'YOUR SHOPPING CART',
+            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.normal,
+                ),
           ),
           actions: [],
           centerTitle: true,
-          toolbarHeight: 80.0,
+          toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
           elevation: 0.0,
         ),
         body: Padding(
@@ -463,36 +457,32 @@ class _PaymentWidgetState extends State<PaymentWidget> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 20.0),
-                child: FFButtonWidget(
-                  onPressed: () async {
-                    context.pushNamed('Order_Summary');
-                  },
-                  text: 'CONTINUE',
-                  options: FFButtonOptions(
-                    width: 313.0,
-                    height: 50.0,
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    iconPadding:
-                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: Color(0xFF2B4244),
-                    textStyle:
-                        FlutterFlowTheme.of(context).titleMedium.override(
-                              fontFamily: 'Montserrat',
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                    elevation: 3.0,
-                    borderSide: BorderSide(
-                      color: Colors.transparent,
-                      width: 1.0,
-                    ),
-                    borderRadius: BorderRadius.circular(80.0),
+              FFButtonWidget(
+                onPressed: () async {
+                  context.pushNamed('Order_Summary');
+                },
+                text: 'CONTINUE',
+                options: FFButtonOptions(
+                  width: 313.0,
+                  height: 50.0,
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  iconPadding:
+                      EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                  color: Color(0xFF2B4244),
+                  textStyle: FlutterFlowTheme.of(context).titleMedium.override(
+                        fontFamily: 'Montserrat',
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                  elevation: 3.0,
+                  borderSide: BorderSide(
+                    color: Colors.transparent,
+                    width: 1.0,
                   ),
+                  borderRadius: BorderRadius.circular(80.0),
                 ),
               ),
-            ],
+            ].addToEnd(SizedBox(height: 20.0)),
           ),
         ),
       ),

@@ -52,44 +52,38 @@ class _DeliveryPickupSelectedWidgetState
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
           automaticallyImplyLeading: false,
-          leading: Align(
-            alignment: AlignmentDirectional(1.0, 1.0),
-            child: FlutterFlowIconButton(
-              borderColor: FlutterFlowTheme.of(context).primaryBackground,
-              borderRadius: 15.0,
-              borderWidth: 1.0,
-              buttonSize: 40.0,
-              fillColor: FlutterFlowTheme.of(context).primaryBackground,
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 14.0,
-              ),
-              onPressed: () async {
-                context.safePop();
-              },
+          leading: FlutterFlowIconButton(
+            borderColor: FlutterFlowTheme.of(context).primaryBackground,
+            borderRadius: 15.0,
+            borderWidth: 1.0,
+            buttonSize: 40.0,
+            fillColor: FlutterFlowTheme.of(context).primaryBackground,
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: FlutterFlowTheme.of(context).primaryText,
+              size: 14.0,
             ),
+            onPressed: () async {
+              context.safePop();
+            },
           ),
-          title: Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
-            child: Text(
-              'DELIVERY / PICK UP',
-              style: FlutterFlowTheme.of(context).bodyMedium.override(
-                    fontFamily: 'Montserrat',
-                    fontWeight: FontWeight.normal,
-                  ),
-            ),
+          title: Text(
+            'DELIVERY / PICK UP',
+            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.normal,
+                ),
           ),
           actions: [],
           centerTitle: true,
-          toolbarHeight: 80.0,
+          toolbarHeight: MediaQuery.sizeOf(context).height * 0.1,
           elevation: 0.0,
         ),
         body: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(20.0, 20.0, 20.0, 20.0),
+          padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
           child: Column(
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
                 mainAxisSize: MainAxisSize.max,
@@ -406,7 +400,7 @@ class _DeliveryPickupSelectedWidgetState
                   borderRadius: BorderRadius.circular(80.0),
                 ),
               ),
-            ],
+            ].addToEnd(SizedBox(height: 20.0)),
           ),
         ),
       ),

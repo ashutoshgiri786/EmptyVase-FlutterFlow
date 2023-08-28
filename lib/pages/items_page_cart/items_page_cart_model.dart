@@ -29,19 +29,18 @@ class ItemsPageCartModel extends FlutterFlowModel {
 
   String variantId = '';
 
+  List<dynamic> price = [];
+  void addToPrice(dynamic item) => price.add(item);
+  void removeFromPrice(dynamic item) => price.remove(item);
+  void removeAtIndexFromPrice(int index) => price.removeAt(index);
+  void updatePriceAtIndex(int index, Function(dynamic) updateFn) =>
+      price[index] = updateFn(price[index]);
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
   // Stores action output result for [Backend Call - API (Product)] action in items_page_cart widget.
   ApiCallResponse? prductdetails;
-  // State field(s) for PageView widget.
-  PageController? pageViewController;
-
-  int get pageViewCurrentIndex => pageViewController != null &&
-          pageViewController!.hasClients &&
-          pageViewController!.page != null
-      ? pageViewController!.page!.round()
-      : 0;
   // State field(s) for DropDown widget.
   String? dropDownValue;
   FormFieldController<String>? dropDownValueController;
@@ -52,9 +51,13 @@ class ItemsPageCartModel extends FlutterFlowModel {
   // Stores action output result for [Backend Call - API (Delete Metafields)] action in ToggleIcon widget.
   ApiCallResponse? deleteMetafield;
   // Stores action output result for [Custom Action - createCart] action in Button widget.
-  dynamic? out;
+  dynamic? out1;
+  // Stores action output result for [Custom Action - createCart] action in Button widget.
+  dynamic? out2;
   // Stores action output result for [Custom Action - addMoreItemsInCart] action in Button widget.
-  dynamic? added;
+  dynamic? added1;
+  // Stores action output result for [Custom Action - addMoreItemsInCart] action in Button widget.
+  dynamic? added2;
 
   /// Initialization and disposal methods.
 
